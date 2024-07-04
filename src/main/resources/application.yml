@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: graduationGoodbye
+
+
+# MYSQL
+  datasource:
+    url: jdbc:mysql://localhost:3306/test
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+# REDIS
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+# MONGO
+    mongodb:
+      uri: mongodb://localhost:27017/test
