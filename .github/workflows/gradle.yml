@@ -6,7 +6,6 @@ on:
       - main
       - develop
       - feature/*
-      -
 permissions:
   contents: read
 
