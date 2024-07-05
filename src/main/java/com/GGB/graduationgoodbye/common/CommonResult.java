@@ -1,4 +1,4 @@
-package com.GGB.graduationGoodbye.common;
+package com.ggb.graduationgoodbye.common;
 
 import lombok.Getter;
 import lombok.Setter;

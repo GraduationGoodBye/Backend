@@ -1,4 +1,4 @@
-package com.GGB.graduationGoodbye;
+package com.GGB.graduationgoodbye;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
