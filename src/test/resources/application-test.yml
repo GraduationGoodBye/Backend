@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: graduationgoodbye
+
+  # MYSQL
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+#  # REDIS
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+#
+#    # MONGO
+#    mongodb:
+#      uri: mongodb://localhost:27017/test
