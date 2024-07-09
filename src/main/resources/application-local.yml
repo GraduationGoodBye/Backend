@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  # h2
+  datasource:
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  # REDIS
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+    # MONGO
+    mongodb:
+      host: localhost
+      port: 27017
+      database: local

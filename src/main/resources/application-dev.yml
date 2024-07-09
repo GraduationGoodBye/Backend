@@ -1,0 +1,23 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: graduationgoodbye
+
+  # MYSQL
+  datasource:
+    url: jdbc:mysql://127.0.0.1:13306/dev
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password:
+
+  # REDIS
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+    # MONGO
+    mongodb:
+      uri: mongodb://localhost:27017/dev

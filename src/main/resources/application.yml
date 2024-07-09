@@ -1,28 +1,3 @@
 spring:
-  application:
-    name: graduationgoodbye
-
-# MYSQL
-  datasource:
-    url: jdbc:mysql://127.0.0.1:13306/test
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        show_sql: true
-        format_sql: true
-        use_sql_comments: true
-
-# REDIS
-  data:
-    redis:
-      host: localhost
-      port: 6379
-
-# MONGO
-    mongodb:
-      uri: mongodb://localhost:27017/test
+  profiles:
+    active: local
