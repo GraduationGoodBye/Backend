@@ -51,9 +51,11 @@ dependencies {
 
 	// Redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'it.ozimov:embedded-redis:0.7.2'
 
 	// MongoDB
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.1.4'
 
 	// Swagger
 	implementation 'io.swagger.core.v3:swagger-annotations:2.2.22'
