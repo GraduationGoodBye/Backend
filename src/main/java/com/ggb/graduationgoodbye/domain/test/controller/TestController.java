@@ -20,7 +20,7 @@ public class TestController {
         return ApiResponse.ok("This service is available");
     }
 
-    @GetMapping("/exception?{name}")
+    @GetMapping("/exception/{name}")
     public void exception(@PathVariable String name){
         switch (name) {
             case "UNAUTHENTICATED": throw new UnauthenticatedException();
