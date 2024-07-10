@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.global.error.exception;
 
-import com.ggb.graduationgoodbye.global.error.ApiErrorType;
+import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
 import lombok.Getter;
 
 @Getter
