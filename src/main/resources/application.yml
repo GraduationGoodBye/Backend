@@ -1,3 +1,21 @@
 spring:
   profiles:
     active: local
+
+
+springdoc:
+  swagger-ui:
+    path: /api/swagger # 접속 경로
+    groups-order: DESC # 내림차순
+    tags-sorter: alpha # 알파벳순 정렬
+    operations-sorter: method # 메소드 별 정렬
+    disable-swagger-default-url: true
+    display-request-duration: true # try it out 실행 후 api 실행 시간 표시
+  api-docs:
+    path: /api-docs
+  show-actuator: true
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  writer-with-default-pretty-printer: true # 예쁘게
+  paths-to-match:
+    - /**
