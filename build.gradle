@@ -60,6 +60,10 @@ dependencies {
 	// Swagger
 	implementation 'io.swagger.core.v3:swagger-annotations:2.2.22'
 
+	// S3
+	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")
+	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+
 	// test
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
