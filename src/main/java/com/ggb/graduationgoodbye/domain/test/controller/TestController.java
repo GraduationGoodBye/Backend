@@ -6,6 +6,8 @@ import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnauthenticatedException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/test")
 public class TestController {
 
+
+    @Operation(summary = "연결 확인")
     @GetMapping("/check")
     public ApiResponse<String> check(){
         return ApiResponse.ok("This service is available");
