@@ -4,7 +4,7 @@ import com.ggb.graduationgoodbye.domain.auth.exception.ExpiredTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
-import com.ggb.graduationgoodbye.global.error.exception.UnauthenticatedException;
+import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -34,7 +34,7 @@ public class TestController {
             )
             @PathVariable String name){
         switch (name) {
-            case "UNAUTHENTICATED": throw new UnauthenticatedException();
+            case "UNAUTHENTICATED": throw new UnAuthenticatedException();
             case "FORBIDDEN": throw new ForbiddenException();
             case "BAD_REQUEST": throw new BusinessException();
             case "EXPIRED_TOKEN": throw new ExpiredTokenException();
