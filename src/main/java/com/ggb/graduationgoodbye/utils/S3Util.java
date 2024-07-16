@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.utils;
 
+import com.ggb.graduationgoodbye.domain.s3.exception.UploadException;
 import io.awspring.cloud.s3.ObjectMetadata;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
@@ -22,12 +23,16 @@ public class S3Util {
     @Value("${spring.cloud.aws.s3.bucket}")
     private String bucketName;
 
-    public String upload(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename(); // 전송한 파일명
-        String extension = StringUtils.getFilenameExtension(fileName);
-        String key = UUID.randomUUID() + "." + extension;
-        S3Resource s3Resource = s3Template.upload(bucketName, key, file.getInputStream(),
-                ObjectMetadata.builder().contentType(file.getContentType()).build());
-        return s3Resource.getURL().toString();
+    public String upload(MultipartFile file){
+        try {
+            String fileName = file.getOriginalFilename();
+            String extension = StringUtils.getFilenameExtension(fileName);
+            String key = UUID.randomUUID() + "." + extension;
+            S3Resource s3Resource = s3Template.upload(bucketName, key, file.getInputStream(),
+                    ObjectMetadata.builder().contentType(file.getContentType()).build());
+            return s3Resource.getURL().toString();
+        }catch(IOException e){
+            throw new UploadException();
+        }
     }
 }

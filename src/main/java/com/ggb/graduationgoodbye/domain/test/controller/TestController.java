@@ -55,7 +55,7 @@ public class TestController {
     }
 
     @PostMapping("/image")
-    public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file) throws IOException {
+    public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file){
         String url = testService.uploadImageTest(file);
         return ApiResponse.ok(url);
     }

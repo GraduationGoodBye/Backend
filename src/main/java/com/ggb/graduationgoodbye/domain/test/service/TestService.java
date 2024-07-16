@@ -21,7 +21,7 @@ import java.util.UUID;
 public class TestService {
     private final S3Util s3Util;
 
-    public String uploadImageTest(MultipartFile image) throws IOException {
+    public String uploadImageTest(MultipartFile image){
         return s3Util.upload(image);
     }
 }
