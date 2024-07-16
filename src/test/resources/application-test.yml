@@ -8,12 +8,12 @@ spring:
   cloud:
     aws:
       credentials:
-        access-key: test
-        secret-key: test
+        access-key: ggb
+        secret-key: ggb
       region:
-        static: test # bucket region
+        static: ggb # bucket region
       s3:
-        bucket: test # bucket 명
+        bucket: ggb # bucket 명
 #  # REDIS
 #  data:
 #    redis:

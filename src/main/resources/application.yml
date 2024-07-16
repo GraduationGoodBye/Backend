@@ -1,6 +1,8 @@
 spring:
+  config:
+    import: classpath:application-secret.yml
   profiles:
-    active: local,secret
+    active: local
 
 
 springdoc:
