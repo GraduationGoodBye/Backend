@@ -2,7 +2,8 @@ package com.ggb.graduationgoodbye.global.error;
 
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
-import com.ggb.graduationgoodbye.global.error.exception.UnauthenticatedException;
+import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
+import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,9 +27,9 @@ public class GlobalExceptionHandler {
     /**
      * 인증을 실패 했을 경우 예외 처리
      */
-    @ExceptionHandler(UnauthenticatedException.class)
+    @ExceptionHandler(UnAuthenticatedException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public ApiResponse<?> handler(UnauthenticatedException e) {
+    public ApiResponse<?> handler(UnAuthenticatedException e) {
         return ApiResponse.error(e.getCode(), e.getMessage());
     }
 
@@ -47,8 +48,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<?> handler(Exception e) {
-//        log.error(e.getMessage());
-//        log.error("Exception : ", e);
+        log.error(e.getMessage());
+        log.error("Exception : ", e);
         return ApiResponse.error(ApiErrorType.INTERNAL_SERVER_ERROR);
     }
 }
