@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.global.error;
 
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
+import com.ggb.graduationgoodbye.global.error.exception.ServerException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
@@ -45,6 +46,12 @@ public class GlobalExceptionHandler {
     /**
      * 서버에서 에러가 발생 했을 경우 예외 처리
      */
+    @ExceptionHandler(ServerException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ApiResponse<?> handler(ServerException e) {
+        return ApiResponse.error(e.getCode(), e.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<?> handler(Exception e) {

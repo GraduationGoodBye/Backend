@@ -1,21 +1,23 @@
 package com.ggb.graduationgoodbye.global.error.exception;
 
 import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
+import lombok.Getter;
 
+@Getter
 public class ServerException extends RuntimeException {
     private final String code;
 
     public ServerException() {
-        super(ApiErrorType.BAD_REQUEST.getMessage());
-        this.code = ApiErrorType.BAD_REQUEST.name();
+        super(ApiErrorType.INTERNAL_SERVER_ERROR.getMessage());
+        this.code = ApiErrorType.INTERNAL_SERVER_ERROR.name();
     }
 
-    public ServerException(final String message) {
+    public ServerException(String message) {
         super(message);
-        this.code = ApiErrorType.BAD_REQUEST.name();
+        this.code = ApiErrorType.INTERNAL_SERVER_ERROR.name();
     }
 
-    public ServerException(final String code, final String message) {
+    public ServerException(String code, String message) {
         super(message);
         this.code = code;
     }
