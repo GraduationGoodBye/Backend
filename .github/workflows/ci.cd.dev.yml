@@ -23,6 +23,27 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+        # APPLICATION-SECRET.YML 등록
+      - name: Create application-secret.yml
+        run: |
+          cat << EOF > src/main/resources/application-secret.yml
+          spring:
+            servlet:
+              multipart:
+                enabled: true
+                max-file-size: 20MB
+                max-request-size: 20MB
+            cloud:
+              aws:
+                credentials:
+                  access-key: ${{ secrets.AWS_ACCESS_KEY }}
+                  secret-key: ${{ secrets.AWS_SECRET_KEY }}
+                region:
+                  static: ap-northeast-2
+                s3:
+                  bucket: ${{ secrets.AWS_S3_BUCKET }}
+          EOF
+
         # BUILD WITH GRADLE
       - name: Build with gradle
         run: ./gradlew clean build
