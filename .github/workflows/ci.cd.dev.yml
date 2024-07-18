@@ -8,7 +8,7 @@ on:
       - feature/GGB-09
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     environment: development
     steps:
@@ -66,3 +66,22 @@ jobs:
           context: .
           push: true
           tags: projectggb/back-end:0.0.1
+  cd:
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Copy files via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.IAM_USER_NAME }}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          script: |
+            docker pull projectggb/back-end:0.0.1
+            docker stop ggb-backend-server || true
+            docker rm ggb-backend-server || true
+            docker run -d --name ggb-backend-server -p 8080:8080 projectggb/back-end:0.0.1
+            docker image prune -af
