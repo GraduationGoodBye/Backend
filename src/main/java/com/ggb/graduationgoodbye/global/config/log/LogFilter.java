@@ -41,7 +41,7 @@ public class LogFilter extends OncePerRequestFilter{
     private void printLog(ContentCachingRequestWrapper request,ContentCachingResponseWrapper response) throws IOException {
         String queryString = request.getQueryString();
         log.info("Request : {} uri=[{}] ", request.getMethod(), queryString == null ? request.getRequestURI() : request.getRequestURI() + "?" +queryString);
-        log.info("Response : {}",new String(response.getContentAsByteArray(), response.getCharacterEncoding()));
+        log.info("Http Status : {} Response : {}", response.getStatus() ,new String(response.getContentAsByteArray(), response.getCharacterEncoding()));
     }
 
 
