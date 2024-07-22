@@ -18,10 +18,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 @Slf4j
 public class LogFilter extends OncePerRequestFilter{
+
+    private final List<Integer> code = Arrays.asList(400,401,403,500);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -51,11 +54,11 @@ public class LogFilter extends OncePerRequestFilter{
 
 
     private void logRequest(ContentCachingRequestWrapper request,LocalDateTime time) {
-
+        String startTime = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String parameter = request.getQueryString();
 
         log.info("[Request.{}] Method : {} uri={} body : {}"
-                , time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                , startTime
                 , request.getMethod()
                 , parameter == null ? request.getRequestURI() : request.getRequestURI() + "?" +parameter
                 , getBody(request));
@@ -67,13 +70,17 @@ public class LogFilter extends OncePerRequestFilter{
     }
 
     private void logResponse(ContentCachingResponseWrapper response,Duration time) throws IOException {
+
+        int status = response.getStatus();
+        String body = new String(response.getContentAsByteArray(), response.getCharacterEncoding());
+
         log.info("[Response. {}ms] Http Status : {} body : {}"
                 , time.toMillis()
-                , response.getStatus()
-                ,new String(response.getContentAsByteArray()
-                        , response.getCharacterEncoding()));
+                , status
+                , body);
+
+        if (!code.contains(status)) {
+            log.error("Stack Trace: ", new Exception("Response Error"));
+        }
     }
-
-
-
 }
