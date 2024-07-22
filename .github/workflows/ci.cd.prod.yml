@@ -3,23 +3,20 @@ name: CI/CD
 
 # workflow trigger
 on:
-#  push:
-#    branches:
-#      - feature/GGB-09
   pull_request:
     branches:
-      - develop
+      - main
     types:
       - closed
 
 env:
-  DOCKER_CONTAINER_NAME: projectggb/back-end-dev:0.0.1
+  DOCKER_CONTAINER_NAME: projectggb/back-end-prod:0.0.1
 
 jobs:
   ci:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-    environment: development
+    environment: production
     steps:
         # Runner 에 repository 에 저장된 코드 복사
       - name: Checkout code
@@ -61,24 +58,3 @@ jobs:
           context: .
           push: true
           tags: ${{env.DOCKER_CONTAINER_NAME}}
-  cd:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    environment: development
-    needs: ci
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Copy files via SSH
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.EC2_HOST}}
-          username: ${{ secrets.EC2_USERNAME}}
-          key: ${{secrets.SSH_PRIVATE_KEY}}
-          script: |
-            docker pull ${{env.DOCKER_CONTAINER_NAME}}
-            docker stop ggb-back || true
-            docker rm ggb-back || true
-            docker run -d --name ggb-back -p 8081:8080 ${{env.DOCKER_CONTAINER_NAME}}
-            docker image prune -af
