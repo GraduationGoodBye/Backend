@@ -50,26 +50,24 @@ public class LogFilter extends OncePerRequestFilter{
     private void logRequest(ContentCachingRequestWrapper request,LocalDateTime startTime) {
         String time = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String parameter = request.getQueryString();
+        String body = getBody(request.getContentAsByteArray());
 
         log.info("[Request.{}] Method : {} uri={} body : {}"
                 , time
                 , request.getMethod()
                 , parameter == null ? request.getRequestURI() : request.getRequestURI() + "?" +parameter
-                , getBody(request));
+                , body);
     }
 
-    public String getBody(ContentCachingRequestWrapper request){
-        byte[] body = request.getContentAsByteArray();
+    public String getBody(byte[] body){
         return new String(body, StandardCharsets.UTF_8);
     }
 
     private void logResponse(ContentCachingResponseWrapper response,LocalDateTime startTime) {
         LocalDateTime endTime = LocalDateTime.now();
         Duration time = Duration.between(startTime, endTime);
-
-
         int status = response.getStatus();
-        String body = new String(response.getContentAsByteArray(), StandardCharsets.UTF_8);
+        String body = getBody(response.getContentAsByteArray());
 
         log.info("[Response. {}ms] Http Status : {} body : {}"
                 , time.toMillis()
