@@ -7,6 +7,8 @@ import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
+import com.ggb.graduationgoodbye.utils.Base64Util;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,14 +23,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/test")
 public class TestController {
 
     private final TestService testService;
-
-    public TestController(TestService testService){
-        this.testService = testService;
-    }
 
     @Operation(summary = "연결 확인")
     @GetMapping("/check")
@@ -58,5 +57,17 @@ public class TestController {
     public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file){
         String url = testService.uploadImageTest(file);
         return ApiResponse.ok(url);
+    }
+
+    @PostMapping("/encode")
+    public ApiResponse<String> encode(@RequestBody String data){
+        String encodedData = testService.encode(data);
+        return ApiResponse.ok(encodedData);
+    }
+
+    @PostMapping("/decode")
+    public ApiResponse<String> decode(@RequestBody String data){
+        String plainText = testService.decode(data);
+        return ApiResponse.ok(plainText);
     }
 }
