@@ -67,10 +67,10 @@ public class LogFilter extends OncePerRequestFilter{
         return new String(body, StandardCharsets.UTF_8);
     }
 
-    private void logResponse(ContentCachingResponseWrapper response,Duration time) throws IOException {
+    private void logResponse(ContentCachingResponseWrapper response,Duration time) {
 
         int status = response.getStatus();
-        String body = new String(response.getContentAsByteArray(), response.getCharacterEncoding());
+        String body = new String(response.getContentAsByteArray(), StandardCharsets.UTF_8);
 
         log.info("[Response. {}ms] Http Status : {} body : {}"
                 , time.toMillis()
