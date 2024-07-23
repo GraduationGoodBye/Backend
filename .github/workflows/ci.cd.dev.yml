@@ -3,9 +3,6 @@ name: CI/CD
 
 # workflow trigger
 on:
-#  push:
-#    branches:
-#      - feature/GGB-09
   pull_request:
     branches:
       - develop
@@ -37,7 +34,6 @@ jobs:
         run: |
           mkdir -p src/main/resources
           echo "${{secrets.SECRET_YML}}" | base64 --decode > src/main/resources/application-secret.yml
-          find src
 
         # BUILD WITH GRADLE
       - name: Build with gradle
@@ -78,7 +74,7 @@ jobs:
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
             docker pull ${{env.DOCKER_CONTAINER_NAME}}
-            docker stop ggb-back || true
-            docker rm ggb-back || true
+            docker stop ggb-back
+            docker rm ggb-back
             docker run -d --name ggb-back -p 8081:8080 ${{env.DOCKER_CONTAINER_NAME}}
             docker image prune -af
