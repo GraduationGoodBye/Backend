@@ -76,9 +76,5 @@ public class LogFilter extends OncePerRequestFilter{
                 , time.toMillis()
                 , status
                 , body);
-
-        if (status == 500) {
-            log.error("Stack Trace: ", new Exception("Response Error"));
-        }
     }
 }
