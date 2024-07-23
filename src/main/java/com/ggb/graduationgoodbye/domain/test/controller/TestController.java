@@ -59,13 +59,13 @@ public class TestController {
         return ApiResponse.ok(url);
     }
 
-    @PostMapping("/encode")
+    @PostMapping("/base64/encode")
     public ApiResponse<String> encode(@RequestBody String data){
         String encodedData = testService.encode(data);
         return ApiResponse.ok(encodedData);
     }
 
-    @PostMapping("/decode")
+    @PostMapping("/base64/decode")
     public ApiResponse<String> decode(@RequestBody String data){
         String plainText = testService.decode(data);
         return ApiResponse.ok(plainText);
