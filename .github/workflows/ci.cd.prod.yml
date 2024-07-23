@@ -10,7 +10,7 @@ on:
       - closed
 
 env:
-  DOCKER_CONTAINER_NAME: projectggb/back-end-prod:0.0.1
+  DOCKER_IMAGE_NAME: projectggb/back-end-prod:0.0.1
 
 jobs:
   ci:
@@ -56,4 +56,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{env.DOCKER_CONTAINER_NAME}}
+          tags: ${{env.DOCKER_IMAGE_NAME}}

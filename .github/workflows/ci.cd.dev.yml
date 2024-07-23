@@ -10,7 +10,8 @@ on:
       - closed
 
 env:
-  DOCKER_CONTAINER_NAME: projectggb/back-end-dev:0.0.1
+  DOCKER_IMAGE_NAME: projectggb/back-end-dev:0.0.1
+  DOCKER_CONTAINER_NAME: ggb-back-test
 
 jobs:
   ci:
@@ -56,7 +57,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{env.DOCKER_CONTAINER_NAME}}
+          tags: ${{env.DOCKER_IMAGE_NAME}}
   cd:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
@@ -73,8 +74,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
           script: |
-            docker pull ${{env.DOCKER_CONTAINER_NAME}}
-            docker stop ggb-back
-            docker rm ggb-back
-            docker run -d --name ggb-back -p 8081:8080 ${{env.DOCKER_CONTAINER_NAME}}
+            docker pull ${{env.DOCKER_IMAGE_NAME}}
+            docker stop ${{env.DOCKER_CONTAINER_NAME}}
+            docker rm ${{env.DOCKER_CONTAINER_NAME}}
+            docker run -d --name ${{env.DOCKER_CONTAINER_NAME}} -p 8081:8080 ${{env.DOCKER_IMAGE_NAME}}
             docker image prune -af
