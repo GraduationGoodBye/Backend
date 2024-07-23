@@ -38,11 +38,7 @@ public class LogFilter extends OncePerRequestFilter{
             filterChain.doFilter(requestWrapper, responseWrapper);
             logRequest(requestWrapper,startTime);
         } finally {
-
-            LocalDateTime endTime = LocalDateTime.now();
-            Duration responseTime = Duration.between(startTime, endTime);
-
-            logResponse(responseWrapper,responseTime);
+            logResponse(responseWrapper,startTime);
             // 응답 본문 클라이언트로 전송
             responseWrapper.copyBodyToResponse();
         }
@@ -51,12 +47,12 @@ public class LogFilter extends OncePerRequestFilter{
     }
 
 
-    private void logRequest(ContentCachingRequestWrapper request,LocalDateTime time) {
-        String startTime = time.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+    private void logRequest(ContentCachingRequestWrapper request,LocalDateTime startTime) {
+        String time = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         String parameter = request.getQueryString();
 
         log.info("[Request.{}] Method : {} uri={} body : {}"
-                , startTime
+                , time
                 , request.getMethod()
                 , parameter == null ? request.getRequestURI() : request.getRequestURI() + "?" +parameter
                 , getBody(request));
@@ -67,7 +63,10 @@ public class LogFilter extends OncePerRequestFilter{
         return new String(body, StandardCharsets.UTF_8);
     }
 
-    private void logResponse(ContentCachingResponseWrapper response,Duration time) {
+    private void logResponse(ContentCachingResponseWrapper response,LocalDateTime startTime) {
+        LocalDateTime endTime = LocalDateTime.now();
+        Duration time = Duration.between(startTime, endTime);
+
 
         int status = response.getStatus();
         String body = new String(response.getContentAsByteArray(), StandardCharsets.UTF_8);
