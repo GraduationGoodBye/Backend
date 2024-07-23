@@ -24,8 +24,6 @@ import java.util.List;
 @Slf4j
 public class LogFilter extends OncePerRequestFilter{
 
-    private final List<Integer> code = Arrays.asList(400,401,403,500);
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -79,7 +77,7 @@ public class LogFilter extends OncePerRequestFilter{
                 , status
                 , body);
 
-        if (!code.contains(status)) {
+        if (status == 500) {
             log.error("Stack Trace: ", new Exception("Response Error"));
         }
     }
