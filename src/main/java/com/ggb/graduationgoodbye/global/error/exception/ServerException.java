@@ -12,12 +12,12 @@ public class ServerException extends RuntimeException {
         this.code = ApiErrorType.INTERNAL_SERVER_ERROR.name();
     }
 
-    public ServerException(String message) {
+    public ServerException(final String message) {
         super(message);
         this.code = ApiErrorType.INTERNAL_SERVER_ERROR.name();
     }
 
-    public ServerException(String code, String message) {
+    public ServerException(final String code, final String message) {
         super(message);
         this.code = code;
     }
