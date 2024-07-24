@@ -9,7 +9,7 @@ on:
 
 env:
   DOCKER_IMAGE_NAME: projectggb/back-end-dev:0.0.1
-  DOCKER_CONTAINER_NAME: ggb-back-test
+  DOCKER_CONTAINER_NAME: ggb-back
 
 jobs:
   ci:
