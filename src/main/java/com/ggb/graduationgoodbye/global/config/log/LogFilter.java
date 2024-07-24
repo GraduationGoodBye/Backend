@@ -1,77 +1,66 @@
 package com.ggb.graduationgoodbye.global.config.log;
 
-import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
-import jakarta.servlet.*;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 @Slf4j
 public class LogFilter extends OncePerRequestFilter{
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request);
+        CachingRequestWrapper requestWrapper = new CachingRequestWrapper(request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 
-        LocalDateTime startTime = LocalDateTime.now();
-
+        long startTime = System.currentTimeMillis();
         try {
-            // 요청을 필터에 전달
-            filterChain.doFilter(requestWrapper, responseWrapper);
-            logRequest(requestWrapper,startTime);
+            logRequest(requestWrapper);
+            filterChain.doFilter(requestWrapper, responseWrapper); // 요청을 필터에 전달
         } finally {
-            logResponse(responseWrapper,startTime);
-            // 응답 본문 클라이언트로 전송
-            responseWrapper.copyBodyToResponse();
+            logResponse(responseWrapper, startTime);
+            responseWrapper.copyBodyToResponse(); // 응답 본문 클라이언트로 전송
         }
-
-
     }
 
+    private void logRequest(HttpServletRequestWrapper request) throws IOException {
+        String queryString = request.getQueryString();
+        String body = getBody(request.getInputStream());
 
-    private void logRequest(ContentCachingRequestWrapper request,LocalDateTime startTime) {
-        String time = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        String parameter = request.getQueryString();
-        String body = getBody(request.getContentAsByteArray());
-
-        log.info("[Request.{}] Method : {} uri={} body : {}"
-                , time
+        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        log.info("Request : {} uri=[{}] content-type=[{}], body=[{}]"
                 , request.getMethod()
-                , parameter == null ? request.getRequestURI() : request.getRequestURI() + "?" +parameter
+                , queryString == null ? request.getRequestURI() : request.getRequestURI() + "?" + queryString
+                , request.getContentType()
                 , body);
     }
 
-    public String getBody(byte[] body){
-        return new String(body, StandardCharsets.UTF_8);
+    private void logResponse(ContentCachingResponseWrapper response, long startTime) throws IOException {
+        String body = getBody(response.getContentInputStream());
+
+        log.info("Response : {} body=[{}]"
+                , response.getStatus()
+                , body);
+        log.info("Request processed in {}ms", (System.currentTimeMillis() - startTime));
+        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
     }
 
-    private void logResponse(ContentCachingResponseWrapper response,LocalDateTime startTime) {
-        LocalDateTime endTime = LocalDateTime.now();
-        Duration time = Duration.between(startTime, endTime);
-        int status = response.getStatus();
-        String body = getBody(response.getContentAsByteArray());
-
-        log.info("[Response. {}ms] Http Status : {} body : {}"
-                , time.toMillis()
-                , status
-                , body);
+    public String getBody(InputStream is) throws IOException {
+        byte[] content = StreamUtils.copyToByteArray(is);
+        if (content.length == 0) {
+            return null;
+        }
+        return new String(content, StandardCharsets.UTF_8);
     }
 }
