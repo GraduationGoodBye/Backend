@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -13,6 +14,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 
 @Slf4j
@@ -23,14 +25,17 @@ public class LogFilter extends OncePerRequestFilter{
 
         CachingRequestWrapper requestWrapper = new CachingRequestWrapper(request);
         ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+        final UUID uuid = UUID.randomUUID();
 
         long startTime = System.currentTimeMillis();
         try {
+            MDC.put("uuid", uuid.toString()); // 로그 임의의 값 추가
             logRequest(requestWrapper);
             filterChain.doFilter(requestWrapper, responseWrapper); // 요청을 필터에 전달
         } finally {
             logResponse(responseWrapper, startTime);
             responseWrapper.copyBodyToResponse(); // 응답 본문 클라이언트로 전송
+            MDC.clear();
         }
     }
 
