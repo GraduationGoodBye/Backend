@@ -24,3 +24,9 @@ spring:
       host: localhost
       port: 27017
       database: local
+
+# MYBATIS 설정
+mybatis:
+  config-location: classpath:mybatis/sqlmap-config.xml
+  mapper-locations: mybatis/map/*.xml
+  type-aliases-package: com.ggb.graduationgoodbye.domain
