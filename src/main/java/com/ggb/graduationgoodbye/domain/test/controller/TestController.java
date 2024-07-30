@@ -7,12 +7,10 @@ import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
-import com.ggb.graduationgoodbye.utils.Base64Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;

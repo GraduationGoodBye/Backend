@@ -10,3 +10,10 @@ CREATE TABLE users(
     role VARCHAR(20),
     PRIMARY KEY (id)
 );
+
+CREATE TABLE tokens(
+   id BIGINT AUTO_INCREMENT,
+   access_token VARCHAR(255),
+   refresh_token VARCHAR(255),
+   PRIMARY KEY (id)
+);

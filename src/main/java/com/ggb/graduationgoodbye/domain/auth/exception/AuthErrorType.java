@@ -5,8 +5,12 @@ import lombok.Getter;
 @Getter
 public enum AuthErrorType {
 
+    // JWT
     EXPIRED_TOKEN ("만료된 토큰입니다."),
     INVALID_TOKEN ("유효하지 않은 토큰입니다.");
+    INVALID_TOKEN ("유효하지 않은 토큰입니다."),
+    INVALID_JWT_SIGNATURE("유효하지 않은 서명입니다."),
+
 
     private final String message;
 
