@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ggb.graduationgoodbye.domain.user.repository.UserRepository">
+    <insert id="save" parameterType="user" keyProperty="id">
+        INSERT INTO users (email,profile,name,nickname,address,phone,gender,role)
+        VALUES (#{email}, #{profile}, #{name}, #{nickname}, #{address}, #{phone}, #{gender}, #{role})
+    </insert>
+
+    <select id="findByEmail" parameterType="String" resultType="user">
+        SELECT * FROM users WHERE email = #{email};
+    </select>
+</mapper>
