@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.OAuth2UserInfo;
 import com.ggb.graduationgoodbye.domain.auth.dto.PrincipalDetails;
+import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
 import com.ggb.graduationgoodbye.domain.user.repository.UserRepository;
 import com.ggb.graduationgoodbye.domain.user.vo.User;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +26,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         Map<String,Object> oAuth2UserAttributes = super.loadUser(userRequest).getAttributes();
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
+        if(!isJoinedUser(oAuth2UserAttributes)){
+            String accessToken = userRequest.getAccessToken().getTokenValue();
+            throw new NotJoinedUserException(accessToken);
+        }
 
-        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint()
-                .getUserNameAttributeName();
+        String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfo.of(registrationId, oAuth2UserAttributes);
 
         User user = getOrSave(oAuth2UserInfo);
+
+        String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint()
+                .getUserNameAttributeName();
 
         return new PrincipalDetails(user, oAuth2UserAttributes, userNameAttributeName);
     }
@@ -47,5 +53,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userRepository.save(user);
             return user;
         }
+    }
+
+    private boolean isJoinedUser(Map<String, Object> oAuth2UserAttributes) {
+        String email = oAuth2UserAttributes.get("email").toString();
+
+        Optional<User> optionalUser = Optional.ofNullable(userRepository.findByEmail(email));
+
+        return optionalUser.isPresent();
     }
 }
