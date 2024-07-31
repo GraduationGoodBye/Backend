@@ -50,7 +50,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         request -> request
                                 .requestMatchers(
-                                        new AntPathRequestMatcher("/api/v1/user/signup","POST"),
+                                        new AntPathRequestMatcher("/api/v1/users/signup", "POST"),
                                         new AntPathRequestMatcher("/api/v1/users/login", "GET"),
                                         new AntPathRequestMatcher("/oauth2/authorize/**", "GET"),
                                         new AntPathRequestMatcher("/api/swagger"),
