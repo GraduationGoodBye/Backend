@@ -3,6 +3,7 @@ package com.ggb.graduationgoodbye.domain.auth.filter;
 import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
+import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,14 +24,13 @@ public class TokenExceptionHandlingFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        try{
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        try {
             filterChain.doFilter(request, response);
-        }catch(UnAuthenticatedException e){
-            writeResponseUtil.writeResponse(response,HttpStatus.UNAUTHORIZED.value(),e.getCode(),e.getMessage());
-        }catch(ForbiddenException e){
-            writeResponseUtil.writeResponse(response,HttpStatus.FORBIDDEN.value(),e.getCode(),e.getMessage());
+        } catch(UnAuthenticatedException e) {
+            writeResponseUtil.writeResponse(response, HttpStatus.UNAUTHORIZED.value(), ApiResponse.error(e.getCode(), e.getMessage()));
+        } catch(ForbiddenException e) {
+            writeResponseUtil.writeResponse(response, HttpStatus.FORBIDDEN.value(), ApiResponse.error(e.getCode(), e.getMessage()));
         }
     }
 }
