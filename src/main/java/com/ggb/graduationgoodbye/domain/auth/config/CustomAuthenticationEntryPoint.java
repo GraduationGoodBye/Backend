@@ -12,6 +12,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException)
             throws IOException, ServletException {
-
+        final String REDIRECT_URL = "http://localhost:8080/api/v1/users/login";
+        response.sendRedirect(REDIRECT_URL);
     }
 }

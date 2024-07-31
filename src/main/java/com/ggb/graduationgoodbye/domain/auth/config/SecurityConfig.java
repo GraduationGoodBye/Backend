@@ -51,6 +51,8 @@ public class SecurityConfig {
                         request -> request
                                 .requestMatchers(
                                         new AntPathRequestMatcher("/api/v1/user/signup","POST"),
+                                        new AntPathRequestMatcher("/api/v1/users/login", "GET"),
+                                        new AntPathRequestMatcher("/oauth2/authorize/**", "GET"),
                                         new AntPathRequestMatcher("/api/swagger"),
                                         new AntPathRequestMatcher("/api/swagger-config"),
                                         new AntPathRequestMatcher("/api/swagger-ui/**"),
@@ -64,9 +66,19 @@ public class SecurityConfig {
 //                                .requestMatchers("/v1/users/**").hasRole(Role.USER.name())
 //                                .anyRequest().authenticated()
                 )
+                /*
+                AS-IS 비회원 사용자가 회원 API를 사용하면 구글 로그인을 시킨다
 
+                note : TO-BE
+                1. 비회원 사용자가 회원 API를 사용할 경우 로그인 페이지로 redirect - done
+                2. 로그인/회원가입 API에 대해서는 Spring Security OAuth2를 이용해서 정보를 가져온다 -
+                 - Auth Code / Google Access Token 가지고 사용자 조회 (loadUser)
+                3. 이외 회원 인증/인가가 필요한 경우 JWT Filter validation을 사용한다
+
+                 */
                 // OAuth2 설정
                 .oauth2Login(oauth -> oauth
+                        .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
                         .userInfoEndpoint(c -> c.userService(oAuth2UserService))
                         .successHandler(new CustomOAuth2SuccessHandler(tokenProvider))
                 )
@@ -77,9 +89,10 @@ public class SecurityConfig {
                 .addFilterBefore(new LogFilter(), TokenExceptionHandlingFilter.class) // 로깅 필터
 
                 // 인증/인가 오류 시 핸들링(커스텀 시 사용)
-//                .exceptionHandling((exceptions) -> exceptions
-//                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-//                        .accessDeniedHandler(new CustomAccessDeniedHandler()))
+                .exceptionHandling((exceptions) -> exceptions
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                )
 
         ;
 
