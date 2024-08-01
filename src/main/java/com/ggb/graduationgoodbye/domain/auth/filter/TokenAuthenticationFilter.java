@@ -23,7 +23,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        log.info("TokenAuthenticationFilter >>>>>");
         // 1. 토큰 추출
         String accessToken = tokenService.getToken(request);
 
@@ -35,6 +34,5 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request,response);
-        log.info("TokenAuthenticationFilter <<<<<");
     }
 }

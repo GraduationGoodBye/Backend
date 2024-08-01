@@ -1,24 +1,30 @@
 package com.ggb.graduationgoodbye.domain.user.controller;
 
-import com.ggb.graduationgoodbye.domain.user.dto.UserRequestDto;
+import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
+import com.ggb.graduationgoodbye.domain.auth.vo.Token;
+import com.ggb.graduationgoodbye.domain.user.dto.UserJoinRequest;
 import com.ggb.graduationgoodbye.domain.user.service.UserService;
 import com.ggb.graduationgoodbye.domain.user.vo.User;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
+@RequiredArgsConstructor
+@Slf4j
 public class UserController {
+
     private final UserService userService;
+    private final TokenService tokenService;
 
     @PostMapping("/signup")
-    public ApiResponse<Long> signup(@RequestBody UserRequestDto signupForm) {
-        Long signupUserId = userService.join(signupForm.dtoToVo());
-        return ApiResponse.ok(signupUserId);
+    public ApiResponse<Token> signup(@RequestBody UserJoinRequest userJoinRequest) {
+        Token token = userService.join(userJoinRequest);
+        return ApiResponse.ok(token);
     }
 
     @GetMapping("/info")
