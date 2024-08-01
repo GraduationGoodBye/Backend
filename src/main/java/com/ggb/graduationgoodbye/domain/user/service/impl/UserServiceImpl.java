@@ -28,4 +28,9 @@ public class UserServiceImpl implements UserService {
     public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email) != null;
     }
+
+    @Override
+    public Optional<User> findById(Long id) {
+        return Optional.ofNullable(userRepository.findById(id));
+    }
 }

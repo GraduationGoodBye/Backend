@@ -1,8 +1,11 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
+import com.ggb.graduationgoodbye.domain.auth.filter.TokenAuthenticationFilter;
+import com.ggb.graduationgoodbye.domain.auth.filter.TokenExceptionHandlingFilter;
 import com.ggb.graduationgoodbye.domain.auth.service.CustomOAuth2UserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
+import com.ggb.graduationgoodbye.global.config.log.LogFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
@@ -60,6 +64,11 @@ public class SecurityConfig {
                         .successHandler(new CustomOAuth2SuccessHandler(tokenService, writeResponseUtil))
                         .failureHandler(new CustomOauth2FailHandler(writeResponseUtil))
                 )
+
+                // JWT 필터, 오류 핸들링 / 로깅 필터 추가
+                .addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터
+                .addFilterBefore(new TokenExceptionHandlingFilter(writeResponseUtil), TokenAuthenticationFilter.class) // 오류 핸들링
+                .addFilterBefore(new LogFilter(), TokenExceptionHandlingFilter.class) // 로깅 필터
         ;
 
         return http.build();

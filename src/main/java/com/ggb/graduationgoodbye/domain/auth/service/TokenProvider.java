@@ -34,6 +34,7 @@ public class TokenProvider {
     private final Long REFRESH_EXP;
     private final JwtParser jwtParser;
 
+    private static final String Bearer = "Bearer ";
     private static final String ROLE_CLAIM = "role";
 
     public TokenProvider(
@@ -85,7 +86,7 @@ public class TokenProvider {
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
         User principal = new User(claims.getSubject(),"",authorities);
-        return new UsernamePasswordAuthenticationToken(principal,token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 
     private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
@@ -115,9 +116,9 @@ public class TokenProvider {
     // Authorization 헤더에서 token 추출
     public String getToken(HttpServletRequest request) {
         String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (!StringUtils.hasText(header)) {
-            return null;
+        if (StringUtils.hasText(header) && header.startsWith(Bearer)) {
+            return header.replace(Bearer, "");
         }
-        return header.substring(7);
+        return null;
     }
 }

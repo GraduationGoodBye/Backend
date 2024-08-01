@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggb.graduationgoodbye.domain.user.repository.UserRepository">
+
+    <select id="findById" parameterType="Long" resultType="user">
+        SELECT * FROM users WHERE id = #{id};
+    </select>
+
     <insert id="save" parameterType="user" keyProperty="id">
         INSERT INTO users (email,profile,name,nickname,address,phone,gender,role)
         VALUES (#{email}, #{profile}, #{name}, #{nickname}, #{address}, #{phone}, #{gender}, #{role})
@@ -11,4 +16,5 @@
     <select id="findByEmail" parameterType="String" resultType="user">
         SELECT * FROM users WHERE email = #{email};
     </select>
+
 </mapper>
