@@ -20,7 +20,7 @@ public class User {
     private String gender;
     private Role role;
 
-    @Builder
+    @Builder(builderMethodName = "builder")
     public User(
             String email,
             String profile,
@@ -29,7 +29,7 @@ public class User {
             String address,
             String phone,
             String gender
-    ){
+    ) {
         this.email = email;
         this.profile = profile;
         this.name = name;
@@ -40,7 +40,7 @@ public class User {
         this.role = Role.USER;
     }
 
-    public UserResponseDto voToDto(){
+    public UserResponseDto voToDto() {
         return UserResponseDto.builder()
                 .email(this.email)
                 .profile(this.profile)

@@ -13,7 +13,7 @@ public class ApiResponse<T> {
     private final String message;
     private final T data;
 
-    private ApiResponse(@Nonnull String code, @Nonnull String message, T data){
+    private ApiResponse(@Nonnull String code, @Nonnull String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;

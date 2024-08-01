@@ -10,11 +10,9 @@ import java.io.IOException;
 @Component
 public class WriteResponseUtil {
 
-    public <T> void writeResponse(HttpServletResponse response, int status, ApiResponse apiResponse)
-            throws IOException{
+    public <T> void writeResponse(HttpServletResponse response, int status, ApiResponse<T> apiResponse) throws IOException {
         response.setContentType("application/json");
         response.setStatus(status);
         new ObjectMapper().writeValue(response.getOutputStream(), apiResponse);
     }
-
 }

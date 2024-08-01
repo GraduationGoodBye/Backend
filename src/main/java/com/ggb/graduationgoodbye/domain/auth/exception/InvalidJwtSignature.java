@@ -13,7 +13,7 @@ public class InvalidJwtSignature extends UnAuthenticatedException {
         this.code = AuthErrorType.INVALID_JWT_SIGNATURE.name();
     }
 
-    public InvalidJwtSignature(String message){
+    public InvalidJwtSignature(String message) {
         super(message);
         this.code = AuthErrorType.INVALID_JWT_SIGNATURE.name();
     }

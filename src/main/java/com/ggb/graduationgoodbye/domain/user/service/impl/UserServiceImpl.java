@@ -14,7 +14,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public Long join(User user){
+    public Long join(User user) {
         userRepository.save(user);
         return user.getId();
     }
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean existsByEmail(String email){
+    public boolean existsByEmail(String email) {
         return userRepository.findByEmail(email) != null;
     }
 }

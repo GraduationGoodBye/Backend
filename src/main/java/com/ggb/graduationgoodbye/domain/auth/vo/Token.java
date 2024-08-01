@@ -13,14 +13,14 @@ public class Token {
     private String accessToken;
     private String refreshToken;
 
-    public static Token of(String accessToken, String refreshToken){
+    public static Token of(String accessToken, String refreshToken) {
         return Token.builder()
                 .refreshToken(refreshToken)
                 .accessToken(accessToken)
                 .build();
     }
 
-    public void updateAccessToken(String reissuedAccessToken){
+    public void updateAccessToken(String reissuedAccessToken) {
         this.accessToken = reissuedAccessToken;
     }
 }

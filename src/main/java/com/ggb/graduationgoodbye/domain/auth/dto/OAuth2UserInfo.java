@@ -1,7 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.dto;
 
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
-import com.ggb.graduationgoodbye.domain.user.vo.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,11 +35,11 @@ public class OAuth2UserInfo {
                 .build();
     }
 
-    public User dtoToVo(){
-        return User.builder()
-                .email(email)
-                .profile(profile)
-                .name(name)
-                .build();
-    }
+//    public User dtoToVo() {
+//        return User.builder()
+//                .email(email)
+//                .profile(profile)
+//                .name(name)
+//                .build();
+//    }
 }

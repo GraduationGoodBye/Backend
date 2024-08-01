@@ -2,15 +2,12 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidJwtSignature;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
-import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
-import com.ggb.graduationgoodbye.domain.auth.vo.Token;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -29,39 +26,44 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class TokenProvider {
-    @Value("${jwt.secret}")
-    private String tokenSecret;
 
-    @Value("${jwt.expired.access}")
-    private String accessExpireTime;
-
-    @Value("${jwt.expired.refresh}")
-    private String refreshExpireTime;
+    private final SecretKey SECRET_KEY;
+    private final Long ACCESS_EXP;
+    private final Long REFRESH_EXP;
+    private final JwtParser jwtParser;
 
     private static final String ROLE_CLAIM = "role";
 
-    private final TokenRepository tokenRepository;
-
-    // access-token 생성
-    public String createAccessToken(Authentication authentication){
-        Long expireTime = Long.parseLong(accessExpireTime);
-        return createToken(authentication, expireTime);
+    public TokenProvider(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expired.access}") Long accessExp,
+            @Value("${jwt.expired.refresh}") Long refreshExp
+    ) {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
+        this.ACCESS_EXP = accessExp;
+        this.REFRESH_EXP = refreshExp;
+        this.jwtParser = Jwts.parser().verifyWith(SECRET_KEY).build();
     }
 
-    // refresh-token 생성
-    public void createRefreshToken(Authentication authentication, String accessToken){
-        Long expireTime = Long.parseLong(refreshExpireTime); // parsing String -> Long
-        String refreshToken = createToken(authentication, expireTime); // refresh-token 생성
-        Token token = Token.of(accessToken, refreshToken); // VO
-        tokenRepository.save(token); // DB 저장
+    public String createAccessToken(Authentication authentication) {
+        return createToken(authentication, ACCESS_EXP);
     }
 
-    private String createToken(Authentication authentication, Long expireTime){
+    public String createAccessToken(String accessToken) {
+        Authentication authentication = getAuthentication(accessToken);
+        return createAccessToken(authentication);
+    }
+
+    public String createRefreshToken(Authentication authentication) {
+        return createToken(authentication, REFRESH_EXP);
+    }
+
+    private String createToken(Authentication authentication, Long exp) {
         Date now = new Date();
-        Date expiredDate = new Date(now.getTime() + expireTime);
+        Date expiredDate = new Date(now.getTime() + exp);
 
         String authorities = authentication.getAuthorities()
                 .stream()
@@ -73,12 +75,12 @@ public class TokenProvider {
                 .claim(ROLE_CLAIM, authorities)
                 .issuedAt(now)
                 .expiration(expiredDate)
-                .signWith(getSigningKey())
+                .signWith(SECRET_KEY)
                 .compact();
     }
 
     // Authentication 객체 생성
-    public Authentication getAuthentication(String token){
+    public Authentication getAuthentication(String token) {
         Claims claims = getClaimsFromToken(token);
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
 
@@ -86,64 +88,36 @@ public class TokenProvider {
         return new UsernamePasswordAuthenticationToken(principal,token, authorities);
     }
 
-    private List<SimpleGrantedAuthority> getAuthorities(Claims claims){
+    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
         return Collections.singletonList(new SimpleGrantedAuthority(claims.get(ROLE_CLAIM).toString()));
     }
 
-    // accessToken 재발급
-    public String reissueAccessToken(String accessToken){
-        if(StringUtils.hasText(accessToken)){
-            Token token = tokenRepository.findByAccessToken(accessToken);
-            String refreshToken = token.getRefreshToken();
-
-            if(validateToken(refreshToken)){
-                String reissuedAccessToken = createAccessToken(getAuthentication(refreshToken));
-                token.updateAccessToken(reissuedAccessToken);
-                tokenRepository.update(token);
-                return reissuedAccessToken;
-            }
-        }
-        return null;
-    }
-
     // token validation
-    public boolean validateToken(String token) {
-        if(!StringUtils.hasText(token)){
-            return false;
-        }
-
-        Claims claims = getClaimsFromToken(token);
-        return claims.getExpiration().after(new Date());
+    public void validateToken(String token) {
+        this.getClaimsFromToken(token);
     }
 
     // JWT 페이로드에 담긴 claims 조회
     private Claims getClaimsFromToken(String token) {
-        try{
-            return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
-        }catch(ExpiredJwtException e){
+        try {
+            return jwtParser.parseSignedClaims(token).getPayload();
+        } catch (ExpiredJwtException e) {
             return e.getClaims();
-        }catch (SignatureException e) {
+        } catch (SignatureException e) {
             throw new InvalidJwtSignature();
-        }catch (JwtException e) {
+        } catch (JwtException e) {
             throw new InvalidTokenException(e.getMessage());
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new UnAuthenticatedException(e.getMessage());
         }
     }
 
-    // secret key 복호화
-    private SecretKey getSigningKey(){
-        byte[] keyBytes = Decoders.BASE64.decode(tokenSecret);
-        return Keys.hmacShaKeyFor(keyBytes);
-    }
-
     // Authorization 헤더에서 token 추출
     public String getToken(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (StringUtils.hasText(authorizationHeader)) {
-            return authorizationHeader.substring(7);
-        } else {
+        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+        if (!StringUtils.hasText(header)) {
             return null;
         }
+        return header.substring(7);
     }
 }

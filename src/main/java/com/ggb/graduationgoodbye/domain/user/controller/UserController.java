@@ -16,7 +16,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ApiResponse<Long> signup(@RequestBody UserRequestDto signupForm){
+    public ApiResponse<Long> signup(@RequestBody UserRequestDto signupForm) {
         Long signupUserId = userService.join(signupForm.dtoToVo());
         return ApiResponse.ok(signupUserId);
     }

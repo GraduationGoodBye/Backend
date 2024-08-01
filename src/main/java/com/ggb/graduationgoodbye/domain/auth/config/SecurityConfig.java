@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
 import com.ggb.graduationgoodbye.domain.auth.service.CustomOAuth2UserService;
-import com.ggb.graduationgoodbye.domain.auth.service.TokenProvider;
+import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService oAuth2UserService;
-    private final TokenProvider tokenProvider;
+    private final TokenService tokenService;
     private final WriteResponseUtil writeResponseUtil;
 
     @Bean
@@ -57,15 +57,9 @@ public class SecurityConfig {
                 .oauth2Login(oauth -> oauth
                         .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
                         .userInfoEndpoint(c -> c.userService(oAuth2UserService))
-                        .successHandler(new CustomOAuth2SuccessHandler(tokenProvider))
-                        .failureHandler(new CustomOauth2FailHandler())
+                        .successHandler(new CustomOAuth2SuccessHandler(tokenService, writeResponseUtil))
+                        .failureHandler(new CustomOauth2FailHandler(writeResponseUtil))
                 )
-                // 인증/인가 오류 시 핸들링(커스텀 시 사용)
-                .exceptionHandling((exceptions) -> exceptions
-                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint(writeResponseUtil))
-                        .accessDeniedHandler(new CustomAccessDeniedHandler())
-                )
-
         ;
 
         return http.build();

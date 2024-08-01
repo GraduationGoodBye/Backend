@@ -5,17 +5,19 @@ import lombok.Getter;
 
 @Getter
 public class UserRequestDto {
+    private String email;
     private String nickname;
     private String address;
     private String phone;
     private String gender;
 
-    public User dtoToVo(){
+    public User dtoToVo() {
         return User.builder()
-                .nickname(this.nickname)
-                .address(this.address)
-                .phone(this.phone)
-                .gender(this.gender)
+                .email(email)
+                .nickname(nickname)
+                .address(address)
+                .phone(phone)
+                .gender(gender)
                 .build();
     }
 }
