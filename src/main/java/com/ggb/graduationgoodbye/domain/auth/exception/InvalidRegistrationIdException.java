@@ -13,7 +13,7 @@ public class InvalidRegistrationIdException extends ServerException {
         this.code = AuthErrorType.INVALID_REGISTRATION_ID.name();
     }
 
-    public InvalidRegistrationIdException(String message) {
+    public InvalidRegistrationIdException(final String message) {
         super(message);
         this.code = AuthErrorType.INVALID_REGISTRATION_ID.name();
     }

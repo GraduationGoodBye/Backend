@@ -18,7 +18,7 @@ public class InvalidTokenException extends UnAuthenticatedException {
         this.code = AuthErrorType.INVALID_TOKEN.name();
     }
 
-    public InvalidTokenException(String message) {
+    public InvalidTokenException(final String message) {
         super(message);
         this.code = AuthErrorType.INVALID_TOKEN.name();
     }

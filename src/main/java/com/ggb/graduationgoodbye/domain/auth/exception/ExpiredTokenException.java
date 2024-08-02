@@ -18,7 +18,7 @@ public class ExpiredTokenException extends UnAuthenticatedException {
         this.code = AuthErrorType.EXPIRED_TOKEN.name();
     }
 
-    public ExpiredTokenException(String message) {
+    public ExpiredTokenException(final String message) {
         super(message);
         this.code = AuthErrorType.EXPIRED_TOKEN.name();
     }
