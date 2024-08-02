@@ -1,8 +1,8 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
+import com.ggb.graduationgoodbye.domain.auth.exception.NoTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.domain.auth.vo.Token;
-import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -33,8 +33,8 @@ public class TokenService {
     // accessToken 재발급
     public String reissueAccessToken(String accessToken) {
         if (!StringUtils.hasText(accessToken)) {
-            // TODO: Exception 다른 거 만들기
-            throw new BusinessException();
+            // NOTE : NoTokenException 생성
+            throw new NoTokenException();
         }
 
         Token token = tokenRepository.findByAccessToken(accessToken);

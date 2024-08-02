@@ -7,6 +7,7 @@ public enum AuthErrorType {
 
     // Common
     NOT_JOINED_USER("가입되지 않은 회원입니다."),
+    NO_TOKEN("액세스 토큰이 존재하지 않습니다."),
 
     // JWT
     EXPIRED_TOKEN ("만료된 토큰입니다."),
