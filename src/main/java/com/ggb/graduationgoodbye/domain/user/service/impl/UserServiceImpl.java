@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.user.service.impl;
 
+import com.ggb.graduationgoodbye.domain.auth.dto.PrincipalDetails;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.auth.vo.Token;
 import com.ggb.graduationgoodbye.domain.user.dto.UserJoinRequest;
@@ -13,9 +14,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -27,6 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Token join(UserJoinRequest request) {
+        // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
         String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo";
 
         HttpHeaders headers = new HttpHeaders();
@@ -41,15 +47,24 @@ public class UserServiceImpl implements UserService {
 
         User user = User.builder()
                 .email(googleUser.getEmail())
+                .profile(googleUser.getProfile())
                 .nickname(request.nickname())
                 .address(request.address())
                 .phone(request.phone())
                 .gender(request.gender())
                 .build();
         userRepository.save(user);
+        
+        return tokenService.getToken(makeAuthentication(user));
+    }
 
-        // TODO: 토큰 발급 추
-        return Token.of("", "");
+    // NOTE : 추가 수정 필요 - 메서드 위치, 구현 방식
+    private Authentication makeAuthentication(User user) {
+        return new UsernamePasswordAuthenticationToken(
+                user.getId().toString(),
+                null,
+                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
+        );
     }
 
     @Override
