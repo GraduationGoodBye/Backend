@@ -5,6 +5,7 @@ import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -13,12 +14,10 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import java.io.IOException;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CustomOauth2FailHandler implements AuthenticationFailureHandler {
-    private final WriteResponseUtil writeResponseUtil;
 
-    public CustomOauth2FailHandler(WriteResponseUtil writeResponseUtil) {
-        this.writeResponseUtil = writeResponseUtil;
-    }
+    private final WriteResponseUtil writeResponseUtil;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
