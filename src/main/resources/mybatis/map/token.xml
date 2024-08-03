@@ -9,10 +9,10 @@
     </insert>
 
     <update id="update" parameterType="token">
-        UPDATE tokens
-        SET
-            access_token = #{accessToken}
-        WHERE refresh_token = #{refreshToken};
+        UPDATE tokens SET
+        access_token = #{accessToken},
+        refresh_token = #{refreshToken}
+        WHERE id = #{id};
     </update>
 
     <delete id="delete" parameterType="int">

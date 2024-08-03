@@ -20,7 +20,8 @@ public class Token {
                 .build();
     }
 
-    public void updateAccessToken(String reissuedAccessToken) {
+    public void updateAccessToken(String reissuedAccessToken, String reissuedRefreshToken) {
         this.accessToken = reissuedAccessToken;
+        this.refreshToken = reissuedRefreshToken;
     }
 }

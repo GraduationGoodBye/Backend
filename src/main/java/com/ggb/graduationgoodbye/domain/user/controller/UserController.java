@@ -38,4 +38,12 @@ public class UserController {
         User user = userService.findById(id).orElse(null);
         return ApiResponse.ok(user);
     }
+
+    @PostMapping("/reissue")
+    public ApiResponse<Token> reissue(@RequestBody TokenReissueRequest tokenReissueRequest,
+                                      HttpServletRequest request){
+        tokenService.validateToken(tokenReissueRequest.refreshToken());
+        Token token = tokenService.reissueAccessToken(tokenService.getToken(request));
+        return ApiResponse.ok(token);
+    }
 }

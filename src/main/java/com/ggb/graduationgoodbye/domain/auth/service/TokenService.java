@@ -31,7 +31,7 @@ public class TokenService {
     }
 
     // accessToken 재발급
-    public String reissueAccessToken(String accessToken) {
+    public Token reissueAccessToken(String accessToken) {
         if (!StringUtils.hasText(accessToken)) {
             // NOTE : NoTokenException 생성
             throw new NoTokenException();
@@ -43,9 +43,10 @@ public class TokenService {
         tokenProvider.validateToken(refreshToken);
 
         String reissuedAccessToken = tokenProvider.createAccessToken(refreshToken);
-        token.updateAccessToken(reissuedAccessToken);
+        String reissuedRefreshToken = tokenProvider.createRefreshToken(reissuedAccessToken);
+        token.updateAccessToken(reissuedAccessToken, reissuedRefreshToken);
         tokenRepository.update(token);
-        return reissuedAccessToken;
+        return token;
     }
 
     public void validateToken(String accessToken) {

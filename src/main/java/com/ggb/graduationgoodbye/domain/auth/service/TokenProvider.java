@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
-import com.ggb.graduationgoodbye.domain.auth.exception.InvalidJwtSignature;
+import com.ggb.graduationgoodbye.domain.auth.exception.ExpiredTokenException;
+import com.ggb.graduationgoodbye.domain.auth.exception.InvalidJwtSignatureException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import io.jsonwebtoken.*;
@@ -53,13 +54,18 @@ public class TokenProvider {
         return createToken(authentication, ACCESS_EXP);
     }
 
-    public String createAccessToken(String accessToken) {
-        Authentication authentication = getAuthentication(accessToken);
+    public String createAccessToken(String refreshToken) {
+        Authentication authentication = getAuthentication(refreshToken);
         return createAccessToken(authentication);
     }
 
     public String createRefreshToken(Authentication authentication) {
         return createToken(authentication, REFRESH_EXP);
+    }
+
+    public String createRefreshToken(String accessToken) {
+        Authentication authentication = getAuthentication(accessToken);
+        return createRefreshToken(authentication);
     }
 
     private String createToken(Authentication authentication, Long exp) {
@@ -103,9 +109,9 @@ public class TokenProvider {
         try {
             return jwtParser.parseSignedClaims(token).getPayload();
         } catch (ExpiredJwtException e) {
-            return e.getClaims();
+            throw new ExpiredTokenException();
         } catch (SignatureException e) {
-            throw new InvalidJwtSignature();
+            throw new InvalidJwtSignatureException();
         } catch (JwtException e) {
             throw new InvalidTokenException(e.getMessage());
         } catch (Exception e) {
