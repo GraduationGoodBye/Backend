@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.s3.utils;
+package com.ggb.graduationgoodbye.global.utils;
 
 import org.springframework.stereotype.Component;
 

@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.dto;
 
-import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
+import com.ggb.graduationgoodbye.domain.auth.exception.InvalidRegistrationIdException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +23,7 @@ public class OAuth2UserInfo {
         return switch (registrationId) {
             case "google" -> ofGoogle(oAuth2UserAttributes);
             // 새로운 리소스 서버 추가 ...
-            default -> throw new InvalidTokenException();
+            default -> throw new InvalidRegistrationIdException();
         };
     }
 

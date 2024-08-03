@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.test.service;
 
-import com.ggb.graduationgoodbye.domain.s3.utils.Base64Util;
+import com.ggb.graduationgoodbye.global.utils.Base64Util;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

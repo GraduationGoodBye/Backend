@@ -1,7 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
 import com.ggb.graduationgoodbye.domain.auth.exception.NoTokenException;
-import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
