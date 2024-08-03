@@ -27,7 +27,6 @@ public class MemberController {
     @PostMapping("/signup")
     public ApiResponse<Token> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
         Token token = memberService.join(memberJoinRequest);
-        tokenService.save(token);
         return ApiResponse.ok(token);
     }
 

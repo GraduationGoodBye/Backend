@@ -53,8 +53,14 @@ public class MemberServiceImpl implements MemberService {
                 .gender(request.gender())
                 .build();
         memberRepository.save(member);
-        
-        return tokenService.getToken(makeAuthentication(member));
+
+        return saveToken(member);
+    }
+
+    private Token saveToken(Member member){
+        Token token = tokenService.getToken(makeAuthentication(member));
+        tokenService.save(token);
+        return token;
     }
 
     // NOTE : 추가 수정 필요 - 메서드 위치, 구현 방식
