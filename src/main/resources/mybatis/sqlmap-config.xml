@@ -14,5 +14,7 @@
         <setting name="defaultExecutorType" value="REUSE" />
         <!-- jdbcTypeForNull : jdbc 타입을 파라미터에 제공하지 않을 때 null 처리한 jdbc 타입을 명시 -->
         <setting name="jdbcTypeForNull" value="NULL" />
+        <!-- 데이터베이스의 컬럼명과 Java 객체의 필드명 간의 명명 규칙 차이를 자동으로 매핑 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 </configuration>
