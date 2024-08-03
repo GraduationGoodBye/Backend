@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
-import com.ggb.graduationgoodbye.domain.auth.exception.NoTokenException;
+import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +20,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
             throws IOException, ServletException {
         if(!StringUtils.hasText(request.getHeader(HttpHeaders.AUTHORIZATION))){
-            throw new NoTokenException();
+            throw new NotExistsTokenException();
         }
         log.error("Unauthorized access : {}", e.getMessage());
         throw new UnAuthenticatedException();

@@ -33,8 +33,7 @@ public class TokenService {
     // accessToken 재발급
     public Token reissueAccessToken(String accessToken) {
         if (!StringUtils.hasText(accessToken)) {
-            // NOTE : NoTokenException 생성
-            throw new NoTokenException();
+            throw new NotExistsTokenException();
         }
 
         Token token = tokenRepository.findByAccessToken(accessToken);
