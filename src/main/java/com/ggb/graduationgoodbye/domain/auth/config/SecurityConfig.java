@@ -65,6 +65,12 @@ public class SecurityConfig {
                         .failureHandler(new CustomOauth2FailHandler(writeResponseUtil))
                 )
 
+                // 예외 핸들링
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                )
+
                 // JWT 필터, 오류 핸들링 / 로깅 필터 추가
                 .addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터
                 .addFilterBefore(new TokenExceptionHandlingFilter(writeResponseUtil), TokenAuthenticationFilter.class) // 오류 핸들링
