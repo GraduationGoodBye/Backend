@@ -23,10 +23,11 @@ spring:
             client-secret: ggb
             scope:
 jwt:
-  secret: ggb
+  secret: ggggggggggggggggggggggbbbbbbbbbbbbbbbbbbbbbb
   expired:
-    access: ggb
-    refresh: ggb
+    access: 123
+    refresh: 123
+
 #  # REDIS
 #  data:
 #    redis:
