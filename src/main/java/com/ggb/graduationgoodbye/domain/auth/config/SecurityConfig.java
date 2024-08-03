@@ -4,7 +4,6 @@ import com.ggb.graduationgoodbye.domain.auth.filter.TokenAuthenticationFilter;
 import com.ggb.graduationgoodbye.domain.auth.filter.TokenExceptionHandlingFilter;
 import com.ggb.graduationgoodbye.domain.auth.service.CustomOAuth2UserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
 import com.ggb.graduationgoodbye.global.config.log.LogFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +25,6 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService oAuth2UserService;
     private final TokenService tokenService;
-    private final WriteResponseUtil writeResponseUtil;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -61,8 +59,8 @@ public class SecurityConfig {
                 .oauth2Login(oauth -> oauth
                         .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
                         .userInfoEndpoint(c -> c.userService(oAuth2UserService))
-                        .successHandler(new CustomOAuth2SuccessHandler(tokenService, writeResponseUtil))
-                        .failureHandler(new CustomOauth2FailHandler(writeResponseUtil))
+                        .successHandler(new CustomOAuth2SuccessHandler(tokenService))
+                        .failureHandler(new CustomOauth2FailHandler())
                 )
 
                 // 예외 핸들링
@@ -73,7 +71,7 @@ public class SecurityConfig {
 
                 // JWT 필터, 오류 핸들링 / 로깅 필터 추가
                 .addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터
-                .addFilterBefore(new TokenExceptionHandlingFilter(writeResponseUtil), TokenAuthenticationFilter.class) // 오류 핸들링
+                .addFilterBefore(new TokenExceptionHandlingFilter(), TokenAuthenticationFilter.class) // 오류 핸들링
                 .addFilterBefore(new LogFilter(), TokenExceptionHandlingFilter.class) // 로깅 필터
         ;
 

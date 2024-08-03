@@ -19,14 +19,13 @@ import java.io.IOException;
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
     private final TokenService tokenService;
-    private final WriteResponseUtil writeResponseUtil;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         Token token = tokenService.getToken(authentication);
         tokenService.save(token);
 
-        writeResponseUtil.writeResponse(
+        WriteResponseUtil.writeResponse(
                 response,
                 HttpStatus.UNAUTHORIZED.value(),
                 ApiResponse.ok(
