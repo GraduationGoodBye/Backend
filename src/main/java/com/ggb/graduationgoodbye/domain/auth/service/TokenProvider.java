@@ -12,18 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -34,6 +29,7 @@ public class TokenProvider {
     private final Long ACCESS_EXP;
     private final Long REFRESH_EXP;
     private final JwtParser jwtParser;
+    private final AuthProvider authProvider;
 
     private static final String Bearer = "Bearer ";
     private static final String ROLE_CLAIM = "role";
@@ -41,8 +37,10 @@ public class TokenProvider {
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.expired.access}") Long accessExp,
-            @Value("${jwt.expired.refresh}") Long refreshExp
+            @Value("${jwt.expired.refresh}") Long refreshExp,
+            AuthProvider authProvider
     ) {
+        this.authProvider = authProvider;
         byte[] keyBytes = Decoders.BASE64.decode(secret);
         this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
         this.ACCESS_EXP = accessExp;
@@ -55,7 +53,8 @@ public class TokenProvider {
     }
 
     public String createAccessToken(String refreshToken) {
-        Authentication authentication = getAuthentication(refreshToken);
+        Claims claims = getClaimsFromToken(refreshToken);
+        Authentication authentication = authProvider.getAuthentication(claims);
         return createAccessToken(authentication);
     }
 
@@ -64,7 +63,8 @@ public class TokenProvider {
     }
 
     public String createRefreshToken(String accessToken) {
-        Authentication authentication = getAuthentication(accessToken);
+        Claims claims = getClaimsFromToken(accessToken);
+        Authentication authentication = authProvider.getAuthentication(claims);
         return createRefreshToken(authentication);
     }
 
@@ -86,26 +86,13 @@ public class TokenProvider {
                 .compact();
     }
 
-    // Authentication 객체 생성
-    public Authentication getAuthentication(String token) {
-        Claims claims = getClaimsFromToken(token);
-        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
-
-        User principal = new User(claims.getSubject(),"",authorities);
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
-    }
-
-    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
-        return Collections.singletonList(new SimpleGrantedAuthority(claims.get(ROLE_CLAIM).toString()));
-    }
-
     // token validation
     public void validateToken(String token) {
         this.getClaimsFromToken(token);
     }
 
     // JWT 페이로드에 담긴 claims 조회
-    private Claims getClaimsFromToken(String token) {
+    public Claims getClaimsFromToken(String token) {
         try {
             return jwtParser.parseSignedClaims(token).getPayload();
         } catch (ExpiredJwtException e) {

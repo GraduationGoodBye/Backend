@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.service.impl;
 
+import com.ggb.graduationgoodbye.domain.auth.service.AuthProvider;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.auth.vo.Token;
 import com.ggb.graduationgoodbye.domain.member.dto.MemberJoinRequest;
@@ -13,13 +14,9 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collections;
 import java.util.Optional;
 
 @Service
@@ -28,6 +25,7 @@ import java.util.Optional;
 public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
     private final TokenService tokenService;
+    private final AuthProvider authProvider;
 
     @Override
     public Token join(MemberJoinRequest request) {
@@ -58,18 +56,9 @@ public class MemberServiceImpl implements MemberService {
     }
 
     private Token saveToken(Member member){
-        Token token = tokenService.getToken(makeAuthentication(member));
+        Token token = tokenService.getToken(authProvider.getAuthentication(member));
         tokenService.save(token);
         return token;
-    }
-
-    // NOTE : 추가 수정 필요 - 메서드 위치, 구현 방식
-    private Authentication makeAuthentication(Member member) {
-        return new UsernamePasswordAuthenticationToken(
-                member.getId().toString(),
-                null,
-                Collections.singletonList(new SimpleGrantedAuthority(member.getRole().name()))
-        );
     }
 
     @Override

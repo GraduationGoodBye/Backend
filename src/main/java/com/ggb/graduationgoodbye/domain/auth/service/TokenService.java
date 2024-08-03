@@ -1,8 +1,9 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
-import com.ggb.graduationgoodbye.domain.auth.exception.NoTokenException;
+import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.domain.auth.vo.Token;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,7 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class TokenService {
     private final TokenProvider tokenProvider;
+    private final AuthProvider  authProvider;
     private final TokenRepository tokenRepository;
 
     public Token getToken(Authentication authentication) {
@@ -53,6 +55,7 @@ public class TokenService {
     }
 
     public Authentication getAuthentication(String token) {
-        return tokenProvider.getAuthentication(token);
+        Claims claims = tokenProvider.getClaimsFromToken(token);
+        return authProvider.getAuthentication(claims);
     }
 }
