@@ -1,14 +1,14 @@
-package com.ggb.graduationgoodbye.domain.user.vo;
+package com.ggb.graduationgoodbye.domain.member.vo;
 
-import com.ggb.graduationgoodbye.domain.user._enum.Role;
+import com.ggb.graduationgoodbye.domain.member._enum.Role;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
-@Alias("user")
+@Alias("member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class User {
+public class Member {
     private Long id;
     private String email;
     private String profile;
@@ -19,8 +19,8 @@ public class User {
     private String gender;
     private Role role;
 
-    @Builder(builderMethodName = "builder")
-    public User(
+    @Builder
+    public Member(
             String email,
             String profile,
             String name,

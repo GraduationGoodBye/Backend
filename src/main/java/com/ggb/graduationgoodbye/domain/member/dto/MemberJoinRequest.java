@@ -1,6 +1,6 @@
-package com.ggb.graduationgoodbye.domain.user.dto;
+package com.ggb.graduationgoodbye.domain.member.dto;
 
-public record UserJoinRequest (
+public record MemberJoinRequest(
     String accessToken,
     String nickname,
     String address,

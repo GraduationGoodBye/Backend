@@ -1,12 +1,11 @@
-package com.ggb.graduationgoodbye.domain.user.service.impl;
+package com.ggb.graduationgoodbye.domain.member.service.impl;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.PrincipalDetails;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.auth.vo.Token;
-import com.ggb.graduationgoodbye.domain.user.dto.UserJoinRequest;
-import com.ggb.graduationgoodbye.domain.user.repository.UserRepository;
-import com.ggb.graduationgoodbye.domain.user.service.UserService;
-import com.ggb.graduationgoodbye.domain.user.vo.User;
+import com.ggb.graduationgoodbye.domain.member.dto.MemberJoinRequest;
+import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
+import com.ggb.graduationgoodbye.domain.member.service.MemberService;
+import com.ggb.graduationgoodbye.domain.member.vo.Member;
 import com.nimbusds.jose.shaded.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +25,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
-    private final UserRepository userRepository;
+public class MemberServiceImpl implements MemberService {
+    private final MemberRepository memberRepository;
     private final TokenService tokenService;
 
     @Override
-    public Token join(UserJoinRequest request) {
+    public Token join(MemberJoinRequest request) {
         // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
         String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo";
 
@@ -43,42 +42,42 @@ public class UserServiceImpl implements UserService {
 
         log.info("Google Response >> {}", response.getBody());
 
-        User googleUser = new Gson().fromJson(response.getBody(), User.class);
+        Member googleMember = new Gson().fromJson(response.getBody(), Member.class);
 
-        User user = User.builder()
-                .email(googleUser.getEmail())
-                .profile(googleUser.getProfile())
+        Member member = Member.builder()
+                .email(googleMember.getEmail())
+                .profile(googleMember.getProfile())
                 .nickname(request.nickname())
                 .address(request.address())
                 .phone(request.phone())
                 .gender(request.gender())
                 .build();
-        userRepository.save(user);
+        memberRepository.save(member);
         
-        return tokenService.getToken(makeAuthentication(user));
+        return tokenService.getToken(makeAuthentication(member));
     }
 
     // NOTE : 추가 수정 필요 - 메서드 위치, 구현 방식
-    private Authentication makeAuthentication(User user) {
+    private Authentication makeAuthentication(Member member) {
         return new UsernamePasswordAuthenticationToken(
-                user.getId().toString(),
+                member.getId().toString(),
                 null,
-                Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()))
+                Collections.singletonList(new SimpleGrantedAuthority(member.getRole().name()))
         );
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return Optional.ofNullable(userRepository.findByEmail(email));
+    public Optional<Member> findByEmail(String email) {
+        return Optional.ofNullable(memberRepository.findByEmail(email));
     }
 
     @Override
     public boolean existsByEmail(String email) {
-        return userRepository.findByEmail(email) != null;
+        return memberRepository.findByEmail(email) != null;
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return Optional.ofNullable(userRepository.findById(id));
+    public Optional<Member> findById(Long id) {
+        return Optional.ofNullable(memberRepository.findById(id));
     }
 }

@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.dto;
 
-import com.ggb.graduationgoodbye.domain.user.vo.User;
+import com.ggb.graduationgoodbye.domain.member.vo.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +15,7 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public class PrincipalDetails implements OAuth2User, UserDetails {
-    private User user;
+    private Member member;
     private Map<String,Object> attributes;
     private String attributeKey;
 
@@ -31,7 +31,7 @@ public class PrincipalDetails implements OAuth2User, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(member.getRole().name()));
     }
 
     @Override
@@ -41,7 +41,7 @@ public class PrincipalDetails implements OAuth2User, UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getId().toString();
+        return member.getId().toString();
     }
 
     @Override
