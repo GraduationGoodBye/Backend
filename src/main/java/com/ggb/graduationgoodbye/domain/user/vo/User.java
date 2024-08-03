@@ -1,7 +1,6 @@
 package com.ggb.graduationgoodbye.domain.user.vo;
 
 import com.ggb.graduationgoodbye.domain.user._enum.Role;
-import com.ggb.graduationgoodbye.domain.user.dto.UserResponseDto;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
@@ -38,18 +37,5 @@ public class User {
         this.phone = phone;
         this.gender = gender;
         this.role = Role.USER;
-    }
-
-    public UserResponseDto voToDto() {
-        return UserResponseDto.builder()
-                .email(this.email)
-                .profile(this.profile)
-                .name(this.name)
-                .nickname(this.nickname)
-                .address(this.address)
-                .phone(this.phone)
-                .gender(this.gender)
-                .role(this.role.name())
-                .build();
     }
 }

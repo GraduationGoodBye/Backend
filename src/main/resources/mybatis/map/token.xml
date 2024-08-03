@@ -19,7 +19,7 @@
         DELETE FROM tokens WHERE id = #{id};
     </delete>
 
-    <select id="findByAccessToken" parameterType="String" resultType="token">
+    <select id="findByAccessToken" parameterType="String" resultType="token" >
         SELECT * FROM tokens WHERE access_token = #{accessToken};
     </select>
 </mapper>
