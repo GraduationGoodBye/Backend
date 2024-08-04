@@ -2,7 +2,7 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
-import com.ggb.graduationgoodbye.domain.auth.vo.Token;
+import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

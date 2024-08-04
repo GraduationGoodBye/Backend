@@ -1,8 +1,8 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
-import com.ggb.graduationgoodbye.domain.auth.vo.Token;
+import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.member.dto.MemberJoinRequest;
-import com.ggb.graduationgoodbye.domain.member.vo.Member;
+import com.ggb.graduationgoodbye.domain.member.entity.Member;
 
 import java.util.Optional;
 

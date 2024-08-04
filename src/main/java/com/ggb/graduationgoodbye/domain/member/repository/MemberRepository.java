@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
-import com.ggb.graduationgoodbye.domain.member.vo.Member;
+import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

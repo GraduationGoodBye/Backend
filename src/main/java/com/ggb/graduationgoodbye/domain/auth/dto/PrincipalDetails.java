@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.dto;
 
-import com.ggb.graduationgoodbye.domain.member.vo.Member;
+import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;

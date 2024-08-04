@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.vo;
+package com.ggb.graduationgoodbye.domain.auth.entity;
 
 import lombok.*;
 import org.apache.ibatis.type.Alias;

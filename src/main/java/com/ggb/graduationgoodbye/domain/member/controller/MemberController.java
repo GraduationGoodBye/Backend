@@ -2,12 +2,11 @@ package com.ggb.graduationgoodbye.domain.member.controller;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.auth.vo.Token;
+import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.member.dto.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
-import com.ggb.graduationgoodbye.domain.member.vo.Member;
+import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;

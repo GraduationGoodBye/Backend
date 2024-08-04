@@ -1,8 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.repository;
 
-import com.ggb.graduationgoodbye.domain.auth.vo.Token;
+import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface TokenRepository {

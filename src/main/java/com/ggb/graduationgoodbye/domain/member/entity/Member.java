@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.vo;
+package com.ggb.graduationgoodbye.domain.member.entity;
 
 import com.ggb.graduationgoodbye.domain.member._enum.Role;
 import lombok.*;
