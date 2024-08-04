@@ -51,11 +51,13 @@ public class TokenService {
     }
 
     public void validateToken(String accessToken) {
-        tokenProvider.validateToken(accessToken);
+        tokenProvider.validateAccessToken(accessToken);
     }
 
     public Authentication getAuthentication(String token) {
         Claims claims = tokenProvider.getClaimsFromToken(token);
+    public Authentication getAuthentication(String accessToken) {
+        Claims claims = tokenProvider.getClaimsFromAccessToken(accessToken);
         return authProvider.getAuthentication(claims);
     }
 }

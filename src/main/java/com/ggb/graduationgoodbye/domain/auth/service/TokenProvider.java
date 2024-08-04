@@ -25,50 +25,52 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TokenProvider {
 
-    private final SecretKey SECRET_KEY;
+    private final SecretKey ACCESS_SECRET;
+    private final SecretKey REFRESH_SECRET;
     private final Long ACCESS_EXP;
     private final Long REFRESH_EXP;
-    private final JwtParser jwtParser;
     private final AuthProvider authProvider;
 
     private static final String Bearer = "Bearer ";
     private static final String ROLE_CLAIM = "role";
 
     public TokenProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expired.access}") Long accessExp,
-            @Value("${jwt.expired.refresh}") Long refreshExp,
+            @Value("${jwt.access.secret}") String accessSecret,
+            @Value("${jwt.access.expired}") Long accessExp,
+            @Value("${jwt.refresh.secret}") String refreshSecret,
+            @Value("${jwt.refresh.expired}") Long refreshExp,
             AuthProvider authProvider
     ) {
         this.authProvider = authProvider;
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        this.SECRET_KEY = Keys.hmacShaKeyFor(keyBytes);
+        byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecret);
+        byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshSecret);
+        this.ACCESS_SECRET = Keys.hmacShaKeyFor(accessKeyBytes);
+        this.REFRESH_SECRET = Keys.hmacShaKeyFor(refreshKeyBytes);
         this.ACCESS_EXP = accessExp;
         this.REFRESH_EXP = refreshExp;
-        this.jwtParser = Jwts.parser().verifyWith(SECRET_KEY).build();
     }
 
     public String createAccessToken(Authentication authentication) {
-        return createToken(authentication, ACCESS_EXP);
+        return createToken(authentication, ACCESS_SECRET, ACCESS_EXP);
     }
 
     public String createAccessToken(String refreshToken) {
-        Claims claims = getClaimsFromToken(refreshToken);
+        Claims claims = getClaimsFromRefreshToken(refreshToken);
         Authentication authentication = authProvider.getAuthentication(claims);
         return createAccessToken(authentication);
     }
 
     public String createRefreshToken(Authentication authentication) {
-        return createToken(authentication, REFRESH_EXP);
+        return createToken(authentication,REFRESH_SECRET ,REFRESH_EXP);
     }
 
     public String createRefreshToken(String accessToken) {
-        Claims claims = getClaimsFromToken(accessToken);
+        Claims claims = getClaimsFromAccessToken(accessToken);
         Authentication authentication = authProvider.getAuthentication(claims);
         return createRefreshToken(authentication);
     }
 
-    private String createToken(Authentication authentication, Long exp) {
+    private String createToken(Authentication authentication,SecretKey secret, Long exp) {
         Date now = new Date();
         Date expiredDate = new Date(now.getTime() + exp);
 
@@ -82,19 +84,35 @@ public class TokenProvider {
                 .claim(ROLE_CLAIM, authorities)
                 .issuedAt(now)
                 .expiration(expiredDate)
-                .signWith(SECRET_KEY)
+                .signWith(secret)
                 .compact();
     }
 
     // token validation
-    public void validateToken(String token) {
-        this.getClaimsFromToken(token);
+    public void validateAccessToken(String accessToken){
+        validateToken(accessToken, ACCESS_SECRET);
+    }
+
+    public void validateRefreshToken(String refreshToken){
+        validateToken(refreshToken, REFRESH_SECRET);
+    }
+
+    private void validateToken(String token, SecretKey secretKey) {
+        this.getClaimsFromToken(token,secretKey);
+    }
+
+    public Claims getClaimsFromAccessToken(String accessToken){
+        return getClaimsFromToken(accessToken, ACCESS_SECRET);
+    }
+
+    public Claims getClaimsFromRefreshToken(String refreshToken){
+        return getClaimsFromToken(refreshToken, REFRESH_SECRET);
     }
 
     // JWT 페이로드에 담긴 claims 조회
-    public Claims getClaimsFromToken(String token) {
+    private Claims getClaimsFromToken(String token, SecretKey secretKey) {
         try {
-            return jwtParser.parseSignedClaims(token).getPayload();
+            return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload();
         } catch (ExpiredJwtException e) {
             throw new ExpiredTokenException();
         } catch (SignatureException e) {
