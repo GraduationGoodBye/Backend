@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.entity;
 
-import com.ggb.graduationgoodbye.domain.member._enum.Role;
+import com.ggb.graduationgoodbye.domain.member.enums.Role;
 import lombok.*;
 import org.apache.ibatis.type.Alias;
 
