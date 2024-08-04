@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 
 public record TokenReissueRequest(
         @NotBlank
-        String refreshToken
+        String refreshToken,
+        @NotBlank
+        String accessToken
 ) {
 }

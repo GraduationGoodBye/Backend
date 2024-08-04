@@ -39,10 +39,8 @@ public class MemberController {
     }
 
     @PostMapping("/reissue")
-    public ApiResponse<Token> reissue(@RequestBody TokenReissueRequest tokenReissueRequest,
-                                      HttpServletRequest request){
-        tokenService.validateToken(tokenReissueRequest.refreshToken());
-        Token token = tokenService.reissueAccessToken(tokenService.getToken(request));
+    public ApiResponse<Token> reissue(@RequestBody TokenReissueRequest tokenReissueRequest){
+        Token token = tokenService.reissueAccessToken(tokenReissueRequest);
         return ApiResponse.ok(token);
     }
 }

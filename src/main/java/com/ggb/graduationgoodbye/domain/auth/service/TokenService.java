@@ -1,5 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
+import com.ggb.graduationgoodbye.domain.auth.dto.TokenReissueRequest;
+import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
@@ -33,15 +35,20 @@ public class TokenService {
     }
 
     // accessToken 재발급
-    public Token reissueAccessToken(String accessToken) {
-        if (!StringUtils.hasText(accessToken)) {
+    // NOTE : AccessToken create 시, 함께 생성된 RefreshToken 인지 여부를 확인함으로써, 보안 강화.
+    public Token reissueAccessToken(TokenReissueRequest tokenReissueRequest) {
+
+        String accessToken = tokenReissueRequest.accessToken();
+        String refreshToken = tokenReissueRequest.refreshToken();
+
+        if (!StringUtils.hasText(accessToken) || !StringUtils.hasText(refreshToken)) {
             throw new NotExistsTokenException();
         }
 
-        Token token = tokenRepository.findByAccessToken(accessToken);
-        String refreshToken = token.getRefreshToken();
-
-        tokenProvider.validateToken(refreshToken);
+        Token token = tokenRepository.findByAccessTokenAndRefreshToken(accessToken, refreshToken);
+        if (token == null) {
+            throw new InvalidTokenException();
+        }
 
         String reissuedAccessToken = tokenProvider.createAccessToken(refreshToken);
         String reissuedRefreshToken = tokenProvider.createRefreshToken(reissuedAccessToken);
@@ -54,8 +61,6 @@ public class TokenService {
         tokenProvider.validateAccessToken(accessToken);
     }
 
-    public Authentication getAuthentication(String token) {
-        Claims claims = tokenProvider.getClaimsFromToken(token);
     public Authentication getAuthentication(String accessToken) {
         Claims claims = tokenProvider.getClaimsFromAccessToken(accessToken);
         return authProvider.getAuthentication(claims);

@@ -22,4 +22,8 @@
     <select id="findByAccessToken" parameterType="String" resultType="token" >
         SELECT * FROM tokens WHERE access_token = #{accessToken};
     </select>
+
+    <select id="findByAccessTokenAndRefreshToken" parameterType="String" resultType="token">
+        SELECT * FROM tokens WHERE access_token = #{accessToken} AND refresh_token = #{refreshToken};
+    </select>
 </mapper>
