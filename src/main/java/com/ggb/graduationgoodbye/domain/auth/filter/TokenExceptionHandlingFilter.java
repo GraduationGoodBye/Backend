@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.filter;
 
-import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
+import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
@@ -22,9 +22,9 @@ public class TokenExceptionHandlingFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(request, response);
         } catch(UnAuthenticatedException e) {
-            WriteResponseUtil.writeResponse(response, HttpStatus.UNAUTHORIZED.value(), ApiResponse.error(e.getCode(), e.getMessage()));
+            writeResponse(response, HttpStatus.UNAUTHORIZED.value(), ApiResponse.error(e.getCode(), e.getMessage()));
         } catch(ForbiddenException e) {
-            WriteResponseUtil.writeResponse(response, HttpStatus.FORBIDDEN.value(), ApiResponse.error(e.getCode(), e.getMessage()));
+            writeResponse(response, HttpStatus.FORBIDDEN.value(), ApiResponse.error(e.getCode(), e.getMessage()));
         }
     }
 }

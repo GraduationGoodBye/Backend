@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
 import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
-import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
+import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ public class CustomOauth2FailHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
         if (exception instanceof NotJoinedUserException e) {
-            WriteResponseUtil.writeResponse(
+            writeResponse(
                     response,
                     HttpStatus.UNAUTHORIZED.value(),
                     ApiResponse.error(

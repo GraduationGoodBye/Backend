@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil;
+import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
         Token token = tokenService.getToken(authentication);
         tokenService.save(token);
 
-        WriteResponseUtil.writeResponse(
+        writeResponse(
                 response,
                 HttpStatus.UNAUTHORIZED.value(),
                 ApiResponse.ok(
