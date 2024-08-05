@@ -7,13 +7,6 @@
         </encoder>
     </appender>
 
-    <logger name="jdbc.sqlonly" level="DEBUG" appender-ref="UUID_CONSOLE"/>
-    <logger name="jdbc.resultsettable" level="DEBUG" appender-ref="UUID_CONSOLE"/>
-    <logger name="jdbc.sqltiming" level="OFF"/>
-    <logger name="jdbc.audit" level="OFF"/>
-    <logger name="jdbc.resultset" level="OFF"/>
-    <logger name="jdbc.connection" level="OFF"/>
-
     <root level="INFO">
         <appender-ref ref="UUID_CONSOLE" />
     </root>
