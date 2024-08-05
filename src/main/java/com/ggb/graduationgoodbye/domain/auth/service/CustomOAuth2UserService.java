@@ -2,8 +2,8 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.PrincipalDetails;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
-import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
