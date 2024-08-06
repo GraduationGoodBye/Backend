@@ -13,7 +13,7 @@ public class MemberNotFoundException extends BusinessException {
         this.code = MemberErrorType.MEMBER_NOT_FOUND.name();
     }
 
-    public MemberNotFoundException(String message) {
+    public MemberNotFoundException(final String message) {
         super(message);
         this.code = MemberErrorType.MEMBER_NOT_FOUND.name();
     }

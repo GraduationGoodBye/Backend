@@ -3,6 +3,7 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
+import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import io.jsonwebtoken.Claims;
@@ -47,7 +48,7 @@ public class TokenService {
 
         Token token = tokenRepository.findByAccessTokenAndRefreshToken(accessToken, refreshToken);
         if (token == null) {
-            throw new InvalidTokenException();
+            throw new NotFoundTokenException();
         }
 
         String reissuedAccessToken = tokenProvider.createAccessToken(refreshToken);

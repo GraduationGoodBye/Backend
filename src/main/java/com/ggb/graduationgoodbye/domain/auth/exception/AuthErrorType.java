@@ -13,6 +13,7 @@ public enum AuthErrorType {
     EXPIRED_TOKEN ("만료된 토큰입니다."),
     INVALID_TOKEN ("유효하지 않은 토큰입니다."),
     INVALID_JWT_SIGNATURE("유효하지 않은 서명입니다."),
+    NOT_FOUND_TOKEN("토큰정보를 찾을 수 없습니다."),
 
     // Google
     INVALID_REGISTRATION_ID("유효하지 않은 리소스 서버입니다.");
