@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum MemberErrorType {
 
-    MEMBER_NOT_FOUND("존재하지 않는 회원입니다.");
+    NOT_FOUND_MEMBER("존재하지 않는 회원입니다.");
 
     private final String message;
 
