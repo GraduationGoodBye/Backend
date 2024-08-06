@@ -15,7 +15,7 @@ springdoc:
     display-request-duration: true # try it out 실행 후 api 실행 시간 표시
   api-docs:
     path: /api-docs
-  show-actuator: true
+  show-actuator: false
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   writer-with-default-pretty-printer: true # 예쁘게

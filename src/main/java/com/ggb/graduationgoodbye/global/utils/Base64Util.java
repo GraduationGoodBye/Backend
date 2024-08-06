@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.utils;
+package com.ggb.graduationgoodbye.global.utils;
 
 import org.springframework.stereotype.Component;
 

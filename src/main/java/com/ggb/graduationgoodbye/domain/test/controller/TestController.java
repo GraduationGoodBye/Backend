@@ -7,20 +7,13 @@ import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
-import com.ggb.graduationgoodbye.utils.Base64Util;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +24,7 @@ public class TestController {
 
     @Operation(summary = "연결 확인")
     @GetMapping("/check")
-    public ApiResponse<?> check(){
+    public ApiResponse<?> check() {
         return ApiResponse.ok("This service is available");
     }
 
@@ -41,7 +34,7 @@ public class TestController {
                     in = ParameterIn.PATH,
                     schema = @Schema(type = "string", allowableValues = {"UNAUTHENTICATED", "FORBIDDEN", "BAD_REQUEST", "EXPIRED_TOKEN", "INVALID_TOKEN", "INTERNAL_SERVER_ERROR"})
             )
-            @PathVariable String name){
+            @PathVariable String name) {
         switch (name) {
             case "UNAUTHENTICATED": throw new UnAuthenticatedException();
             case "FORBIDDEN": throw new ForbiddenException();
@@ -54,19 +47,19 @@ public class TestController {
     }
 
     @PostMapping("/image")
-    public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file){
+    public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file) {
         String url = testService.uploadImageTest(file);
         return ApiResponse.ok(url);
     }
 
     @PostMapping("/base64/encode")
-    public ApiResponse<String> encode(@RequestBody String data){
+    public ApiResponse<String> encode(@RequestBody String data) {
         String encodedData = testService.encode(data);
         return ApiResponse.ok(encodedData);
     }
 
     @PostMapping("/base64/decode")
-    public ApiResponse<String> decode(@RequestBody String data){
+    public ApiResponse<String> decode(@RequestBody String data) {
         String plainText = testService.decode(data);
         return ApiResponse.ok(plainText);
     }

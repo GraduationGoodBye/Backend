@@ -14,6 +14,20 @@ spring:
         static: ggb # bucket region
       s3:
         bucket: ggb # bucket 명
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ggb
+            client-secret: ggb
+            scope:
+jwt:
+  secret: ggggggggggggggggggggggbbbbbbbbbbbbbbbbbbbbbb
+  expired:
+    access: 123
+    refresh: 123
+
 #  # REDIS
 #  data:
 #    redis:

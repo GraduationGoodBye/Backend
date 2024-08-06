@@ -13,7 +13,7 @@ public class ApiResponse<T> {
     private final String message;
     private final T data;
 
-    private ApiResponse(@Nonnull String code, @Nonnull String message, T data){
+    private ApiResponse(@Nonnull String code, @Nonnull String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -32,6 +32,10 @@ public class ApiResponse<T> {
     }
 
     public static <T> ApiResponse<T> error(String code, String message) {
-        return new ApiResponse<T>(code, message, null);
+        return error(code, message, null);
+    }
+
+    public static <T> ApiResponse<T> error(String code, String message, T data) {
+        return new ApiResponse<T>(code, message, data);
     }
 }
