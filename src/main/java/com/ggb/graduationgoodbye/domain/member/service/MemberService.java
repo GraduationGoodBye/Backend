@@ -2,8 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.auth.service.AuthProvider;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.auth.entity.Token;
-import com.ggb.graduationgoodbye.domain.member.dto.MemberJoinRequest;
+import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.nimbusds.jose.shaded.gson.Gson;
