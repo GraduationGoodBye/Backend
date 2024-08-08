@@ -17,25 +17,25 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final MemberService memberService;
+  private final MemberService memberService;
 
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+  @Override
+  public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
-        Map<String,Object> attr = super.loadUser(userRequest).getAttributes();
+    Map<String, Object> attr = super.loadUser(userRequest).getAttributes();
 
-        String email = attr.get("email").toString();
+    String email = attr.get("email").toString();
 
-        Member member = memberService.findByEmail(email).orElseThrow(() -> {
-            String accessToken = userRequest.getAccessToken().getTokenValue();
-            return new NotJoinedUserException(accessToken);
-        });
+    Member member = memberService.findByEmail(email).orElseThrow(() -> {
+      String accessToken = userRequest.getAccessToken().getTokenValue();
+      return new NotJoinedUserException(accessToken);
+    });
 
-        String userNameAttributeName = userRequest.getClientRegistration()
-                .getProviderDetails()
-                .getUserInfoEndpoint()
-                .getUserNameAttributeName();
+    String userNameAttributeName = userRequest.getClientRegistration()
+        .getProviderDetails()
+        .getUserInfoEndpoint()
+        .getUserNameAttributeName();
 
-        return new PrincipalDetails(member, attr, userNameAttributeName);
-    }
+    return new PrincipalDetails(member, attr, userNameAttributeName);
+  }
 }

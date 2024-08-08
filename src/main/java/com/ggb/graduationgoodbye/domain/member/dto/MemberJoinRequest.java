@@ -7,4 +7,5 @@ public record MemberJoinRequest(
     String phone,
     String gender
 ) {
+
 }

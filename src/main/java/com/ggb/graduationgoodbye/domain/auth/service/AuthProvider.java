@@ -16,25 +16,25 @@ import java.util.List;
 @Slf4j
 public class AuthProvider {
 
-    private static final String ROLE_CLAIM = "role";
+  private static final String ROLE_CLAIM = "role";
 
-    public Authentication getAuthentication(Claims claims){
-        List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
-        User principal = new User(claims.getSubject(),"",authorities);
-        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-    }
+  public Authentication getAuthentication(Claims claims) {
+    List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
+    User principal = new User(claims.getSubject(), "", authorities);
+    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+  }
 
-    public Authentication getAuthentication(Member member){
-        List<SimpleGrantedAuthority> authorities = getAuthorities(member);
-        User principal = new User(member.getId().toString(), "",authorities);
-        return new UsernamePasswordAuthenticationToken(principal, null, authorities);
-    }
+  public Authentication getAuthentication(Member member) {
+    List<SimpleGrantedAuthority> authorities = getAuthorities(member);
+    User principal = new User(member.getId().toString(), "", authorities);
+    return new UsernamePasswordAuthenticationToken(principal, null, authorities);
+  }
 
-    private List<SimpleGrantedAuthority> getAuthorities(Member member) {
-        return Collections.singletonList(new SimpleGrantedAuthority(member.getRole().name()));
-    }
+  private List<SimpleGrantedAuthority> getAuthorities(Member member) {
+    return Collections.singletonList(new SimpleGrantedAuthority(member.getRole().name()));
+  }
 
-    private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
-        return Collections.singletonList(new SimpleGrantedAuthority(claims.get(ROLE_CLAIM).toString()));
-    }
+  private List<SimpleGrantedAuthority> getAuthorities(Claims claims) {
+    return Collections.singletonList(new SimpleGrantedAuthority(claims.get(ROLE_CLAIM).toString()));
+  }
 }

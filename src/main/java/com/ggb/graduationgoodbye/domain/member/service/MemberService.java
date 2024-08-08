@@ -22,52 +22,55 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberService {
-    private final MemberRepository memberRepository;
-    private final TokenService tokenService;
-    private final AuthProvider authProvider;
 
-    public Token join(MemberJoinRequest request) {
-        // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
-        String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo";
+  private final MemberRepository memberRepository;
+  private final TokenService tokenService;
+  private final AuthProvider authProvider;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + request.accessToken());
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+  public Token join(MemberJoinRequest request) {
+    // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
+    String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo";
 
-        ResponseEntity<String> response = new RestTemplate().exchange(userInfoEndpointUri, HttpMethod.GET, entity, String.class);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + request.accessToken());
+    HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        log.info("Google Response >> {}", response.getBody());
+    ResponseEntity<String> response = new RestTemplate().exchange(userInfoEndpointUri,
+        HttpMethod.GET, entity,
+        String.class);
 
-        Member googleMember = new Gson().fromJson(response.getBody(), Member.class);
+    log.info("Google Response >> {}", response.getBody());
 
-        Member member = Member.builder()
-                .email(googleMember.getEmail())
-                .profile(googleMember.getProfile())
-                .nickname(request.nickname())
-                .address(request.address())
-                .phone(request.phone())
-                .gender(request.gender())
-                .build();
-        memberRepository.save(member);
+    Member googleMember = new Gson().fromJson(response.getBody(), Member.class);
 
-        return saveToken(member);
-    }
+    Member member = Member.builder()
+        .email(googleMember.getEmail())
+        .profile(googleMember.getProfile())
+        .nickname(request.nickname())
+        .address(request.address())
+        .phone(request.phone())
+        .gender(request.gender())
+        .build();
+    memberRepository.save(member);
 
-    private Token saveToken(Member member){
-        Token token = tokenService.getToken(authProvider.getAuthentication(member));
-        tokenService.save(token);
-        return token;
-    }
+    return saveToken(member);
+  }
 
-    public Optional<Member> findByEmail(String email) {
-        return Optional.ofNullable(memberRepository.findByEmail(email));
-    }
+  private Token saveToken(Member member) {
+    Token token = tokenService.getToken(authProvider.getAuthentication(member));
+    tokenService.save(token);
+    return token;
+  }
 
-    public boolean existsByEmail(String email) {
-        return memberRepository.findByEmail(email) != null;
-    }
+  public Optional<Member> findByEmail(String email) {
+    return Optional.ofNullable(memberRepository.findByEmail(email));
+  }
 
-    public Optional<Member> findById(Long id) {
-        return Optional.ofNullable(memberRepository.findById(id));
-    }
+  public boolean existsByEmail(String email) {
+    return memberRepository.findByEmail(email) != null;
+  }
+
+  public Optional<Member> findById(Long id) {
+    return Optional.ofNullable(memberRepository.findById(id));
+  }
 }

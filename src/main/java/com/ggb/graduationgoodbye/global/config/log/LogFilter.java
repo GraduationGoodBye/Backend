@@ -18,54 +18,58 @@ import java.util.UUID;
 
 
 @Slf4j
-public class LogFilter extends OncePerRequestFilter{
+public class LogFilter extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+      FilterChain filterChain)
+      throws ServletException, IOException {
 
-        CachingRequestWrapper requestWrapper = new CachingRequestWrapper(request);
-        ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
-        final UUID uuid = UUID.randomUUID();
+    CachingRequestWrapper requestWrapper = new CachingRequestWrapper(request);
+    ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
+    final UUID uuid = UUID.randomUUID();
 
-        long startTime = System.currentTimeMillis();
-        try {
-            MDC.put("uuid", uuid.toString()); // 로그 임의의 값 추가
-            logRequest(requestWrapper);
-            filterChain.doFilter(requestWrapper, responseWrapper); // 요청을 필터에 전달
-        } finally {
-            logResponse(responseWrapper, startTime);
-            responseWrapper.copyBodyToResponse(); // 응답 본문 클라이언트로 전송
-            MDC.clear();
-        }
+    long startTime = System.currentTimeMillis();
+    try {
+      MDC.put("uuid", uuid.toString()); // 로그 임의의 값 추가
+      logRequest(requestWrapper);
+      filterChain.doFilter(requestWrapper, responseWrapper); // 요청을 필터에 전달
+    } finally {
+      logResponse(responseWrapper, startTime);
+      responseWrapper.copyBodyToResponse(); // 응답 본문 클라이언트로 전송
+      MDC.clear();
     }
+  }
 
-    private void logRequest(HttpServletRequestWrapper request) throws IOException {
-        String queryString = request.getQueryString();
-        String body = getBody(request.getInputStream());
+  private void logRequest(HttpServletRequestWrapper request) throws IOException {
+    String queryString = request.getQueryString();
+    String body = getBody(request.getInputStream());
 
-        log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-        log.info("Request : {} uri=[{}] content-type=[{}], body=[{}]"
-                , request.getMethod()
-                , queryString == null ? request.getRequestURI() : request.getRequestURI() + "?" + queryString
-                , request.getContentType()
-                , body);
+    log.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+    log.info("Request : {} uri=[{}] content-type=[{}], body=[{}]"
+        , request.getMethod()
+        ,
+        queryString == null ? request.getRequestURI() : request.getRequestURI() + "?" + queryString
+        , request.getContentType()
+        , body);
+  }
+
+  private void logResponse(ContentCachingResponseWrapper response, long startTime)
+      throws IOException {
+    String body = getBody(response.getContentInputStream());
+
+    log.info("Response : {} body=[{}]"
+        , response.getStatus()
+        , body);
+    log.info("Request processed in {}ms", (System.currentTimeMillis() - startTime));
+    log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
+  }
+
+  public String getBody(InputStream is) throws IOException {
+    byte[] content = StreamUtils.copyToByteArray(is);
+    if (content.length == 0) {
+      return null;
     }
-
-    private void logResponse(ContentCachingResponseWrapper response, long startTime) throws IOException {
-        String body = getBody(response.getContentInputStream());
-
-        log.info("Response : {} body=[{}]"
-                , response.getStatus()
-                , body);
-        log.info("Request processed in {}ms", (System.currentTimeMillis() - startTime));
-        log.info("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-    }
-
-    public String getBody(InputStream is) throws IOException {
-        byte[] content = StreamUtils.copyToByteArray(is);
-        if (content.length == 0) {
-            return null;
-        }
-        return new String(content, StandardCharsets.UTF_8);
-    }
+    return new String(content, StandardCharsets.UTF_8);
+  }
 }

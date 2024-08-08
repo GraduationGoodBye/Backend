@@ -10,13 +10,13 @@ import org.springframework.context.annotation.Configuration;
 //@Configuration
 public class WebConfig {
 
-    @Bean
-    public FilterRegistrationBean logFilter() {
-        FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<Filter>();
-        filterRegistrationBean.setFilter(new LogFilter());
-        filterRegistrationBean.setOrder(1);
-        filterRegistrationBean.addUrlPatterns("/*");
-        return filterRegistrationBean;
-    }
+  @Bean
+  public FilterRegistrationBean logFilter() {
+    FilterRegistrationBean<Filter> filterRegistrationBean = new FilterRegistrationBean<Filter>();
+    filterRegistrationBean.setFilter(new LogFilter());
+    filterRegistrationBean.setOrder(1);
+    filterRegistrationBean.addUrlPatterns("/*");
+    return filterRegistrationBean;
+  }
 
 }

@@ -18,43 +18,43 @@ import java.io.IOException;
 @Profile("local")
 public class LocalEmbeddedRedisConfig {
 
-    private RedisServer redisServer;
+  private RedisServer redisServer;
 
-    @Value("${spring.data.redis.host}")
-    private String redisHost;
-    @Value("${spring.data.redis.port}")
-    private int redisPort;
+  @Value("${spring.data.redis.host}")
+  private String redisHost;
+  @Value("${spring.data.redis.port}")
+  private int redisPort;
 
-    private static final String REDIS_SERVER_MAX_MEMORY = "maxmemory 512M";
+  private static final String REDIS_SERVER_MAX_MEMORY = "maxmemory 512M";
 
-    @PostConstruct
-    public void startRedis() throws IOException {
-        redisServer = RedisServer.builder()
-                .port(redisPort)
-                .setting(REDIS_SERVER_MAX_MEMORY)
-                .build();
-        redisServer.start();
+  @PostConstruct
+  public void startRedis() throws IOException {
+    redisServer = RedisServer.builder()
+        .port(redisPort)
+        .setting(REDIS_SERVER_MAX_MEMORY)
+        .build();
+    redisServer.start();
+  }
+
+  @PreDestroy
+  public void stopRedis() {
+    if (redisServer != null) {
+      redisServer.stop();
     }
+  }
 
-    @PreDestroy
-    public void stopRedis() {
-        if (redisServer != null) {
-            redisServer.stop();
-        }
-    }
+  @Bean
+  public RedisConnectionFactory redisConnectionFactory() {
+    RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
+    redisConfiguration.setHostName(redisHost);
+    redisConfiguration.setPort(redisPort);
+    return new LettuceConnectionFactory(redisConfiguration);
+  }
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
-        redisConfiguration.setHostName(redisHost);
-        redisConfiguration.setPort(redisPort);
-        return new LettuceConnectionFactory(redisConfiguration);
-    }
-
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
-        RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory());
-        return redisTemplate;
-    }
+  @Bean
+  public RedisTemplate<?, ?> redisTemplate() {
+    RedisTemplate<?, ?> redisTemplate = new RedisTemplate<>();
+    redisTemplate.setConnectionFactory(redisConnectionFactory());
+    return redisTemplate;
+  }
 }
