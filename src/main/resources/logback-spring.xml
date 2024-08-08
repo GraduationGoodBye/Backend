@@ -1,14 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-    <appender name="UUID_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%green([%X{uuid}]) %cyan(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread]) %red(%-5level) %magenta(%logger{36}) %msg%n</pattern>
-        </encoder>
-    </appender>
+  <appender name="UUID_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%green([%X{uuid}]) %cyan(%d{yyyy-MM-dd HH:mm:ss}) %highlight([%thread])
+        %red(%-5level)
+        %magenta(%logger{36}) %msg%n
+      </pattern>
+    </encoder>
+  </appender>
 
-    <root level="INFO">
-        <appender-ref ref="UUID_CONSOLE" />
-    </root>
+  <root level="INFO">
+    <appender-ref ref="UUID_CONSOLE"/>
+  </root>
 
 </configuration>

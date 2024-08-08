@@ -21,27 +21,27 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MemberController {
 
-    private final MemberService memberService;
-    private final TokenService tokenService;
+  private final MemberService memberService;
+  private final TokenService tokenService;
 
-    @PostMapping("/signup")
-    public ApiResponse<Token> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
-        Token token = memberService.join(memberJoinRequest);
-        return ApiResponse.ok(token);
-    }
+  @PostMapping("/signup")
+  public ApiResponse<Token> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
+    Token token = memberService.join(memberJoinRequest);
+    return ApiResponse.ok(token);
+  }
 
-    @GetMapping("/info")
-    public ApiResponse<Member> info() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User u = (User) authentication.getPrincipal();
-        Long id = Long.valueOf(u.getUsername());
-        Member member = memberService.findById(id).orElseThrow(NotFoundMemberException::new);
-        return ApiResponse.ok(member);
-    }
+  @GetMapping("/info")
+  public ApiResponse<Member> info() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User u = (User) authentication.getPrincipal();
+    Long id = Long.valueOf(u.getUsername());
+    Member member = memberService.findById(id).orElseThrow(NotFoundMemberException::new);
+    return ApiResponse.ok(member);
+  }
 
-    @PostMapping("/reissue")
-    public ApiResponse<Token> reissue(@RequestBody TokenReissueRequest tokenReissueRequest){
-        Token token = tokenService.reissueAccessToken(tokenReissueRequest);
-        return ApiResponse.ok(token);
-    }
+  @PostMapping("/reissue")
+  public ApiResponse<Token> reissue(@RequestBody TokenReissueRequest tokenReissueRequest) {
+    Token token = tokenService.reissueAccessToken(tokenReissueRequest);
+    return ApiResponse.ok(token);
+  }
 }

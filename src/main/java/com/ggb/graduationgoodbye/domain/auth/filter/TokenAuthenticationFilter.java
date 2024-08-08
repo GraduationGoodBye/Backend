@@ -18,21 +18,22 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-    private final TokenService tokenService;
+  private final TokenService tokenService;
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
-        // 1. 토큰 추출
-        String accessToken = tokenService.getToken(request);
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+      FilterChain filterChain)
+      throws ServletException, IOException {
+    // 1. 토큰 추출
+    String accessToken = tokenService.getToken(request);
 
-        // 2. 토큰 검증
-        if (StringUtils.hasText(accessToken) && !request.getRequestURI().contains("reissue")) {
-            tokenService.validateToken(accessToken);
-            Authentication auth = tokenService.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(auth);
-        }
-
-        filterChain.doFilter(request,response);
+    // 2. 토큰 검증
+    if (StringUtils.hasText(accessToken) && !request.getRequestURI().contains("reissue")) {
+      tokenService.validateToken(accessToken);
+      Authentication auth = tokenService.getAuthentication(accessToken);
+      SecurityContextHolder.getContext().setAuthentication(auth);
     }
+
+    filterChain.doFilter(request, response);
+  }
 }

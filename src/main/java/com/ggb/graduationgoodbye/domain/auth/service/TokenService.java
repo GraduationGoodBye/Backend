@@ -16,54 +16,55 @@ import org.springframework.util.StringUtils;
 @Service
 @RequiredArgsConstructor
 public class TokenService {
-    private final TokenProvider tokenProvider;
-    private final AuthProvider  authProvider;
-    private final TokenRepository tokenRepository;
 
-    public Token getToken(Authentication authentication) {
-        String accessToken = tokenProvider.createAccessToken(authentication);
-        String refreshToken = tokenProvider.createRefreshToken(authentication);
-        return Token.of(accessToken, refreshToken);
+  private final TokenProvider tokenProvider;
+  private final AuthProvider authProvider;
+  private final TokenRepository tokenRepository;
+
+  public Token getToken(Authentication authentication) {
+    String accessToken = tokenProvider.createAccessToken(authentication);
+    String refreshToken = tokenProvider.createRefreshToken(authentication);
+    return Token.of(accessToken, refreshToken);
+  }
+
+  // Authorization 헤더에서 token 추출
+  public String getToken(HttpServletRequest request) {
+    return tokenProvider.getToken(request);
+  }
+
+  public void save(Token token) {
+    tokenRepository.save(token);
+  }
+
+  // accessToken 재발급
+  // NOTE : AccessToken create 시, 함께 생성된 RefreshToken 인지 여부를 확인함으로써, 보안 강화.
+  public Token reissueAccessToken(TokenReissueRequest tokenReissueRequest) {
+
+    String accessToken = tokenReissueRequest.accessToken();
+    String refreshToken = tokenReissueRequest.refreshToken();
+
+    if (!StringUtils.hasText(accessToken) || !StringUtils.hasText(refreshToken)) {
+      throw new NotExistsTokenException();
     }
 
-    // Authorization 헤더에서 token 추출
-    public String getToken(HttpServletRequest request) {
-        return tokenProvider.getToken(request);
+    Token token = tokenRepository.findByAccessTokenAndRefreshToken(accessToken, refreshToken);
+    if (token == null) {
+      throw new NotFoundTokenException();
     }
 
-    public void save(Token token) {
-        tokenRepository.save(token);
-    }
+    String reissuedAccessToken = tokenProvider.createAccessToken(refreshToken);
+    String reissuedRefreshToken = tokenProvider.createRefreshToken(reissuedAccessToken);
+    token.updateAccessToken(reissuedAccessToken, reissuedRefreshToken);
+    tokenRepository.update(token);
+    return token;
+  }
 
-    // accessToken 재발급
-    // NOTE : AccessToken create 시, 함께 생성된 RefreshToken 인지 여부를 확인함으로써, 보안 강화.
-    public Token reissueAccessToken(TokenReissueRequest tokenReissueRequest) {
+  public void validateToken(String accessToken) {
+    tokenProvider.validateAccessToken(accessToken);
+  }
 
-        String accessToken = tokenReissueRequest.accessToken();
-        String refreshToken = tokenReissueRequest.refreshToken();
-
-        if (!StringUtils.hasText(accessToken) || !StringUtils.hasText(refreshToken)) {
-            throw new NotExistsTokenException();
-        }
-
-        Token token = tokenRepository.findByAccessTokenAndRefreshToken(accessToken, refreshToken);
-        if (token == null) {
-            throw new NotFoundTokenException();
-        }
-
-        String reissuedAccessToken = tokenProvider.createAccessToken(refreshToken);
-        String reissuedRefreshToken = tokenProvider.createRefreshToken(reissuedAccessToken);
-        token.updateAccessToken(reissuedAccessToken, reissuedRefreshToken);
-        tokenRepository.update(token);
-        return token;
-    }
-
-    public void validateToken(String accessToken) {
-        tokenProvider.validateAccessToken(accessToken);
-    }
-
-    public Authentication getAuthentication(String accessToken) {
-        Claims claims = tokenProvider.getClaimsFromAccessToken(accessToken);
-        return authProvider.getAuthentication(claims);
-    }
+  public Authentication getAuthentication(String accessToken) {
+    Claims claims = tokenProvider.getClaimsFromAccessToken(accessToken);
+    return authProvider.getAuthentication(claims);
+  }
 }

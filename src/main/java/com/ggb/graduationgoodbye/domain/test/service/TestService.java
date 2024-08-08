@@ -11,18 +11,19 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Slf4j
 public class TestService {
-    private final S3Util s3Util;
-    private final Base64Util base64Util;
 
-    public String uploadImageTest(MultipartFile image) {
-        return s3Util.upload(image);
-    }
+  private final S3Util s3Util;
+  private final Base64Util base64Util;
 
-    public String encode(String data) {
-        return base64Util.encode(data);
-    }
+  public String uploadImageTest(MultipartFile image) {
+    return s3Util.upload(image);
+  }
 
-    public String decode(String encodedData) {
-        return base64Util.decode(encodedData);
-    }
+  public String encode(String data) {
+    return base64Util.encode(data);
+  }
+
+  public String decode(String encodedData) {
+    return base64Util.decode(encodedData);
+  }
 }

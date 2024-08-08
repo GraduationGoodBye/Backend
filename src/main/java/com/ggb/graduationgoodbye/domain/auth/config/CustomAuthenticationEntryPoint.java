@@ -16,13 +16,14 @@ import java.io.IOException;
 @Slf4j
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e)
-            throws IOException, ServletException {
-        if(!StringUtils.hasText(request.getHeader(HttpHeaders.AUTHORIZATION))){
-            throw new NotExistsTokenException();
-        }
-        log.error("Unauthorized access : {}", e.getMessage());
-        throw new UnAuthenticatedException();
+  @Override
+  public void commence(HttpServletRequest request, HttpServletResponse response,
+      AuthenticationException e)
+      throws IOException, ServletException {
+    if (!StringUtils.hasText(request.getHeader(HttpHeaders.AUTHORIZATION))) {
+      throw new NotExistsTokenException();
     }
+    log.error("Unauthorized access : {}", e.getMessage());
+    throw new UnAuthenticatedException();
+  }
 }

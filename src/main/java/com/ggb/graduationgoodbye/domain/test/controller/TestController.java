@@ -20,47 +20,49 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/test")
 public class TestController {
 
-    private final TestService testService;
+  private final TestService testService;
 
-    @Operation(summary = "연결 확인")
-    @GetMapping("/check")
-    public ApiResponse<?> check() {
-        return ApiResponse.ok("This service is available");
-    }
+  @Operation(summary = "연결 확인")
+  @GetMapping("/check")
+  public ApiResponse<?> check() {
+    return ApiResponse.ok("This service is available");
+  }
 
-    @GetMapping("/exception/{name}")
-    public void exception(
-            @Parameter(
-                    in = ParameterIn.PATH,
-                    schema = @Schema(type = "string", allowableValues = {"UNAUTHENTICATED", "FORBIDDEN", "BAD_REQUEST", "EXPIRED_TOKEN", "INVALID_TOKEN", "INTERNAL_SERVER_ERROR"})
-            )
-            @PathVariable String name) {
-        switch (name) {
-            case "UNAUTHENTICATED": throw new UnAuthenticatedException();
-            case "FORBIDDEN": throw new ForbiddenException();
-            case "BAD_REQUEST": throw new BusinessException();
-            case "EXPIRED_TOKEN": throw new ExpiredTokenException();
-            case "INVALID_TOKEN": throw new InvalidTokenException();
-            case "INTERNAL_SERVER_ERROR": throw new RuntimeException("INTERNAL_SERVER_ERROR");
-            default: throw new RuntimeException("default");
-        }
+  @GetMapping("/exception/{name}")
+  public void exception(
+      @Parameter(
+          in = ParameterIn.PATH,
+          schema = @Schema(type = "string", allowableValues = {"UNAUTHENTICATED", "FORBIDDEN",
+              "BAD_REQUEST",
+              "EXPIRED_TOKEN", "INVALID_TOKEN", "INTERNAL_SERVER_ERROR"})
+      )
+      @PathVariable String name) {
+    switch (name) {
+      case "UNAUTHENTICATED" -> throw new UnAuthenticatedException();
+      case "FORBIDDEN" -> throw new ForbiddenException();
+      case "BAD_REQUEST" -> throw new BusinessException();
+      case "EXPIRED_TOKEN" -> throw new ExpiredTokenException();
+      case "INVALID_TOKEN" -> throw new InvalidTokenException();
+      case "INTERNAL_SERVER_ERROR" -> throw new RuntimeException("INTERNAL_SERVER_ERROR");
+      default -> throw new RuntimeException("default");
     }
+  }
 
-    @PostMapping("/image")
-    public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file) {
-        String url = testService.uploadImageTest(file);
-        return ApiResponse.ok(url);
-    }
+  @PostMapping("/image")
+  public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file) {
+    String url = testService.uploadImageTest(file);
+    return ApiResponse.ok(url);
+  }
 
-    @PostMapping("/base64/encode")
-    public ApiResponse<String> encode(@RequestBody String data) {
-        String encodedData = testService.encode(data);
-        return ApiResponse.ok(encodedData);
-    }
+  @PostMapping("/base64/encode")
+  public ApiResponse<String> encode(@RequestBody String data) {
+    String encodedData = testService.encode(data);
+    return ApiResponse.ok(encodedData);
+  }
 
-    @PostMapping("/base64/decode")
-    public ApiResponse<String> decode(@RequestBody String data) {
-        String plainText = testService.decode(data);
-        return ApiResponse.ok(plainText);
-    }
+  @PostMapping("/base64/decode")
+  public ApiResponse<String> decode(@RequestBody String data) {
+    String plainText = testService.decode(data);
+    return ApiResponse.ok(plainText);
+  }
 }

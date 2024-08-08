@@ -1,7 +1,9 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
+
 import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
+
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,21 +20,22 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
-    private final TokenService tokenService;
+  private final TokenService tokenService;
 
-    @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-        Token token = tokenService.getToken(authentication);
-        tokenService.save(token);
+  @Override
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws IOException {
+    Token token = tokenService.getToken(authentication);
+    tokenService.save(token);
 
-        writeResponse(
-                response,
-                HttpStatus.UNAUTHORIZED.value(),
-                ApiResponse.ok(
-                        token
-                )
-        );
+    writeResponse(
+        response,
+        HttpStatus.UNAUTHORIZED.value(),
+        ApiResponse.ok(
+            token
+        )
+    );
 
-        log.info("Successfully authenticated oauth2 token");
-    }
+    log.info("Successfully authenticated oauth2 token");
+  }
 }

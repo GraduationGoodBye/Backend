@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.filter;
 
 import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
+
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
@@ -17,14 +18,18 @@ import java.io.IOException;
 @Slf4j
 public class TokenExceptionHandlingFilter extends OncePerRequestFilter {
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        try {
-            filterChain.doFilter(request, response);
-        } catch(UnAuthenticatedException e) {
-            writeResponse(response, HttpStatus.UNAUTHORIZED.value(), ApiResponse.error(e.getCode(), e.getMessage()));
-        } catch(ForbiddenException e) {
-            writeResponse(response, HttpStatus.FORBIDDEN.value(), ApiResponse.error(e.getCode(), e.getMessage()));
-        }
+  @Override
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+      FilterChain filterChain)
+      throws ServletException, IOException {
+    try {
+      filterChain.doFilter(request, response);
+    } catch (UnAuthenticatedException e) {
+      writeResponse(response, HttpStatus.UNAUTHORIZED.value(),
+          ApiResponse.error(e.getCode(), e.getMessage()));
+    } catch (ForbiddenException e) {
+      writeResponse(response, HttpStatus.FORBIDDEN.value(),
+          ApiResponse.error(e.getCode(), e.getMessage()));
     }
+  }
 }

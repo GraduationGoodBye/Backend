@@ -9,19 +9,20 @@ import org.apache.ibatis.type.Alias;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Token {
-    private Long id;
-    private String accessToken;
-    private String refreshToken;
 
-    public static Token of(String accessToken, String refreshToken) {
-        return Token.builder()
-                .refreshToken(refreshToken)
-                .accessToken(accessToken)
-                .build();
-    }
+  private Long id;
+  private String accessToken;
+  private String refreshToken;
 
-    public void updateAccessToken(String reissuedAccessToken, String reissuedRefreshToken) {
-        this.accessToken = reissuedAccessToken;
-        this.refreshToken = reissuedRefreshToken;
-    }
+  public static Token of(String accessToken, String refreshToken) {
+    return Token.builder()
+        .refreshToken(refreshToken)
+        .accessToken(accessToken)
+        .build();
+  }
+
+  public void updateAccessToken(String reissuedAccessToken, String reissuedRefreshToken) {
+    this.accessToken = reissuedAccessToken;
+    this.refreshToken = reissuedRefreshToken;
+  }
 }
