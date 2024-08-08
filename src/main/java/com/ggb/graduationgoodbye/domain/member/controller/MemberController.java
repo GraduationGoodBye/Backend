@@ -1,8 +1,7 @@
 package com.ggb.graduationgoodbye.domain.member.controller;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.TokenReissueRequest;
+import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
@@ -24,9 +23,10 @@ public class MemberController {
   private final TokenService tokenService;
 
   @PostMapping("/signup")
-  public ApiResponse<Token> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
-    Token token = memberService.join(memberJoinRequest);
-    return ApiResponse.ok(token);
+  public ApiResponse<TokenResponse> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
+    TokenDto token = memberService.join(memberJoinRequest);
+    TokenResponse tokenResponse = token.toResponse();
+    return ApiResponse.ok(tokenResponse);
   }
 
   @GetMapping("/info")
@@ -39,8 +39,9 @@ public class MemberController {
   }
 
   @PostMapping("/reissue")
-  public ApiResponse<Token> reissue(@RequestBody TokenReissueRequest tokenReissueRequest) {
-    Token token = tokenService.reissueAccessToken(tokenReissueRequest);
-    return ApiResponse.ok(token);
+  public ApiResponse<TokenResponse> reissue(@RequestBody TokenReissueRequest tokenReissueRequest) {
+    TokenDto token = tokenService.reissueAccessToken(tokenReissueRequest);
+    TokenResponse tokenResponse = token.toResponse();
+    return ApiResponse.ok(tokenResponse);
   }
 }

@@ -14,8 +14,7 @@ CREATE TABLE users
 
 CREATE TABLE tokens
 (
-    id            BIGINT AUTO_INCREMENT,
-    access_token  VARCHAR(255),
-    refresh_token VARCHAR(255),
+    id          BIGINT AUTO_INCREMENT,
+    token_value VARCHAR(255),
     PRIMARY KEY (id)
 );
