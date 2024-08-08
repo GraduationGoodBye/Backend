@@ -3,7 +3,6 @@ package com.ggb.graduationgoodbye.domain.member.controller;
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
-import com.ggb.graduationgoodbye.domain.member.dto.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;

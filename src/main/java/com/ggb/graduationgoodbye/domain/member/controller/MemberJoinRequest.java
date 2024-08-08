@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.dto;
+package com.ggb.graduationgoodbye.domain.member.controller;
 
 public record MemberJoinRequest(
     String accessToken,

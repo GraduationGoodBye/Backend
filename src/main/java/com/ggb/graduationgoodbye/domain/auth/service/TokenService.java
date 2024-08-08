@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
+import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
