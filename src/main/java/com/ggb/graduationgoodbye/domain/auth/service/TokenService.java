@@ -73,4 +73,9 @@ public class TokenService {
     Claims claims = tokenProvider.getClaimsFromAccessToken(accessToken);
     return authProvider.getAuthentication(claims);
   }
+
+  // Authorization 헤더에서 token 추출
+  public String getTokenFromAuthorizationHeader(HttpServletRequest request) {
+    return tokenProvider.getTokenFromAuthorizationHeader(request);
+  }
 }
