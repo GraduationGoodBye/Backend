@@ -25,7 +25,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
       FilterChain filterChain)
       throws ServletException, IOException {
     // 1. 토큰 추출
-    String accessToken = tokenService.getToken(request);
+    String accessToken = tokenService.getTokenFromAuthorizationHeader(request);
 
     // 2. 토큰 검증
     if (StringUtils.hasText(accessToken) && !request.getRequestURI().contains("reissue")) {
