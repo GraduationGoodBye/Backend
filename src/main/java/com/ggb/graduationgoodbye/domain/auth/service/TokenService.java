@@ -29,7 +29,7 @@ public class TokenService {
 
   // Authorization 헤더에서 token 추출
   public String getToken(HttpServletRequest request) {
-    return tokenProvider.getToken(request);
+    return tokenProvider.getBearerToken(request);
   }
 
   public void save(Token token) {
