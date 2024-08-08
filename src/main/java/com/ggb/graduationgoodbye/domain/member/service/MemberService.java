@@ -1,7 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.entity.RefreshToken;
 import com.ggb.graduationgoodbye.domain.auth.service.AuthProvider;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
@@ -14,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -54,13 +54,9 @@ public class MemberService {
         .build();
     memberRepository.save(member);
 
-    return saveToken(member);
-  }
+    Authentication authentication = authProvider.getAuthentication(member);
 
-  private TokenDto saveToken(Member member) {
-    TokenDto token = tokenService.getToken(authProvider.getAuthentication(member));
-    tokenService.save(RefreshToken.of(token.getRefreshToken()));
-    return token;
+    return tokenService.getToken(authentication);
   }
 
   public Optional<Member> findByEmail(String email) {

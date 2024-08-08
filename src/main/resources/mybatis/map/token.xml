@@ -4,13 +4,13 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository">
   <insert id="save" parameterType="token" keyProperty="id">
-    INSERT INTO tokens (token_value)
-    VALUES (#{tokenValue});
+    INSERT INTO tokens (user_id, refresh_token)
+    VALUES (#{userId}, #{refreshToken});
   </insert>
 
   <update id="update" parameterType="token">
     UPDATE tokens SET
-    token_value = #{tokenValue}
+    refresh_token = #{refreshToken}
     WHERE id = #{id};
   </update>
 
@@ -19,6 +19,10 @@
   </delete>
 
   <select id="findToken" parameterType="String" resultType="token">
-    SELECT * FROM tokens WHERE token_value = #{tokenValue};
+    SELECT * FROM tokens WHERE refresh_token = #{refreshToken};
+  </select>
+
+  <select id="findByUserId" parameterType="String" resultType="token">
+    SELECT * FROM tokens WHERE user_id = #{userId};
   </select>
 </mapper>

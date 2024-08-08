@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.entity.RefreshToken;
+import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
@@ -30,15 +30,6 @@ public class TokenService {
         .build();
   }
 
-  // Authorization 헤더에서 token 추출
-  public String getToken(HttpServletRequest request) {
-    return tokenProvider.getTokenFromAuthorizationHeader(request);
-  }
-
-  public void save(RefreshToken token) {
-    tokenRepository.save(token);
-  }
-
   // AccessToken & RefreshToken 재발급
   public TokenDto reissueAccessToken(TokenReissueRequest tokenReissueRequest) {
 
@@ -50,15 +41,14 @@ public class TokenService {
 
     tokenProvider.validateRefreshToken(refreshToken);
 
-    RefreshToken token = tokenRepository.findToken(refreshToken);
+    Token token = tokenRepository.findToken(refreshToken);
     if (token == null) {
       throw new NotFoundTokenException();
     }
 
     String reissuedAccessToken = tokenProvider.createAccessToken(refreshToken);
     String reissuedRefreshToken = tokenProvider.createRefreshToken(reissuedAccessToken);
-    token.updateTokenValue(reissuedRefreshToken);
-    tokenRepository.update(token);
+
     return TokenDto.builder()
         .accessToken(reissuedAccessToken)
         .refreshToken(reissuedRefreshToken)
