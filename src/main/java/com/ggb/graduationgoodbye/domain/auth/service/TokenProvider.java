@@ -1,8 +1,10 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
+import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.exception.ExpiredTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidJwtSignatureException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
+import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -30,6 +32,7 @@ public class TokenProvider {
   private final Long ACCESS_EXP;
   private final Long REFRESH_EXP;
   private final AuthProvider authProvider;
+  private final TokenRepository tokenRepository;
 
   private static final String Bearer = "Bearer ";
   private static final String ROLE_CLAIM = "role";
@@ -39,8 +42,8 @@ public class TokenProvider {
       @Value("${jwt.access.expired}") Long accessExp,
       @Value("${jwt.refresh.secret}") String refreshSecret,
       @Value("${jwt.refresh.expired}") Long refreshExp,
-      AuthProvider authProvider
-  ) {
+      AuthProvider authProvider,
+      TokenRepository tokenRepository) {
     this.authProvider = authProvider;
     byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecret);
     byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshSecret);
@@ -48,6 +51,7 @@ public class TokenProvider {
     this.REFRESH_SECRET = Keys.hmacShaKeyFor(refreshKeyBytes);
     this.ACCESS_EXP = accessExp;
     this.REFRESH_EXP = refreshExp;
+    this.tokenRepository = tokenRepository;
   }
 
   public String createAccessToken(Authentication authentication) {
@@ -61,7 +65,20 @@ public class TokenProvider {
   }
 
   public String createRefreshToken(Authentication authentication) {
-    return createToken(authentication, REFRESH_SECRET, REFRESH_EXP);
+    String refreshToken = createToken(authentication, REFRESH_SECRET, REFRESH_EXP);
+    String userId = authentication.getName();
+
+    Token token = tokenRepository.findByUserId(userId);
+
+    if (token == null) {
+      token = Token.of(userId, refreshToken);
+      tokenRepository.save(token);
+    } else {
+      token.updateRefreshToken(refreshToken);
+      tokenRepository.update(token);
+    }
+
+    return refreshToken;
   }
 
   public String createRefreshToken(String accessToken) {

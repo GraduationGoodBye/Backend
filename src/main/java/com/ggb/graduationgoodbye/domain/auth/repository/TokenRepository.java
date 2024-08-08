@@ -1,16 +1,18 @@
 package com.ggb.graduationgoodbye.domain.auth.repository;
 
-import com.ggb.graduationgoodbye.domain.auth.entity.RefreshToken;
+import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface TokenRepository {
 
-  void save(RefreshToken token);
+  void save(Token token);
 
-  RefreshToken findToken(String refreshToken);
+  Token findToken(String refreshToken);
 
-  void update(RefreshToken token);
+  Token findByUserId(String userId);
+
+  void update(Token token);
 
   int delete(Long id);
 }
