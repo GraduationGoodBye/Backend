@@ -15,9 +15,4 @@ public class TokenDto {
   private String accessToken;
   private String refreshToken;
 
-  public TokenResponse toResponse() {
-    return new TokenResponse(
-        this.accessToken, this.refreshToken
-    );
-  }
 }
