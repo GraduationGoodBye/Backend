@@ -125,7 +125,7 @@ public class TokenProvider {
   }
 
   // Authorization 헤더에서 token 추출
-  public String getBearerToken(HttpServletRequest request) {
+  public String getTokenFromAuthorizationHeader(HttpServletRequest request) {
     String header = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (StringUtils.hasText(header) && header.startsWith(Bearer)) {
       return header.replace(Bearer, "");
