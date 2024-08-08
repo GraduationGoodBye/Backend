@@ -1,5 +1,7 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
+import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.entity.RefreshToken;
 import com.ggb.graduationgoodbye.domain.auth.service.AuthProvider;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
@@ -26,7 +28,7 @@ public class MemberService {
   private final TokenService tokenService;
   private final AuthProvider authProvider;
 
-  public Token join(MemberJoinRequest request) {
+  public TokenDto join(MemberJoinRequest request) {
     // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
     String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo";
 
@@ -55,9 +57,9 @@ public class MemberService {
     return saveToken(member);
   }
 
-  private Token saveToken(Member member) {
-    Token token = tokenService.getToken(authProvider.getAuthentication(member));
-    tokenService.save(token);
+  private TokenDto saveToken(Member member) {
+    TokenDto token = tokenService.getToken(authProvider.getAuthentication(member));
+    tokenService.save(RefreshToken.of(token.getRefreshToken()));
     return token;
   }
 
