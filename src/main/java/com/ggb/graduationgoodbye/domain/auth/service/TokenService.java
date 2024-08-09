@@ -26,7 +26,10 @@ public class TokenService {
 
     saveOrUpdateToken(authentication.getName(), refreshToken);
 
-    return buildToken(accessToken, refreshToken);
+    return TokenDto.builder()
+        .accessToken(accessToken)
+        .refreshToken(refreshToken)
+        .build();
   }
 
   // AccessToken & RefreshToken 재발급
@@ -48,13 +51,9 @@ public class TokenService {
     String reissuedAccessToken = reissueAccessToken(refreshToken);
     String reissuedRefreshToken = reissueRefreshToken(reissuedAccessToken);
 
-    return buildToken(reissuedAccessToken, reissuedRefreshToken);
-  }
-
-  private TokenDto buildToken(String accessToken, String refreshToken) {
     return TokenDto.builder()
-        .accessToken(accessToken)
-        .refreshToken(refreshToken)
+        .accessToken(reissuedAccessToken)
+        .refreshToken(reissuedRefreshToken)
         .build();
   }
 
