@@ -72,7 +72,10 @@ public class TokenService {
     Token token = tokenRepository.findByUserId(userId);
 
     if (token == null) {
-      token = Token.of(userId, refreshToken);
+      token = Token.builder()
+          .userId(userId)
+          .refreshToken(refreshToken)
+          .build();
       tokenRepository.save(token);
     } else {
       token.updateRefreshToken(refreshToken);

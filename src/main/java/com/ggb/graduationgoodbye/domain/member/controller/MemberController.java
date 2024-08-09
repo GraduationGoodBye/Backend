@@ -25,8 +25,8 @@ public class MemberController {
   @PostMapping("/signup")
   public ApiResponse<TokenResponse> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
     TokenDto token = memberService.join(memberJoinRequest);
-    TokenResponse tokenResponse = new TokenResponse(token.accessToken(),
-        token.refreshToken());
+    TokenResponse tokenResponse = new TokenResponse(token.getAccessToken(),
+        token.getRefreshToken());
     return ApiResponse.ok(tokenResponse);
   }
 
@@ -42,8 +42,8 @@ public class MemberController {
   @PostMapping("/reissue")
   public ApiResponse<TokenResponse> reissue(@RequestBody TokenReissueRequest tokenReissueRequest) {
     TokenDto token = tokenService.reissueToken(tokenReissueRequest);
-    TokenResponse tokenResponse = new TokenResponse(token.accessToken(),
-        token.accessToken());
+    TokenResponse tokenResponse = new TokenResponse(token.getAccessToken(),
+        token.getRefreshToken());
     return ApiResponse.ok(tokenResponse);
   }
 }
