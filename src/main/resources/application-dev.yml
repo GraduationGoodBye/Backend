@@ -7,10 +7,10 @@ spring:
 
   # MYSQL
   datasource:
-    url: jdbc:mysql://127.0.0.1:13306/dev
+    url: jdbc:mysql://localhost:3306/ggbTest?useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password:
+    password: root
 
   # REDIS
   data:
@@ -20,4 +20,4 @@ spring:
 
     # MONGO
     mongodb:
-      uri: mongodb://localhost:27017/dev
+      uri: mongodb://localhost:27017/test
