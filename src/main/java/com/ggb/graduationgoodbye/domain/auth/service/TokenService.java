@@ -20,7 +20,7 @@ public class TokenService {
   private final TokenRepository tokenRepository;
 
   // AccessToken 생성 & RefreshToken 생성 및 저장
-  public TokenDto getTokens(Authentication authentication) {
+  public TokenDto getToken(Authentication authentication) {
     String accessToken = tokenProvider.createAccessToken(authentication);
     String refreshToken = tokenProvider.createRefreshToken(authentication);
 
@@ -30,7 +30,7 @@ public class TokenService {
   }
 
   // AccessToken & RefreshToken 재발급
-  public TokenDto reissueTokens(TokenReissueRequest tokenReissueRequest) {
+  public TokenDto reissueToken(TokenReissueRequest tokenReissueRequest) {
 
     String refreshToken = tokenReissueRequest.refreshToken();
 
