@@ -7,6 +7,7 @@ import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -43,10 +44,8 @@ public class TokenService {
 
     tokenProvider.validateRefreshToken(refreshToken);
 
-    Token token = tokenRepository.findToken(refreshToken);
-    if (token == null) {
-      throw new NotFoundTokenException();
-    }
+    Optional.ofNullable(tokenRepository.findToken(refreshToken))
+        .orElseThrow(NotFoundTokenException::new);
 
     String reissuedAccessToken = reissueAccessToken(refreshToken);
     String reissuedRefreshToken = reissueRefreshToken(reissuedAccessToken);
