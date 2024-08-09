@@ -49,7 +49,7 @@ public class TokenProvider {
     this.REFRESH_EXP = refreshExp;
   }
 
-  // 토큰 생성 로직
+  // 토큰 생성
   public String createAccessToken(Authentication authentication) {
     return createToken(authentication, ACCESS_SECRET, ACCESS_EXP);
   }
@@ -76,7 +76,7 @@ public class TokenProvider {
         .compact();
   }
 
-  //
+  // 토큰 파싱 후 Authentication 생성
   public Authentication getAuthenticationByAccessToken(String accessToken) {
     Claims claims = getClaimsFromAccessToken(accessToken);
     return authProvider.getAuthentication(claims);
@@ -87,7 +87,7 @@ public class TokenProvider {
     return authProvider.getAuthentication(claims);
   }
 
-  // AuthorizationHeader에서 accessToken 추출
+  // AuthorizationHeader 에서 accessToken 추출
   public String getTokenFromAuthorizationHeader(HttpServletRequest request) {
     String header = request.getHeader(HttpHeaders.AUTHORIZATION);
     if (StringUtils.hasText(header) && header.startsWith(Bearer)) {
@@ -109,6 +109,7 @@ public class TokenProvider {
     this.getClaimsFromToken(token, secretKey);
   }
 
+  // 토큰 파싱
   private Claims getClaimsFromAccessToken(String accessToken) {
     return getClaimsFromToken(accessToken, ACCESS_SECRET);
   }
