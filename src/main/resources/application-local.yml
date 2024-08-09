@@ -3,6 +3,9 @@ server:
 
 spring:
   # MYSQL
+  sql:
+    init:
+      mode: always
   datasource:
     url: jdbc:mysql://mysql:3306/ggbTest?useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver

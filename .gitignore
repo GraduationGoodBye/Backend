@@ -38,4 +38,3 @@ out/
 
 ### .secret
 application-secret.yml
-schema.sql
