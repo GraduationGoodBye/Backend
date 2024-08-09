@@ -25,7 +25,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException {
-    TokenDto token = tokenService.getTokens(authentication);
+    TokenDto token = tokenService.getToken(authentication);
 
     writeResponse(
         response,

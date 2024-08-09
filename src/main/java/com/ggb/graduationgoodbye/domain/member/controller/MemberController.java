@@ -41,7 +41,7 @@ public class MemberController {
 
   @PostMapping("/reissue")
   public ApiResponse<TokenResponse> reissue(@RequestBody TokenReissueRequest tokenReissueRequest) {
-    TokenDto token = tokenService.reissueTokens(tokenReissueRequest);
+    TokenDto token = tokenService.reissueToken(tokenReissueRequest);
     TokenResponse tokenResponse = new TokenResponse(token.accessToken(),
         token.accessToken());
     return ApiResponse.ok(tokenResponse);
