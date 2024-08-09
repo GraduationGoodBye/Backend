@@ -15,7 +15,7 @@ CREATE TABLE members
 CREATE TABLE tokens
 (
     id          BIGINT AUTO_INCREMENT,
-    user_id     VARCHAR(100),
+    user_id     VARCHAR(100) UNIQUE,
     refresh_token VARCHAR(255),
     PRIMARY KEY (id)
 );
