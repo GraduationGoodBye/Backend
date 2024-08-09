@@ -4,6 +4,9 @@ server:
 spring:
   application:
     name: GraduationGoodBye
+  sql:
+    init:
+      mode: never
 
   # MYSQL
   datasource:

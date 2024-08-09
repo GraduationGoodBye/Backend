@@ -1,9 +1,9 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
+import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.AuthProvider;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.auth.entity.Token;
-import com.ggb.graduationgoodbye.domain.member.dto.MemberJoinRequest;
+import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.nimbusds.jose.shaded.gson.Gson;
@@ -13,6 +13,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,7 +28,7 @@ public class MemberService {
   private final TokenService tokenService;
   private final AuthProvider authProvider;
 
-  public Token join(MemberJoinRequest request) {
+  public TokenDto join(MemberJoinRequest request) {
     // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
     String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo";
 
@@ -53,13 +54,9 @@ public class MemberService {
         .build();
     memberRepository.save(member);
 
-    return saveToken(member);
-  }
+    Authentication authentication = authProvider.getAuthentication(member);
 
-  private Token saveToken(Member member) {
-    Token token = tokenService.getToken(authProvider.getAuthentication(member));
-    tokenService.save(token);
-    return token;
+    return tokenService.getToken(authentication);
   }
 
   public Optional<Member> findByEmail(String email) {

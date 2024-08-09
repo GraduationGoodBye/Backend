@@ -1,4 +1,4 @@
-CREATE TABLE users
+CREATE TABLE members
 (
     id       BIGINT AUTO_INCREMENT,
     email    VARCHAR(100),
@@ -14,8 +14,8 @@ CREATE TABLE users
 
 CREATE TABLE tokens
 (
-    id            BIGINT AUTO_INCREMENT,
-    access_token  VARCHAR(255),
+    id          BIGINT AUTO_INCREMENT,
+    user_id     VARCHAR(100) UNIQUE,
     refresh_token VARCHAR(255),
     PRIMARY KEY (id)
 );

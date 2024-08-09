@@ -8,9 +8,9 @@ public interface TokenRepository {
 
   void save(Token token);
 
-  Token findByAccessTokenAndRefreshToken(String accessToken, String refreshToken);
+  Token findToken(String refreshToken);
 
-  Token findByAccessToken(String accessToken);
+  Token findByUserId(String userId);
 
   void update(Token token);
 

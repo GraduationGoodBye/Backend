@@ -36,6 +36,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         .getUserInfoEndpoint()
         .getUserNameAttributeName();
 
-    return new PrincipalDetails(member, attr, userNameAttributeName);
+    return PrincipalDetails.builder()
+        .member(member)
+        .attributes(attr)
+        .attributeKey(userNameAttributeName)
+        .build();
   }
 }
