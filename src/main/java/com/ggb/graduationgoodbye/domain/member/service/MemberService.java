@@ -56,7 +56,7 @@ public class MemberService {
 
     Authentication authentication = authProvider.getAuthentication(member);
 
-    return tokenService.getToken(authentication);
+    return tokenService.getTokens(authentication);
   }
 
   public Optional<Member> findByEmail(String email) {

@@ -1,10 +1,8 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
-import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.exception.ExpiredTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidJwtSignatureException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
-import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -32,7 +30,6 @@ public class TokenProvider {
   private final Long ACCESS_EXP;
   private final Long REFRESH_EXP;
   private final AuthProvider authProvider;
-  private final TokenRepository tokenRepository;
 
   private static final String Bearer = "Bearer ";
   private static final String ROLE_CLAIM = "role";
@@ -42,8 +39,7 @@ public class TokenProvider {
       @Value("${jwt.access.expired}") Long accessExp,
       @Value("${jwt.refresh.secret}") String refreshSecret,
       @Value("${jwt.refresh.expired}") Long refreshExp,
-      AuthProvider authProvider,
-      TokenRepository tokenRepository) {
+      AuthProvider authProvider) {
     this.authProvider = authProvider;
     byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecret);
     byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshSecret);
@@ -51,40 +47,15 @@ public class TokenProvider {
     this.REFRESH_SECRET = Keys.hmacShaKeyFor(refreshKeyBytes);
     this.ACCESS_EXP = accessExp;
     this.REFRESH_EXP = refreshExp;
-    this.tokenRepository = tokenRepository;
   }
 
+  // 토큰 생성 로직
   public String createAccessToken(Authentication authentication) {
     return createToken(authentication, ACCESS_SECRET, ACCESS_EXP);
   }
 
-  public String createAccessToken(String refreshToken) {
-    Claims claims = getClaimsFromRefreshToken(refreshToken);
-    Authentication authentication = authProvider.getAuthentication(claims);
-    return createAccessToken(authentication);
-  }
-
   public String createRefreshToken(Authentication authentication) {
-    String refreshToken = createToken(authentication, REFRESH_SECRET, REFRESH_EXP);
-    String userId = authentication.getName();
-
-    Token token = tokenRepository.findByUserId(userId);
-
-    if (token == null) {
-      token = Token.of(userId, refreshToken);
-      tokenRepository.save(token);
-    } else {
-      token.updateRefreshToken(refreshToken);
-      tokenRepository.update(token);
-    }
-
-    return refreshToken;
-  }
-
-  public String createRefreshToken(String accessToken) {
-    Claims claims = getClaimsFromAccessToken(accessToken);
-    Authentication authentication = authProvider.getAuthentication(claims);
-    return createRefreshToken(authentication);
+    return createToken(authentication, REFRESH_SECRET, REFRESH_EXP);
   }
 
   private String createToken(Authentication authentication, SecretKey secret, Long exp) {
@@ -105,7 +76,27 @@ public class TokenProvider {
         .compact();
   }
 
-  // token validation
+  //
+  public Authentication getAuthenticationByAccessToken(String accessToken) {
+    Claims claims = getClaimsFromAccessToken(accessToken);
+    return authProvider.getAuthentication(claims);
+  }
+
+  public Authentication getAuthenticationByRefreshToken(String refreshToken) {
+    Claims claims = getClaimsFromRefreshToken(refreshToken);
+    return authProvider.getAuthentication(claims);
+  }
+
+  // AuthorizationHeader에서 accessToken 추출
+  public String getTokenFromAuthorizationHeader(HttpServletRequest request) {
+    String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (StringUtils.hasText(header) && header.startsWith(Bearer)) {
+      return header.replace(Bearer, "");
+    }
+    return null;
+  }
+
+  // 토큰 검증
   public void validateAccessToken(String accessToken) {
     validateToken(accessToken, ACCESS_SECRET);
   }
@@ -118,11 +109,11 @@ public class TokenProvider {
     this.getClaimsFromToken(token, secretKey);
   }
 
-  public Claims getClaimsFromAccessToken(String accessToken) {
+  private Claims getClaimsFromAccessToken(String accessToken) {
     return getClaimsFromToken(accessToken, ACCESS_SECRET);
   }
 
-  public Claims getClaimsFromRefreshToken(String refreshToken) {
+  private Claims getClaimsFromRefreshToken(String refreshToken) {
     return getClaimsFromToken(refreshToken, REFRESH_SECRET);
   }
 
@@ -139,14 +130,5 @@ public class TokenProvider {
     } catch (Exception e) {
       throw new UnAuthenticatedException(e.getMessage());
     }
-  }
-
-  // Authorization 헤더에서 token 추출
-  public String getTokenFromAuthorizationHeader(HttpServletRequest request) {
-    String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (StringUtils.hasText(header) && header.startsWith(Bearer)) {
-      return header.replace(Bearer, "");
-    }
-    return null;
   }
 }
