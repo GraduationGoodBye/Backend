@@ -15,9 +15,9 @@ spring:
   # REDIS
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
 
     # MONGO
     mongodb:
-      uri: mongodb://localhost:27017/main
+      uri: mongodb://mongo:27017/main
