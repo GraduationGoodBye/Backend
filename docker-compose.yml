@@ -1,5 +1,5 @@
 services:
-  db:
+  mysql:
     container_name: mysql
     image: mysql:8.4
     environment:
@@ -15,8 +15,8 @@ services:
       - mysql_data:/var/lib/mysql
 
   mongo:
-    image: mongo:7.0.12
     container_name: mongo
+    image: mongo:7.0.12
     ports:
       - 27017:27017
     environment:
@@ -31,6 +31,18 @@ services:
       - 6379:6379
     volumes:
       - redis_data:/data
+
+  springboot-app:
+    container_name: springboot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - mongo
+      - redis
 
 
 volumes:
