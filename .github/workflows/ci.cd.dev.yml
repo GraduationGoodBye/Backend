@@ -77,5 +77,5 @@ jobs:
             docker pull ${{env.DOCKER_IMAGE_NAME}}
             docker stop ${{env.DOCKER_CONTAINER_NAME}}
             docker rm ${{env.DOCKER_CONTAINER_NAME}}
-            docker run -d --name ${{env.DOCKER_CONTAINER_NAME}} -p 8081:8080 ${{env.DOCKER_IMAGE_NAME}}
+            docker-compose -f docker-compose/docker-compose.yml up -d
             docker image prune -af
