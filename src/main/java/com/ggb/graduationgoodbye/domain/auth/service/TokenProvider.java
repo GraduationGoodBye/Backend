@@ -39,8 +39,7 @@ public class TokenProvider {
       @Value("${jwt.access.expired}") Long accessExp,
       @Value("${jwt.refresh.secret}") String refreshSecret,
       @Value("${jwt.refresh.expired}") Long refreshExp,
-      AuthProvider authProvider
-  ) {
+      AuthProvider authProvider) {
     this.authProvider = authProvider;
     byte[] accessKeyBytes = Decoders.BASE64.decode(accessSecret);
     byte[] refreshKeyBytes = Decoders.BASE64.decode(refreshSecret);
@@ -50,24 +49,13 @@ public class TokenProvider {
     this.REFRESH_EXP = refreshExp;
   }
 
+  // 토큰 생성
   public String createAccessToken(Authentication authentication) {
     return createToken(authentication, ACCESS_SECRET, ACCESS_EXP);
   }
 
-  public String createAccessToken(String refreshToken) {
-    Claims claims = getClaimsFromRefreshToken(refreshToken);
-    Authentication authentication = authProvider.getAuthentication(claims);
-    return createAccessToken(authentication);
-  }
-
   public String createRefreshToken(Authentication authentication) {
     return createToken(authentication, REFRESH_SECRET, REFRESH_EXP);
-  }
-
-  public String createRefreshToken(String accessToken) {
-    Claims claims = getClaimsFromAccessToken(accessToken);
-    Authentication authentication = authProvider.getAuthentication(claims);
-    return createRefreshToken(authentication);
   }
 
   private String createToken(Authentication authentication, SecretKey secret, Long exp) {
@@ -88,7 +76,27 @@ public class TokenProvider {
         .compact();
   }
 
-  // token validation
+  // 토큰 파싱 후 Authentication 생성
+  public Authentication getAuthenticationByAccessToken(String accessToken) {
+    Claims claims = getClaimsFromAccessToken(accessToken);
+    return authProvider.getAuthentication(claims);
+  }
+
+  public Authentication getAuthenticationByRefreshToken(String refreshToken) {
+    Claims claims = getClaimsFromRefreshToken(refreshToken);
+    return authProvider.getAuthentication(claims);
+  }
+
+  // AuthorizationHeader 에서 accessToken 추출
+  public String getTokenFromAuthorizationHeader(HttpServletRequest request) {
+    String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+    if (StringUtils.hasText(header) && header.startsWith(Bearer)) {
+      return header.replace(Bearer, "");
+    }
+    return null;
+  }
+
+  // 토큰 검증
   public void validateAccessToken(String accessToken) {
     validateToken(accessToken, ACCESS_SECRET);
   }
@@ -101,11 +109,12 @@ public class TokenProvider {
     this.getClaimsFromToken(token, secretKey);
   }
 
-  public Claims getClaimsFromAccessToken(String accessToken) {
+  // 토큰 파싱
+  private Claims getClaimsFromAccessToken(String accessToken) {
     return getClaimsFromToken(accessToken, ACCESS_SECRET);
   }
 
-  public Claims getClaimsFromRefreshToken(String refreshToken) {
+  private Claims getClaimsFromRefreshToken(String refreshToken) {
     return getClaimsFromToken(refreshToken, REFRESH_SECRET);
   }
 
@@ -122,14 +131,5 @@ public class TokenProvider {
     } catch (Exception e) {
       throw new UnAuthenticatedException(e.getMessage());
     }
-  }
-
-  // Authorization 헤더에서 token 추출
-  public String getToken(HttpServletRequest request) {
-    String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-    if (StringUtils.hasText(header) && header.startsWith(Bearer)) {
-      return header.replace(Bearer, "");
-    }
-    return null;
   }
 }

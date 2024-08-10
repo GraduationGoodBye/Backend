@@ -1,10 +1,10 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
+import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 
 import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
 
-import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,8 +25,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException {
-    Token token = tokenService.getToken(authentication);
-    tokenService.save(token);
+    TokenDto token = tokenService.getToken(authentication);
 
     writeResponse(
         response,

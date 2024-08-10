@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.dto;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Map;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public class PrincipalDetails implements OAuth2User, UserDetails {
 
   private Member member;

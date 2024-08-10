@@ -5,24 +5,21 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("token")
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Token {
 
   private Long id;
-  private String accessToken;
+  private String userId;
   private String refreshToken;
 
-  public static Token of(String accessToken, String refreshToken) {
-    return Token.builder()
-        .refreshToken(refreshToken)
-        .accessToken(accessToken)
-        .build();
+  @Builder
+  public Token(String userId, String refreshToken) {
+    this.userId = userId;
+    this.refreshToken = refreshToken;
   }
 
-  public void updateAccessToken(String reissuedAccessToken, String reissuedRefreshToken) {
-    this.accessToken = reissuedAccessToken;
+  public void updateRefreshToken(String reissuedRefreshToken) {
     this.refreshToken = reissuedRefreshToken;
   }
 }
