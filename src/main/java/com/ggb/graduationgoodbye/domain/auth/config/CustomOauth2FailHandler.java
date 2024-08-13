@@ -1,18 +1,16 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
-import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
-
 import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
 
+import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-
-import java.io.IOException;
 
 @Slf4j
 public class CustomOauth2FailHandler implements AuthenticationFailureHandler {

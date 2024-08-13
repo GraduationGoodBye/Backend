@@ -5,11 +5,17 @@ import com.ggb.graduationgoodbye.domain.auth.exception.InvalidJwtSignatureExcept
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.stream.Collectors;
+import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -17,10 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-
-import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j

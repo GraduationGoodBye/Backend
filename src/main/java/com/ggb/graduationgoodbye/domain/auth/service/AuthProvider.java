@@ -2,15 +2,14 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;
+import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.List;
 
 @Component
 @Slf4j

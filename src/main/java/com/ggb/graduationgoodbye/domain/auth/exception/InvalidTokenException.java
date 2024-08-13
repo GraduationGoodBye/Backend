@@ -1,9 +1,8 @@
 package com.ggb.graduationgoodbye.domain.auth.exception;
 
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
-import lombok.Getter;
-
 import java.io.Serial;
+import lombok.Getter;
 
 @Getter
 public class InvalidTokenException extends UnAuthenticatedException {
