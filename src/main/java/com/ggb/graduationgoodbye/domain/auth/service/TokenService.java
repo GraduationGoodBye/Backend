@@ -44,8 +44,7 @@ public class TokenService {
 
     tokenProvider.validateRefreshToken(refreshToken);
 
-    Optional.ofNullable(tokenRepository.findToken(refreshToken))
-        .orElseThrow(NotFoundTokenException::new);
+    tokenRepository.findToken(refreshToken).orElseThrow(NotFoundTokenException::new);
 
     String reissuedAccessToken = reissueAccessToken(refreshToken);
     String reissuedRefreshToken = reissueRefreshToken(reissuedAccessToken);
@@ -69,17 +68,17 @@ public class TokenService {
   }
 
   private void saveOrUpdateToken(String userId, String refreshToken) {
-    Token token = tokenRepository.findByUserId(userId);
-
-    if (token == null) {
-      token = Token.builder()
+    Optional<Token> optionalToken = tokenRepository.findByUserId(userId);
+    if (optionalToken.isPresent()) {
+      Token token = optionalToken.get();
+      token.updateRefreshToken(refreshToken);
+      tokenRepository.update(token);
+    } else {
+      Token token = Token.builder()
           .userId(userId)
           .refreshToken(refreshToken)
           .build();
       tokenRepository.save(token);
-    } else {
-      token.updateRefreshToken(refreshToken);
-      tokenRepository.update(token);
     }
   }
 

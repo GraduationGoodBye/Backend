@@ -1,18 +1,33 @@
 package com.ggb.graduationgoodbye.domain.auth.repository;
 
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
-import org.apache.ibatis.annotations.Mapper;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Mapper
-public interface TokenRepository {
+@Repository
+@RequiredArgsConstructor
+public class TokenRepository {
 
-  void save(Token token);
+  private final SqlSession mysql;
 
-  Token findToken(String refreshToken);
+  @Transactional
+  public void save(Token token) {
+    mysql.insert("TokenRepository.save", token);
+  }
 
-  Token findByUserId(String userId);
+  @Transactional
+  public void update(Token token) {
+    mysql.update("TokenRepository.update", token);
+  }
 
-  void update(Token token);
+  public Optional<Token> findToken(String refreshToken) {
+    return Optional.ofNullable(mysql.selectOne("TokenRepository.findToken", refreshToken));
+  }
 
-  int delete(Long id);
+  public Optional<Token> findByUserId(String userId) {
+    return Optional.ofNullable(mysql.selectOne("TokenRepository.findByUserId", userId));
+  }
 }
