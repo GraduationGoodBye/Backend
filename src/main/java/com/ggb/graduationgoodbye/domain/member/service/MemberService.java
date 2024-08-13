@@ -60,14 +60,14 @@ public class MemberService {
   }
 
   public Optional<Member> findByEmail(String email) {
-    return Optional.ofNullable(memberRepository.findByEmail(email));
-  }
-
-  public boolean existsByEmail(String email) {
-    return memberRepository.findByEmail(email) != null;
+    return memberRepository.findByEmail(email);
   }
 
   public Optional<Member> findById(Long id) {
-    return Optional.ofNullable(memberRepository.findById(id));
+    return memberRepository.findById(id);
+  }
+
+  public boolean existsByEmail(String email) {
+    return memberRepository.findByEmail(email).isPresent();
   }
 }

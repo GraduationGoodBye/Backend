@@ -2,8 +2,8 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
+import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
-import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,13 +39,12 @@ public class TokenService {
     String refreshToken = tokenReissueRequest.refreshToken();
 
     if (!StringUtils.hasText(refreshToken)) {
-      throw new NotExistsTokenException();
+      throw new InvalidTokenException();
     }
 
     tokenProvider.validateRefreshToken(refreshToken);
 
-    Optional.ofNullable(tokenRepository.findToken(refreshToken))
-        .orElseThrow(NotFoundTokenException::new);
+    tokenRepository.findToken(refreshToken).orElseThrow(NotFoundTokenException::new);
 
     String reissuedAccessToken = reissueAccessToken(refreshToken);
     String reissuedRefreshToken = reissueRefreshToken(reissuedAccessToken);
@@ -69,17 +68,17 @@ public class TokenService {
   }
 
   private void saveOrUpdateToken(String userId, String refreshToken) {
-    Token token = tokenRepository.findByUserId(userId);
-
-    if (token == null) {
-      token = Token.builder()
+    Optional<Token> optionalToken = tokenRepository.findByUserId(userId);
+    if (optionalToken.isPresent()) {
+      Token token = optionalToken.get();
+      token.updateRefreshToken(refreshToken);
+      tokenRepository.update(token);
+    } else {
+      Token token = Token.builder()
           .userId(userId)
           .refreshToken(refreshToken)
           .build();
       tokenRepository.save(token);
-    } else {
-      token.updateRefreshToken(refreshToken);
-      tokenRepository.update(token);
     }
   }
 

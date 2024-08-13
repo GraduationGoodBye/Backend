@@ -1,16 +1,28 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import org.apache.ibatis.annotations.Mapper;
+import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-@Mapper
-public interface MemberRepository {
+@Repository
+@RequiredArgsConstructor
+public class MemberRepository {
 
-  Member findById(Long id);
+  private final SqlSession mysql;
 
-  void save(Member member);
+  @Transactional
+  public void save(Member member) {
+    mysql.insert("MemberRepository.save", member);
+  }
 
-  Member findByEmail(String email);
+  public Optional<Member> findById(Long id) {
+    return Optional.ofNullable(mysql.selectOne("MemberRepository.findById", id));
+  }
 
-  boolean existsByEmail(String email);
+  public Optional<Member> findByEmail(String email) {
+    return Optional.ofNullable(mysql.selectOne("MemberRepository.findByEmail", email));
+  }
 }
