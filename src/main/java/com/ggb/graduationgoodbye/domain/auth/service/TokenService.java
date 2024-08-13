@@ -2,8 +2,8 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
+import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
-import com.ggb.graduationgoodbye.domain.auth.exception.NotExistsTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,7 +39,7 @@ public class TokenService {
     String refreshToken = tokenReissueRequest.refreshToken();
 
     if (!StringUtils.hasText(refreshToken)) {
-      throw new NotExistsTokenException();
+      throw new InvalidTokenException();
     }
 
     tokenProvider.validateRefreshToken(refreshToken);
