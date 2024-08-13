@@ -26,7 +26,6 @@ public class MemberService {
 
   private final MemberMapper memberMapper;
   private final TokenService tokenService;
-  private final AuthProvider authProvider;
 
   public TokenDto join(MemberJoinRequest request) {
     // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
@@ -54,7 +53,7 @@ public class MemberService {
         .build();
     memberMapper.save(member);
 
-    Authentication authentication = authProvider.getAuthentication(member);
+    Authentication authentication = tokenService.getAuthenticationByMember(member);
 
     return tokenService.getToken(authentication);
   }

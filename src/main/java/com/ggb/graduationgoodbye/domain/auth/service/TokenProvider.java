@@ -3,6 +3,7 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 import com.ggb.graduationgoodbye.domain.auth.exception.ExpiredTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidJwtSignatureException;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
+import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -85,6 +86,10 @@ public class TokenProvider {
   public Authentication getAuthenticationByRefreshToken(String refreshToken) {
     Claims claims = getClaimsFromRefreshToken(refreshToken);
     return authProvider.getAuthentication(claims);
+  }
+
+  public Authentication getAuthenticationByMember(Member member) {
+    return authProvider.getAuthentication(member);
   }
 
   // AuthorizationHeader 에서 accessToken 추출
