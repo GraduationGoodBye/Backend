@@ -5,7 +5,7 @@ import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
-import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
+import com.ggb.graduationgoodbye.domain.auth.mapper.TokenMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ import org.springframework.util.StringUtils;
 public class TokenService {
 
   private final TokenProvider tokenProvider;
-  private final TokenRepository tokenRepository;
+  private final TokenMapper tokenMapper;
 
   // AccessToken 생성 & RefreshToken 생성 및 저장
   public TokenDto getToken(Authentication authentication) {
@@ -44,7 +44,7 @@ public class TokenService {
 
     tokenProvider.validateRefreshToken(refreshToken);
 
-    tokenRepository.findToken(refreshToken).orElseThrow(NotFoundTokenException::new);
+    tokenMapper.findToken(refreshToken).orElseThrow(NotFoundTokenException::new);
 
     String reissuedAccessToken = reissueAccessToken(refreshToken);
     String reissuedRefreshToken = reissueRefreshToken(reissuedAccessToken);
@@ -68,17 +68,17 @@ public class TokenService {
   }
 
   private void saveOrUpdateToken(String userId, String refreshToken) {
-    Optional<Token> optionalToken = tokenRepository.findByUserId(userId);
+    Optional<Token> optionalToken = tokenMapper.findByUserId(userId);
     if (optionalToken.isPresent()) {
       Token token = optionalToken.get();
       token.updateRefreshToken(refreshToken);
-      tokenRepository.update(token);
+      tokenMapper.update(token);
     } else {
       Token token = Token.builder()
           .userId(userId)
           .refreshToken(refreshToken)
           .build();
-      tokenRepository.save(token);
+      tokenMapper.save(token);
     }
   }
 

@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.repository;
+package com.ggb.graduationgoodbye.domain.auth.mapper;
 
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class TokenRepository {
+public class TokenMapper {
 
   private final SqlSession mysql;
 

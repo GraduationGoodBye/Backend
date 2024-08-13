@@ -4,7 +4,7 @@ import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.AuthProvider;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
-import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
+import com.ggb.graduationgoodbye.domain.member.mapper.MemberMapper;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.nimbusds.jose.shaded.gson.Gson;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 public class MemberService {
 
-  private final MemberRepository memberRepository;
+  private final MemberMapper memberMapper;
   private final TokenService tokenService;
   private final AuthProvider authProvider;
 
@@ -52,7 +52,7 @@ public class MemberService {
         .phone(request.phone())
         .gender(request.gender())
         .build();
-    memberRepository.save(member);
+    memberMapper.save(member);
 
     Authentication authentication = authProvider.getAuthentication(member);
 
@@ -60,14 +60,14 @@ public class MemberService {
   }
 
   public Optional<Member> findByEmail(String email) {
-    return memberRepository.findByEmail(email);
+    return memberMapper.findByEmail(email);
   }
 
   public Optional<Member> findById(Long id) {
-    return memberRepository.findById(id);
+    return memberMapper.findById(id);
   }
 
   public boolean existsByEmail(String email) {
-    return memberRepository.findByEmail(email).isPresent();
+    return memberMapper.findByEmail(email).isPresent();
   }
 }

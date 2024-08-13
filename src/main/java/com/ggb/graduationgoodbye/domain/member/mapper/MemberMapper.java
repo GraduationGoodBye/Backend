@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.repository;
+package com.ggb.graduationgoodbye.domain.member.mapper;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberRepository {
+public class MemberMapper {
 
   private final SqlSession mysql;
 
