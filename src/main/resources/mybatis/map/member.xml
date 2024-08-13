@@ -8,8 +8,9 @@
   </select>
 
   <insert id="save" parameterType="member" keyProperty="id">
-    INSERT INTO members (email,profile,name,nickname,address,phone,gender,role)
-    VALUES (#{email}, #{profile}, #{name}, #{nickname}, #{address}, #{phone}, #{gender}, #{role})
+    INSERT INTO members (sns_type,sns_id,email,profile,nickname,address,gender,age,phone,role)
+    VALUES (#{snsType}, #{snsId}, #{email}, #{profile}, #{nickname}, #{address}, #{gender}, #{age},
+    #{phone}, #{role})
   </insert>
 
   <select id="findByEmail" parameterType="String" resultType="member">
