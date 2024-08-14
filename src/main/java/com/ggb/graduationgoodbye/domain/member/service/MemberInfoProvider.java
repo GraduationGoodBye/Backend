@@ -6,7 +6,7 @@ import com.ggb.graduationgoodbye.domain.auth.exception.InvalidRegistrationIdExce
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
 import com.ggb.graduationgoodbye.domain.member.exception.UriSyntaxException;
 import com.ggb.graduationgoodbye.domain.member.feign.OAuth2FeignClient;
-import com.ggb.graduationgoodbye.domain.member.vo.GoogleInfoVo;
+import com.ggb.graduationgoodbye.domain.member.dto.GoogleInfoDto;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -37,7 +37,7 @@ public class MemberInfoProvider {
 
     String GOOGLE_URI = "https://www.googleapis.com/oauth2/v3/userinfo";
     try {
-      GoogleInfoVo googleInfo = feignClient.getInfo(
+      GoogleInfoDto googleInfo = feignClient.getInfo(
           new URI(GOOGLE_URI),
           BEARER + accessToken,
           CONTENT_TYPE);
