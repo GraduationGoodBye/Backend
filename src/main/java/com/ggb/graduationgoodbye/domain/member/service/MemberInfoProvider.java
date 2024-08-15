@@ -3,10 +3,12 @@ package com.ggb.graduationgoodbye.domain.member.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidRegistrationIdException;
+import com.ggb.graduationgoodbye.domain.member.dto.GoogleInfoDto;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
+import com.ggb.graduationgoodbye.domain.member.exception.OAuth2FeignException;
 import com.ggb.graduationgoodbye.domain.member.exception.UriSyntaxException;
 import com.ggb.graduationgoodbye.domain.member.feign.OAuth2FeignClient;
-import com.ggb.graduationgoodbye.domain.member.dto.GoogleInfoDto;
+import feign.FeignException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
@@ -49,6 +51,8 @@ public class MemberInfoProvider {
       return OAuth2MemberInfo.ofGoogle(attributes);
     } catch (URISyntaxException e) {
       throw new UriSyntaxException();
+    } catch (FeignException e) {
+      throw new OAuth2FeignException();
     }
   }
 }
