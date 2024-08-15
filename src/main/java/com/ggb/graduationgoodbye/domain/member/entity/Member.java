@@ -23,7 +23,7 @@ public class Member {
   private String nickname;
   private String address;
   private String gender;
-  private Long age;
+  private Integer age;
   private String phone;
   private Role role;
 
@@ -36,7 +36,7 @@ public class Member {
       String nickname,
       String address,
       String gender,
-      Long age,
+      Integer age,
       String phone
   ) {
     this.snsType = snsType;

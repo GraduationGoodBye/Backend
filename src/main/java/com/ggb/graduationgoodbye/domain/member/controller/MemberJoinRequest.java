@@ -6,7 +6,7 @@ public record MemberJoinRequest(
     String nickname,
     String address,
     String gender,
-    Long age,
+    Integer age,
     String phone
 ) {
 
