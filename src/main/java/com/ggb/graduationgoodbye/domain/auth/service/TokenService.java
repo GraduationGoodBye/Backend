@@ -4,7 +4,7 @@ import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
-import com.ggb.graduationgoodbye.domain.auth.mapper.TokenMapper;
+import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
 public class TokenService {
 
   private final TokenProvider tokenProvider;
-  private final TokenMapper tokenMapper;
+  private final TokenRepository tokenRepository;
 
   // AccessToken 생성 & RefreshToken 생성 및 저장
   public TokenDto getToken(Authentication authentication) {
@@ -45,7 +45,7 @@ public class TokenService {
 
     tokenProvider.validateRefreshToken(refreshToken);
 
-    tokenMapper.findToken(refreshToken).orElseThrow(NotFoundTokenException::new);
+    tokenRepository.findToken(refreshToken).orElseThrow(NotFoundTokenException::new);
 
     String reissuedAccessToken = reissueAccessToken(refreshToken);
     String reissuedRefreshToken = reissueRefreshToken(reissuedAccessToken);
@@ -69,17 +69,17 @@ public class TokenService {
   }
 
   private void saveOrUpdateToken(String userId, String refreshToken) {
-    Optional<Token> optionalToken = tokenMapper.findByUserId(userId);
+    Optional<Token> optionalToken = tokenRepository.findByUserId(userId);
     if (optionalToken.isPresent()) {
       Token token = optionalToken.get();
       token.updateRefreshToken(refreshToken);
-      tokenMapper.update(token);
+      tokenRepository.update(token);
     } else {
       Token token = Token.builder()
           .userId(userId)
           .refreshToken(refreshToken)
           .build();
-      tokenMapper.save(token);
+      tokenRepository.save(token);
     }
   }
 

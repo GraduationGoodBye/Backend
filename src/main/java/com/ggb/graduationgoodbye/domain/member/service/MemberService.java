@@ -6,7 +6,7 @@ import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
-import com.ggb.graduationgoodbye.domain.member.mapper.MemberMapper;
+import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class MemberService {
 
-  private final MemberMapper memberMapper;
+  private final MemberRepository memberRepository;
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
 
@@ -41,7 +41,7 @@ public class MemberService {
         .phone(request.phone())
         .build();
 
-    memberMapper.save(member);
+    memberRepository.save(member);
 
     Authentication authentication = tokenService.getAuthenticationByMember(member);
 
@@ -49,14 +49,14 @@ public class MemberService {
   }
 
   public Optional<Member> findByEmail(String email) {
-    return memberMapper.findByEmail(email);
+    return memberRepository.findByEmail(email);
   }
 
   public Optional<Member> findById(Long id) {
-    return memberMapper.findById(id);
+    return memberRepository.findById(id);
   }
 
   public boolean existsByEmail(String email) {
-    return memberMapper.findByEmail(email).isPresent();
+    return memberRepository.findByEmail(email).isPresent();
   }
 }

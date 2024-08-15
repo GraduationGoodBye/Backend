@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.mapper;
+package com.ggb.graduationgoodbye.domain.member.repository;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import java.util.Optional;
@@ -9,20 +9,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @RequiredArgsConstructor
-public class MemberMapper {
+public class MemberRepository {
 
   private final SqlSession mysql;
 
   @Transactional
   public void save(Member member) {
-    mysql.insert("MemberRepository.save", member);
+    mysql.insert("MemberMapper.save", member);
   }
 
   public Optional<Member> findById(Long id) {
-    return Optional.ofNullable(mysql.selectOne("MemberRepository.findById", id));
+    return Optional.ofNullable(mysql.selectOne("MemberMapper.findById", id));
   }
 
   public Optional<Member> findByEmail(String email) {
-    return Optional.ofNullable(mysql.selectOne("MemberRepository.findByEmail", email));
+    return Optional.ofNullable(mysql.selectOne("MemberMapper.findByEmail", email));
   }
 }
