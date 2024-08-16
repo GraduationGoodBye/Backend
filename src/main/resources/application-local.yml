@@ -22,8 +22,7 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/test
 
-# MYBATIS 설정
-mybatis:
-  config-location: classpath:mybatis/sqlmap-config.xml
-  mapper-locations: mybatis/map/*.xml
-  type-aliases-package: com.ggb.graduationgoodbye.domain
+
+
+
+
