@@ -1,16 +1,15 @@
 package com.ggb.graduationgoodbye.domain.auth.dto;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
 
 @Getter
 @Builder

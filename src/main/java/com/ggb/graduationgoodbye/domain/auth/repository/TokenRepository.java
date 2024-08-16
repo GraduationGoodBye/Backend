@@ -15,19 +15,19 @@ public class TokenRepository {
 
   @Transactional
   public void save(Token token) {
-    mysql.insert("TokenRepository.save", token);
+    mysql.insert("TokenMapper.save", token);
   }
 
   @Transactional
   public void update(Token token) {
-    mysql.update("TokenRepository.update", token);
+    mysql.update("TokenMapper.update", token);
   }
 
   public Optional<Token> findToken(String refreshToken) {
-    return Optional.ofNullable(mysql.selectOne("TokenRepository.findToken", refreshToken));
+    return Optional.ofNullable(mysql.selectOne("TokenMapper.findToken", refreshToken));
   }
 
   public Optional<Token> findByUserId(String userId) {
-    return Optional.ofNullable(mysql.selectOne("TokenRepository.findByUserId", userId));
+    return Optional.ofNullable(mysql.selectOne("TokenMapper.findByUserId", userId));
   }
 }

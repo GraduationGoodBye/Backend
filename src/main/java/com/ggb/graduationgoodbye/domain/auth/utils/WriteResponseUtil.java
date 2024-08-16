@@ -3,7 +3,6 @@ package com.ggb.graduationgoodbye.domain.auth.utils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
-
 import java.io.IOException;
 
 public class WriteResponseUtil {

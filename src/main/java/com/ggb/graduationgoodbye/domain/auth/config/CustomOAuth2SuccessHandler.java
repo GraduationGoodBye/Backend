@@ -1,20 +1,18 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-
 import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
 
+import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-
-import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor

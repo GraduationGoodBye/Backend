@@ -1,83 +1,96 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.3.1'
-	id 'io.spring.dependency-management' version '1.1.5'
+    id 'java'
+    id 'org.springframework.boot' version '3.3.1'
+    id 'io.spring.dependency-management' version '1.1.5'
+}
+
+ext {
+    springCloudVersion = "2023.0.3"
 }
 
 group = 'com.ggb'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-	// Spring Web
-	implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Spring Web
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	// Spring Validation
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // Spring Validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
-	// Spring Security
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 
-	// OAuth2
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // OAuth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-	// JWT
-	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
-	implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
-	implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
+    // JWT
+    implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.12.6'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 
-	// MyBatis
-	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+    // MyBatis
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
-	// lombok
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+    // lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 
-	// MySQL
-	implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.4.0'
+    // MySQL
+    implementation group: 'com.mysql', name: 'mysql-connector-j', version: '8.4.0'
 
-	// Redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-	implementation 'it.ozimov:embedded-redis:0.7.2'
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+    implementation 'it.ozimov:embedded-redis:0.7.2'
 
-	// MongoDB
-	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.1.4'
+    // MongoDB
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    implementation 'de.flapdoodle.embed:de.flapdoodle.embed.mongo:3.1.4'
 
-	// Swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+    // Swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
-	// S3
-	implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")
-	implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+    // S3
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
 
-	// test
-	testCompileOnly 'org.projectlombok:lombok'
-	testAnnotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'com.h2database:h2'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
-	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")
-	testImplementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+    // OpenFeign
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // test
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'com.h2database:h2'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.0")
+    testImplementation 'io.awspring.cloud:spring-cloud-aws-starter-s3'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

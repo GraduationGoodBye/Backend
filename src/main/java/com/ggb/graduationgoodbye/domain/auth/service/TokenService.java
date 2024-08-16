@@ -3,9 +3,10 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
-import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
+import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
+import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -87,11 +88,16 @@ public class TokenService {
     tokenProvider.validateAccessToken(accessToken);
   }
 
-  //
+  // Authentication 생성
   public Authentication getAuthenticationByAccessToken(String accessToken) {
     return tokenProvider.getAuthenticationByAccessToken(accessToken);
   }
 
+  public Authentication getAuthenticationByMember(Member member) {
+    return tokenProvider.getAuthenticationByMember(member);
+  }
+
+  // Header 에서 Token 추출
   public String getTokenFromAuthorizationHeader(HttpServletRequest request) {
     return tokenProvider.getTokenFromAuthorizationHeader(request);
   }

@@ -1,6 +1,10 @@
 package com.ggb.graduationgoodbye.domain.auth.entity;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.ibatis.type.Alias;
 
 @Alias("token")

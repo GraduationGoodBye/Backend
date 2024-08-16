@@ -1,23 +1,17 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.service.AuthProvider;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
-import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
+import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.nimbusds.jose.shaded.gson.Gson;
+import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
+import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,35 +20,30 @@ public class MemberService {
 
   private final MemberRepository memberRepository;
   private final TokenService tokenService;
-  private final AuthProvider authProvider;
+  private final MemberInfoProvider memberInfoProvider;
 
   public TokenDto join(MemberJoinRequest request) {
-    // NOTE : 확장성 고려, OpenFeign 또는 추상화 도입 고민
-    String userInfoEndpointUri = "https://www.googleapis.com/oauth2/v3/userinfo";
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Bearer " + request.accessToken());
-    HttpEntity<String> entity = new HttpEntity<>(headers);
+    OAuth2MemberInfo memberInfo = memberInfoProvider.getInfo(request.snsType(),
+        request.accessToken());
 
-    ResponseEntity<String> response = new RestTemplate().exchange(userInfoEndpointUri,
-        HttpMethod.GET, entity,
-        String.class);
-
-    log.info("Google Response >> {}", response.getBody());
-
-    Member googleMember = new Gson().fromJson(response.getBody(), Member.class);
+    log.info("OAuth2 Server Response >> {}", memberInfo);
 
     Member member = Member.builder()
-        .email(googleMember.getEmail())
-        .profile(googleMember.getProfile())
+        .snsType(SnsType.valueOf(request.snsType().toUpperCase()))
+        .snsId(memberInfo.getSnsId())
+        .email(memberInfo.getEmail())
+        .profile(memberInfo.getProfile())
         .nickname(request.nickname())
         .address(request.address())
-        .phone(request.phone())
         .gender(request.gender())
+        .age(request.age())
+        .phone(request.phone())
         .build();
+
     memberRepository.save(member);
 
-    Authentication authentication = authProvider.getAuthentication(member);
+    Authentication authentication = tokenService.getAuthenticationByMember(member);
 
     return tokenService.getToken(authentication);
   }

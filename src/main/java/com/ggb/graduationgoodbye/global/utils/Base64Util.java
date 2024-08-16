@@ -1,9 +1,8 @@
 package com.ggb.graduationgoodbye.global.utils;
 
-import org.springframework.stereotype.Component;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import org.springframework.stereotype.Component;
 
 @Component
 public class Base64Util {
