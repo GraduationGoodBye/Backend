@@ -9,8 +9,8 @@ public class UriSyntaxException extends ServerException {
   private final String code;
 
   public UriSyntaxException() {
-    super(MemberErrorType.URI_SYNTAX_ERROR.name());
-    this.code = MemberErrorType.URI_SYNTAX_ERROR.getMessage();
+    super(MemberErrorType.URI_SYNTAX_ERROR.getMessage());
+    this.code = MemberErrorType.URI_SYNTAX_ERROR.name();
   }
 
   public UriSyntaxException(final String message) {
