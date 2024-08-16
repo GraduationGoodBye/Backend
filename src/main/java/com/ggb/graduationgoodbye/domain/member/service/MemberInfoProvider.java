@@ -52,6 +52,7 @@ public class MemberInfoProvider {
     } catch (URISyntaxException e) {
       throw new UriSyntaxException();
     } catch (FeignException e) {
+      log.error(e.getMessage());
       throw new OAuth2FeignException();
     }
   }
