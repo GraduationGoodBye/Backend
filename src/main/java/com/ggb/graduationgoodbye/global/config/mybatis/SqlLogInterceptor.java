@@ -1,12 +1,8 @@
 package com.ggb.graduationgoodbye.global.config.mybatis;
 
-import java.lang.reflect.Field;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
-import java.util.function.BiConsumer;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -16,9 +12,11 @@ import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.plugin.Intercepts;
 import org.apache.ibatis.plugin.Invocation;
 import org.apache.ibatis.plugin.Signature;
+import org.apache.ibatis.reflection.MetaObject;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.ResultHandler;
 import org.apache.ibatis.session.RowBounds;
-import org.springframework.util.ReflectionUtils;
+import org.apache.ibatis.type.TypeHandlerRegistry;
 
 @Slf4j
 @Intercepts(value = {
@@ -34,95 +32,61 @@ public class SqlLogInterceptor implements Interceptor {
   @Override
   public Object intercept(Invocation invocation) throws Throwable {
     MappedStatement statement = (MappedStatement) invocation.getArgs()[0];
-    Object paramObj = invocation.getArgs()[1];
-    BoundSql boundSql = statement.getBoundSql(paramObj);
-    String paramSql = getParamBindSQL(boundSql);
+    Object param = invocation.getArgs().length > 1 ? invocation.getArgs()[1] : null;
 
-    log.debug(LOG_FORMAT + "mapper: {}"
-        + LOG_FORMAT + "method: {}"
-        + LOG_FORMAT + "SQL: {}", statement.getResource(), statement.getId(), paramSql);
+    BoundSql boundSql = statement.getBoundSql(param);
+    Configuration configuration = statement.getConfiguration();
 
-    return invocation.proceed();
+    String paramSql = getParamBindSQL(configuration, boundSql);
+
+    String sb = LOG_FORMAT
+        + "/*------------------------------ SQL LOG -----------------------------------*/"
+        + LOG_FORMAT + "RESOURCE: " + statement.getResource()
+        + LOG_FORMAT + "SQL_ID: " + statement.getId()
+        + LOG_FORMAT + "SQL: " + paramSql
+        + LOG_FORMAT
+        + "/*--------------------------------------------------------------------------*/";
+    log.debug(sb);
+
+    long start = System.currentTimeMillis();
+    Object returnValue = invocation.proceed();
+    log.debug("SQL processed in : {} ms", System.currentTimeMillis() - start);
+    return returnValue;
   }
 
-  private String getParamBindSQL(BoundSql boundSql) {
+  private String getParamBindSQL(Configuration configuration, BoundSql boundSql) {
     Object parameterObject = boundSql.getParameterObject();
-    StringBuilder sqlStringBuilder = new StringBuilder(boundSql.getSql());
+    List<ParameterMapping> parameterMappings = boundSql.getParameterMappings();
+    String sql = boundSql.getSql();
 
-    // stringBuilder 파라미터 replace 처리
-    BiConsumer<StringBuilder, Object> sqlObjectReplace = (sqlSb, value) -> {
-
-      int questionIdx = sqlSb.indexOf("?");
-
-      if (questionIdx == -1) {
-        return;
-      }
-
-      if (value == null) {
-        sqlSb.replace(questionIdx, questionIdx + 1, "null");
-      } else if (value instanceof String || value instanceof LocalDate
-          || value instanceof LocalDateTime || value instanceof Enum<?>) {
-        sqlSb.replace(questionIdx, questionIdx + 1,
-            "'" + value.toString() + "'");
-      } else {
-        sqlSb.replace(questionIdx, questionIdx + 1, value.toString());
-      }
-    };
-
-    if (parameterObject == null) {
-      sqlObjectReplace.accept(sqlStringBuilder, null);
-    } else {
-      if (parameterObject instanceof Integer || parameterObject instanceof Long
-          || parameterObject instanceof Float || parameterObject instanceof Double
-          || parameterObject instanceof String) {
-        sqlObjectReplace.accept(sqlStringBuilder, parameterObject);
-      } else if (parameterObject instanceof Map) {
-        Map paramterObjectMap = (Map) parameterObject;
-        List<ParameterMapping> paramMappings = boundSql.getParameterMappings();
-
-        for (ParameterMapping parameterMapping : paramMappings) {
-          String propertyKey = parameterMapping.getProperty();
-          try {
-            Object paramValue = null;
-            if (boundSql.hasAdditionalParameter(propertyKey)) {
-              // 동적 SQL로 인해 __frch_item_0 같은 파라미터가 생성되어 적재됨, additionalParameter로 획득
-              paramValue = boundSql.getAdditionalParameter(propertyKey);
-            } else {
-              paramValue = paramterObjectMap.get(propertyKey);
-            }
-
-            sqlObjectReplace.accept(sqlStringBuilder, paramValue);
-          } catch (Exception e) {
-            sqlObjectReplace.accept(sqlStringBuilder, "[cannot binding : " + propertyKey + "]");
-          }
-
-        }
-      } else {
-        List<ParameterMapping> paramMappings = boundSql.getParameterMappings();
-        Class<? extends Object> paramClass = parameterObject.getClass();
-
-        for (ParameterMapping parameterMapping : paramMappings) {
-          String propertyKey = parameterMapping.getProperty();
-
-          try {
-            Object paramValue = null;
-            if (boundSql.hasAdditionalParameter(propertyKey)) {
-              // 동적 SQL로 인해 __frch_item_0 같은 파라미터가 생성되어 적재됨, additionalParameter로 획득
-              paramValue = boundSql.getAdditionalParameter(propertyKey);
-            } else {
-              Field field = ReflectionUtils.findField(paramClass, propertyKey);
-              field.setAccessible(true);
-              paramValue = field.get(parameterObject);
-            }
-
-            sqlObjectReplace.accept(sqlStringBuilder, paramValue);
-          } catch (Exception e) {
-            sqlObjectReplace.accept(sqlStringBuilder, "[cannot binding : " + propertyKey + "]");
+    if (!parameterMappings.isEmpty() && Objects.nonNull(parameterObject)) {
+      TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
+      if (typeHandlerRegistry.hasTypeHandler(parameterObject.getClass())) { // 단일 파라미터 처리
+        sql = sql.replaceFirst("\\?", getParamValue(parameterObject));
+      } else { // 복합 파라미터 처리
+        MetaObject metaObject = configuration.newMetaObject(parameterObject);
+        for (ParameterMapping parameterMapping : parameterMappings) {
+          String propertyName = parameterMapping.getProperty();
+          if (metaObject.hasGetter(propertyName)) {
+            Object obj = metaObject.getValue(propertyName);
+            sql = sql.replaceFirst("\\?", getParamValue(obj));
+          } else if (boundSql.hasAdditionalParameter(propertyName)) {
+            Object obj = boundSql.getAdditionalParameter(propertyName);
+            sql = sql.replaceFirst("\\?", getParamValue(obj));
           }
         }
       }
     }
-    return sqlStringBuilder.toString().replaceAll("([\\r\\n\\s]){2,}([\\r\\n])+", "\n");
+
+    return sql;
+  }
+
+  private String getParamValue(Object obj) {
+    if (obj instanceof String) {
+      return "'" + obj + "'";
+    } else {
+      return Objects.isNull(obj) ? "null" : obj.toString();
+    }
   }
 
   @Override

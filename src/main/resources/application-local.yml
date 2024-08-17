@@ -22,7 +22,7 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/test
 
-
-
-
-
+logging:
+  level:
+    com.ggb.graduationgoodbye.global.config.mybatis.SqlLogInterceptor: DEBUG # SQL 로그
+    org.springframework.jdbc.datasource.init.ScriptUtils: DEBUG # schema.sql 실행 관련 로그
