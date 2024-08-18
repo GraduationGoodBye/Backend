@@ -17,7 +17,6 @@ public class CachingRequestWrapper extends HttpServletRequestWrapper {
 
   public CachingRequestWrapper(HttpServletRequest request) throws IOException {
     super(request);
-    Map<String, String[]> parameterMap = request.getParameterMap();
     this.cachedContent = StreamUtils.copyToByteArray(request.getInputStream());
   }
 
