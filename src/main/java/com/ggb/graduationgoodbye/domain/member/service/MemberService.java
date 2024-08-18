@@ -9,10 +9,11 @@ import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundMajorExcept
 import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundUniversityException;
 import com.ggb.graduationgoodbye.domain.commonCode.service.CommonCodeInfoProvider;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
-import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDTO;
+import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
+import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
 import java.time.LocalDateTime;
@@ -20,6 +21,8 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -70,8 +73,14 @@ public class MemberService {
   /**
    * 작가 회원 전환 요청.
    */
-  public Artist promoteArtist(Member member, PromoteArtistDTO.Request request,
+  public Artist promoteArtist(PromoteArtistDto.Request request,
       MultipartFile certificate) {
+
+    /* Authentication 관련 코드 추후 작성 위치 변경 필요 */
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    User user = (User) authentication.getPrincipal();
+    Long id = Long.parseLong(user.getUsername());
+    Member member = findById(id).orElseThrow(NotFoundMemberException::new);
 
     CommonCode university = commonCodeInfoProvider.findByUniversity(request.getUniversity())
         .orElseThrow(NotFoundUniversityException::new);

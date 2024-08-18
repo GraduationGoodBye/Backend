@@ -14,12 +14,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+
+/**
+ * 멤버 Controller.
+ */
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -55,19 +59,17 @@ public class MemberController {
   }
 
 
+  /**
+   * 작가 등업 신청 요청.
+   */
   @PostMapping("promote-artist")
-  public ApiResponse<PromoteArtistDTO.Response> promoteArtist(
-          @RequestPart("request") PromoteArtistDTO.Request request,
-          @RequestPart("certificate") MultipartFile certificate){
+  public ApiResponse<PromoteArtistDto.Response> promoteArtist(
+      @RequestPart("request") PromoteArtistDto.Request request,
+      @RequestPart("certificate") MultipartFile certificate) {
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    User user = (User) authentication.getPrincipal();
-    Long id = Long.parseLong(user.getUsername());
-    Member member = memberService.findById(id).orElseThrow();
+    Artist artist = memberService.promoteArtist(request, certificate);
 
-    Artist artist = memberService.promoteArtist(member,request,certificate);
-
-    PromoteArtistDTO.Response response = new PromoteArtistDTO.Response(artist);
+    PromoteArtistDto.Response response = new PromoteArtistDto.Response(artist);
 
     return ApiResponse.ok(response);
   }
