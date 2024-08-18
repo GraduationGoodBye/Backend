@@ -24,3 +24,7 @@ spring:
     # MONGO
     mongodb:
       uri: mongodb://mongo:27017/test
+
+logging:
+  level:
+    com.ggb.graduationgoodbye.global.config.mybatis.SqlLogInterceptor: DEBUG # SQL 로그
