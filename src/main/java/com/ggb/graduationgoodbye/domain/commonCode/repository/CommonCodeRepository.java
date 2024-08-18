@@ -1,31 +1,35 @@
 package com.ggb.graduationgoodbye.domain.commonCode.repository;
 
 import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Optional;
 
+/**
+ * 공통 코드 Repository.
+ */
 @Repository
 @RequiredArgsConstructor
 public class CommonCodeRepository {
-    private final SqlSession mysql;
 
-    public List<CommonCode> findUniversityAll(){
-        return mysql.selectList("CommonCodeMapper.findUniversityAll");
-    }
+  private final SqlSession mysql;
 
-    public Optional<CommonCode> findByUniversity(String name){
-        return Optional.ofNullable(mysql.selectOne("CommonCodeMapper.findByUniversity",name));
-    }
+  public List<CommonCode> findUniversityAll() {
+    return mysql.selectList("CommonCodeMapper.findUniversityAll");
+  }
 
-    public List<CommonCode> findMajorAll(){
-        return mysql.selectList("CommonCodeMapper.findMajorAll");
-    }
+  public Optional<CommonCode> findByUniversity(String name) {
+    return Optional.ofNullable(mysql.selectOne("CommonCodeMapper.findByUniversity", name));
+  }
 
-    public Optional<CommonCode> findByMajor(String name){
-        return Optional.ofNullable(mysql.selectOne("CommonCodeMapper.findByMajor",name));
-    }
+  public List<CommonCode> findMajorAll() {
+    return mysql.selectList("CommonCodeMapper.findMajorAll");
+  }
+
+  public Optional<CommonCode> findByMajor(String name) {
+    return Optional.ofNullable(mysql.selectOne("CommonCodeMapper.findByMajor", name));
+  }
 }
