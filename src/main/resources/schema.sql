@@ -59,7 +59,7 @@ CREATE TABLE artist
     created_id              varchar(255)    NOT NULL                COMMENT '생성자',
     created_at              datetime        NOT NULL                COMMENT '생성일시',
     updated_id              varchar(255)	NULL                    COMMENT '수정자(null)',
-    updated_at              datetime        NOT NULL                COMMENT '수정일시(null)',
+    updated_at              datetime        NULL                    COMMENT '수정일시(null)',
     certificate_url          varchar(255)	NOT NULL                COMMENT '증명서URL',
     approval_date           datetime        NULL	                COMMENT 'null 로 승인 여부 판별',
     PRIMARY KEY (id),
