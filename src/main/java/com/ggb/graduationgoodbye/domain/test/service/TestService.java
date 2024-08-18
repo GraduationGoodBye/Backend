@@ -16,7 +16,7 @@ public class TestService {
   private final Base64Util base64Util;
 
   public String uploadImageTest(MultipartFile image) {
-    return s3Util.upload("test",image);
+    return s3Util.upload(image);
   }
 
   public String encode(String data) {

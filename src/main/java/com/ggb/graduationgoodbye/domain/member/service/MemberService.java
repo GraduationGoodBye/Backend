@@ -70,7 +70,7 @@ public class MemberService {
             .orElseThrow(NotFoundUniversityException::new);
     CommonCode major = commonCodeInfoProvider.findByMajor(request.getMajor())
             .orElseThrow(NotFoundMajorException::new);
-    String certificateUrl = s3Util.upload("artist", certificate);
+    String certificateUrl = s3Util.upload(certificate);
     String createId = String.valueOf(member.getId());
 
     Artist artist = Artist.builder()
