@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS tokens;
+DROP TABLE IF EXISTS members;
+
 CREATE TABLE members
 (
     id       BIGINT AUTO_INCREMENT,
