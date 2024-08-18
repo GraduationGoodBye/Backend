@@ -25,5 +25,11 @@ public class ArtistRepository {
   public Artist save(Artist artist) {
     mysql.insert("ArtistMapper.save", artist);
     return artist;
+  @Transactional
+  public Artist save(Artist artist) {
+    mysql.insert("ArtistMapper.save", artist);
+    return artist;
+  }
+
   }
 }
