@@ -23,13 +23,13 @@ public class S3Util {
   @Value("${spring.cloud.aws.s3.bucket}")
   private String bucketName;
 
-  public String upload(MultipartFile file) {
+  public String upload(String folder, MultipartFile file) {
     try {
       String fileName = file.getOriginalFilename();
       String extension = StringUtils.getFilenameExtension(fileName);
-      String key = UUID.randomUUID() + "." + extension;
+      String key = folder + "/" + UUID.randomUUID() + "." + extension;
       S3Resource s3Resource = s3Template.upload(bucketName, key, file.getInputStream(),
-          ObjectMetadata.builder().contentType(file.getContentType()).build());
+              ObjectMetadata.builder().contentType(file.getContentType()).build());
       return s3Resource.getURL().toString();
     } catch (IOException e) {
       throw new UploadException();
