@@ -8,6 +8,7 @@ import com.ggb.graduationgoodbye.global.config.log.LogFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -15,11 +16,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -47,15 +48,6 @@ public class SecurityConfig {
         .sessionManagement(c -> c
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
 
-        // 요청에 따른 리소스 접근 설정
-        .authorizeHttpRequests(
-            request -> request
-                .requestMatchers(
-                    new AntPathRequestMatcher("/api/auth/**")
-                ).authenticated()
-                .anyRequest().permitAll()
-        )
-
         // OAuth2 설정
         .oauth2Login(oauth -> oauth
             .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
@@ -72,7 +64,7 @@ public class SecurityConfig {
 
         // JWT 필터, 오류 핸들링 / 로깅 필터 추가
         .addFilterBefore(new TokenAuthenticationFilter(tokenService),
-            UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터
+            SecurityContextPersistenceFilter.class) // 토큰 필터
         .addFilterBefore(new TokenExceptionHandlingFilter(),
             TokenAuthenticationFilter.class) // 오류 핸들링
         .addFilterBefore(new LogFilter(), TokenExceptionHandlingFilter.class) // 로깅 필터

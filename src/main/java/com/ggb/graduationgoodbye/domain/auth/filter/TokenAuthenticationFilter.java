@@ -26,9 +26,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     // 1. 토큰 추출
     String accessToken = tokenService.getTokenFromAuthorizationHeader(request);
 
-    // 2. 토큰 검증
-    if (StringUtils.hasText(accessToken) && !request.getRequestURI().contains("reissue")) {
+    if (StringUtils.hasText(accessToken)) {
+      // 2. 토큰 검증
       tokenService.validateToken(accessToken);
+
+      // 3. Auth 세팅
       Authentication auth = tokenService.getAuthenticationByAccessToken(accessToken);
       SecurityContextHolder.getContext().setAuthentication(auth);
     }

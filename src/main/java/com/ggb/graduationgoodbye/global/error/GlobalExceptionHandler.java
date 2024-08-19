@@ -8,6 +8,7 @@ import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -28,10 +29,10 @@ public class GlobalExceptionHandler {
   /**
    * 인증을 실패 했을 경우 예외 처리
    */
-  @ExceptionHandler(UnAuthenticatedException.class)
+  @ExceptionHandler({UnAuthenticatedException.class, AccessDeniedException.class})
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public ApiResponse<?> handler(UnAuthenticatedException e) {
-    return ApiResponse.error(e.getCode(), e.getMessage());
+  public ApiResponse<?> handler(AccessDeniedException e) {
+    return ApiResponse.error(ApiErrorType.UNAUTHENTICATED.name(), e.getMessage());
   }
 
   /**

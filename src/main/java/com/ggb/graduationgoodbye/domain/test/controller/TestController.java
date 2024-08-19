@@ -11,7 +11,11 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -70,5 +74,25 @@ public class TestController {
   public ApiResponse<String> decode(@RequestBody String data) {
     String plainText = testService.decode(data);
     return ApiResponse.ok(plainText);
+  }
+
+  @GetMapping("/auth/member")
+  @PreAuthorize("hasAuthority('USER')")
+  public ApiResponse<?> authMember() {
+    Map<String, String> map = new LinkedHashMap<>();
+    map.put("name", SecurityContextHolder.getContext().getAuthentication().getName());
+    map.put("principal", SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    map.put("authorities", SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+    return ApiResponse.ok(map);
+  }
+
+  @GetMapping("/auth/admin")
+  @PreAuthorize("hasAuthority('ADMIN')")
+  public ApiResponse<?> authAdmin() {
+    Map<String, String> map = new LinkedHashMap<>();
+    map.put("name", SecurityContextHolder.getContext().getAuthentication().getName());
+    map.put("principal", SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    map.put("authorities", SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+    return ApiResponse.ok(map);
   }
 }
