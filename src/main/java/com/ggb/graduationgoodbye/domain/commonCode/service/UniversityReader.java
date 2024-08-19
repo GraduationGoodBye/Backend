@@ -8,31 +8,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-
 /**
- * 공통 코드 InfoProvider.
+ * 대학 Reader.
  */
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class CommonCodeInfoProvider {
+public class UniversityReader {
 
   private final CommonCodeRepository commonCodeRepository;
 
-
   public List<CommonCode> findUniversityAll() {
-    return commonCodeRepository.findUniversityAll();
+    return commonCodeRepository.findCommonCode("university");
   }
 
-  public Optional<CommonCode> findByUniversity(String name) {
-    return commonCodeRepository.findByUniversity(name);
-  }
-
-  public List<CommonCode> findMajorAll() {
-    return commonCodeRepository.findMajorAll();
-  }
-
-  public Optional<CommonCode> findByMajor(String name) {
-    return commonCodeRepository.findByMajor(name);
+  public Optional<CommonCode> findUniversity(String name) {
+    return commonCodeRepository.findCommonCode("university", name);
   }
 }

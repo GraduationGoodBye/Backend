@@ -4,18 +4,13 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="CommonCodeMapper">
 
-    <select id="findUniversityAll" resultType="commonCode">
-        SELECT * FROM common_code WHERE type = 'university'
+    <select id="findCommonCode" parameterType="HashMap" resultType="commonCode">
+        SELECT *
+        FROM common_code
+        WHERE type = #{type}
+        <if test="name != null">
+            AND name = #{name}
+        </if>
     </select>
-    <select id="findByUniversity" parameterType="String" resultType="commonCode">
-        SELECT * FROM common_code WHERE type = 'university' AND name = #{name}
-    </select>
-    <select id="findMajorAll" resultType="commonCode">
-        SELECT * FROM common_code WHERE type = 'major'
-    </select>
-    <select id="findByMajor" parameterType="String" resultType="commonCode">
-        SELECT * FROM common_code WHERE type = 'major' AND name = #{name}
-    </select>
-
 
 </mapper>

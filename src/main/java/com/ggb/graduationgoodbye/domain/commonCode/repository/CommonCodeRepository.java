@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.domain.commonCode.repository;
 
 import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -17,19 +18,23 @@ public class CommonCodeRepository {
 
   private final SqlSession mysql;
 
-  public List<CommonCode> findUniversityAll() {
-    return mysql.selectList("CommonCodeMapper.findUniversityAll");
+  /**
+   * Type 별 공통 코드 찾기.
+   */
+  public List<CommonCode> findCommonCode(String type) {
+    HashMap<String, String> map = new HashMap<>();
+    map.put("type", type);
+    return mysql.selectList("CommonCodeMapper.findCommonCode", map);
   }
 
-  public Optional<CommonCode> findByUniversity(String name) {
-    return Optional.ofNullable(mysql.selectOne("CommonCodeMapper.findByUniversity", name));
+  /**
+   * 공통 코드 찾기.
+   */
+  public Optional<CommonCode> findCommonCode(String type, String name) {
+    HashMap<String, String> map = new HashMap<>();
+    map.put("type", type);
+    map.put("name", name);
+    return Optional.ofNullable(mysql.selectOne("CommonCodeMapper.findCommonCode", map));
   }
 
-  public List<CommonCode> findMajorAll() {
-    return mysql.selectList("CommonCodeMapper.findMajorAll");
-  }
-
-  public Optional<CommonCode> findByMajor(String name) {
-    return Optional.ofNullable(mysql.selectOne("CommonCodeMapper.findByMajor", name));
-  }
 }
