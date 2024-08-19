@@ -7,7 +7,8 @@ import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundUniversityException;
-import com.ggb.graduationgoodbye.domain.commonCode.service.CommonCodeInfoProvider;
+import com.ggb.graduationgoodbye.domain.commonCode.service.MajorReader;
+import com.ggb.graduationgoodbye.domain.commonCode.service.UniversityReader;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
@@ -38,7 +39,8 @@ public class MemberService {
   private final ArtistRepository artistRepository;
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
-  private final CommonCodeInfoProvider commonCodeInfoProvider;
+  private final UniversityReader universityReader;
+  private final MajorReader majorReader;
   private final S3Util s3Util;
 
   /**
@@ -82,9 +84,9 @@ public class MemberService {
     Long id = Long.parseLong(user.getUsername());
     Member member = findById(id).orElseThrow(NotFoundMemberException::new);
 
-    CommonCode university = commonCodeInfoProvider.findByUniversity(request.getUniversity())
+    CommonCode university = universityReader.findUniversity(request.getUniversity())
         .orElseThrow(NotFoundUniversityException::new);
-    CommonCode major = commonCodeInfoProvider.findByMajor(request.getMajor())
+    CommonCode major = majorReader.findByMajor(request.getMajor())
         .orElseThrow(NotFoundMajorException::new);
     String certificateUrl = s3Util.upload(certificate);
     String createId = String.valueOf(member.getId());
