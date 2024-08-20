@@ -91,6 +91,11 @@ public class MemberService {
     String certificateUrl = s3Util.upload(certificate);
     String createId = String.valueOf(member.getId());
 
+    Member member1 = findByEmail("id").orElse(null);
+    member1.builder()
+        .address("aa")
+        .build();
+
     Artist artist = Artist.builder()
         .memberId(member)
         .universityId(university)
@@ -98,8 +103,6 @@ public class MemberService {
         .name(request.getName())
         .certificateUrl(certificateUrl)
         .createdId(createId)
-        .createdAt(LocalDateTime.now())
-        .updatedId(createId)
         .build();
 
     return artistRepository.save(artist);
