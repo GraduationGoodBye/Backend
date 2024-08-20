@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS common_code;
 DROP TABLE IF EXISTS admin;
 DROP TABLE IF EXISTS tokens;
 DROP TABLE IF EXISTS members;
+
 CREATE TABLE members
 (
     id       BIGINT AUTO_INCREMENT,
