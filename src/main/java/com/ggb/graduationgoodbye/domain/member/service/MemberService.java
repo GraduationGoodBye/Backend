@@ -2,9 +2,8 @@ package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
-import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinDto;
+import com.ggb.graduationgoodbye.domain.member.dto.OAuth2InfoDto;
 import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
