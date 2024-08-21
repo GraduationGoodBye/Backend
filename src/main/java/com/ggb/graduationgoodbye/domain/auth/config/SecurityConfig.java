@@ -2,7 +2,6 @@ package com.ggb.graduationgoodbye.domain.auth.config;
 
 import com.ggb.graduationgoodbye.domain.auth.filter.TokenAuthenticationFilter;
 import com.ggb.graduationgoodbye.domain.auth.filter.TokenExceptionHandlingFilter;
-import com.ggb.graduationgoodbye.domain.auth.service.CustomOAuth2UserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.config.log.LogFilter;
 import lombok.RequiredArgsConstructor;

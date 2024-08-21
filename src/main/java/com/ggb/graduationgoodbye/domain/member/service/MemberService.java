@@ -4,6 +4,7 @@ import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
+import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
@@ -23,23 +24,23 @@ public class MemberService {
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
 
-  public TokenDto join(MemberJoinRequest request) {
+  public TokenDto join(MemberJoinDto.Request request) {
 
-    OAuth2MemberInfo memberInfo = memberInfoProvider.getInfo(request.snsType(),
-        request.accessToken());
+    OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(request.getSnsType(),
+        request.getAccessToken());
 
     log.info("OAuth2 Server Response >> {}", memberInfo);
 
     Member member = Member.builder()
-        .snsType(SnsType.valueOf(request.snsType().toUpperCase()))
+        .snsType(SnsType.valueOf(request.getSnsType().toUpperCase()))
         .snsId(memberInfo.getSnsId())
         .email(memberInfo.getEmail())
         .profile(memberInfo.getProfile())
-        .nickname(request.nickname())
-        .address(request.address())
-        .gender(request.gender())
-        .age(request.age())
-        .phone(request.phone())
+        .nickname(request.getNickname())
+        .address(request.getAddress())
+        .gender(request.getGender())
+        .age(request.getAge())
+        .phone(request.getPhone())
         .build();
 
     memberRepository.save(member);

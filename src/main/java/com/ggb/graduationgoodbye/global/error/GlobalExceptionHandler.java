@@ -6,8 +6,10 @@ import com.ggb.graduationgoodbye.global.error.exception.ServerException;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,6 +17,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
+
+  /**
+   * Bean Validation 예외 처리
+   */
+  @ExceptionHandler(BindException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  public ApiResponse<?> handler(BindException e) {
+    List<String> errorMessageList = e.getFieldErrors().stream().map(
+        b -> b.getField() + " : " + b.getDefaultMessage()
+    ).toList();
+    return ApiResponse.error(ApiErrorType.BAD_REQUEST, errorMessageList);
+  }
 
   /**
    * 잘못된 요청 경우 예외 처리

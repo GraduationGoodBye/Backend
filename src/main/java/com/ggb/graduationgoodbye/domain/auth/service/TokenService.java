@@ -5,7 +5,7 @@ import com.ggb.graduationgoodbye.domain.auth.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
-import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
+import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -35,9 +35,9 @@ public class TokenService {
   }
 
   // AccessToken & RefreshToken 재발급
-  public TokenDto reissueToken(TokenReissueRequest tokenReissueRequest) {
+  public TokenDto reissueToken(TokenReissueDto.Request tokenReissueRequest) {
 
-    String refreshToken = tokenReissueRequest.refreshToken();
+    String refreshToken = tokenReissueRequest.getRefreshToken();
 
     if (!StringUtils.hasText(refreshToken)) {
       throw new InvalidTokenException();
