@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.PrincipalDetails;
 import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
+import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import java.util.Map;
@@ -23,9 +23,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     Map<String, Object> attr = super.loadUser(userRequest).getAttributes();
 
-    String email = attr.get("email").toString();
+    String snsType = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
+    String snsId = attr.get("sub").toString();
+    SnsDto snsDto = new SnsDto(snsType, snsId);
 
-    Member member = memberService.findByEmail(email).orElseThrow(() -> {
+    Member member = memberService.findBySns(snsDto).orElseThrow(() -> {
       String accessToken = userRequest.getAccessToken().getTokenValue();
       return new NotJoinedUserException(accessToken);
     });

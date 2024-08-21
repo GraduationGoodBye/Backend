@@ -4,6 +4,7 @@ import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
+import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
@@ -48,15 +49,11 @@ public class MemberService {
     return tokenService.getToken(authentication);
   }
 
-  public Optional<Member> findByEmail(String email) {
-    return memberRepository.findByEmail(email);
+  public Optional<Member> findBySns(SnsDto dto) {
+    return memberRepository.findBySns(dto);
   }
 
   public Optional<Member> findById(Long id) {
     return memberRepository.findById(id);
-  }
-
-  public boolean existsByEmail(String email) {
-    return memberRepository.findByEmail(email).isPresent();
   }
 }

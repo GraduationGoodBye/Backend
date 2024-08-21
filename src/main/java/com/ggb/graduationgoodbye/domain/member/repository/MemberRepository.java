@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
+import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +23,7 @@ public class MemberRepository {
     return Optional.ofNullable(mysql.selectOne("MemberMapper.findById", id));
   }
 
-  public Optional<Member> findByEmail(String email) {
-    return Optional.ofNullable(mysql.selectOne("MemberMapper.findByEmail", email));
+  public Optional<Member> findBySns(SnsDto snsDto) {
+    return Optional.ofNullable(mysql.selectOne("MemberMapper.findBySns", snsDto));
   }
 }
