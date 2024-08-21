@@ -1,7 +1,5 @@
 package com.ggb.graduationgoodbye.domain.auth.entity;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +7,7 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("token")
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@NoArgsConstructor
 public class Token {
 
   private Long id;
