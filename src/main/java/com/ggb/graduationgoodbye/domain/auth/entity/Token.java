@@ -14,12 +14,12 @@ import org.apache.ibatis.type.Alias;
 public class Token {
 
   private Long id;
-  private String userId;
+  private String memberId;
   private String refreshToken;
 
   @Builder
-  public Token(String userId, String refreshToken) {
-    this.userId = userId;
+  public Token(String memberId, String refreshToken) {
+    this.memberId = memberId;
     this.refreshToken = refreshToken;
   }
 

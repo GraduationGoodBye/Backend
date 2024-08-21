@@ -68,15 +68,15 @@ public class TokenService {
     return reissuedRefreshToken;
   }
 
-  private void saveOrUpdateToken(String userId, String refreshToken) {
-    Optional<Token> optionalToken = tokenRepository.findByUserId(userId);
+  private void saveOrUpdateToken(String memberId, String refreshToken) {
+    Optional<Token> optionalToken = tokenRepository.findByUserId(memberId);
     if (optionalToken.isPresent()) {
       Token token = optionalToken.get();
       token.updateRefreshToken(refreshToken);
       tokenRepository.update(token);
     } else {
       Token token = Token.builder()
-          .userId(userId)
+          .memberId(memberId)
           .refreshToken(refreshToken)
           .build();
       tokenRepository.save(token);
