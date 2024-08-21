@@ -77,7 +77,7 @@ public class TestController {
   }
 
   @GetMapping("/auth/member")
-  @PreAuthorize("hasAuthority('USER')")
+  @PreAuthorize("hasAuthority('MEMBER')")
   public ApiResponse<?> authMember() {
     Map<String, String> map = new LinkedHashMap<>();
     map.put("name", SecurityContextHolder.getContext().getAuthentication().getName());

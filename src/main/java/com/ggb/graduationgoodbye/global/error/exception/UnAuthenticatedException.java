@@ -2,10 +2,9 @@ package com.ggb.graduationgoodbye.global.error.exception;
 
 import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
 import lombok.Getter;
-import org.springframework.security.access.AccessDeniedException;
 
 @Getter
-public class UnAuthenticatedException extends AccessDeniedException {
+public class UnAuthenticatedException extends RuntimeException {
 
   private final String code;
 

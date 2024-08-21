@@ -1,7 +1,5 @@
 package com.ggb.graduationgoodbye.domain.auth.config;
 
-import com.ggb.graduationgoodbye.domain.auth.filter.TokenAuthenticationFilter;
-import com.ggb.graduationgoodbye.domain.auth.filter.TokenExceptionHandlingFilter;
 import com.ggb.graduationgoodbye.domain.auth.service.CustomOAuth2UserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.config.log.LogFilter;
@@ -56,18 +54,8 @@ public class SecurityConfig {
             .failureHandler(new CustomOauth2FailHandler())
         )
 
-        // 예외 핸들링
-        .exceptionHandling(ex -> ex
-            .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-            .accessDeniedHandler(new CustomAccessDeniedHandler())
-        )
-
-        // JWT 필터, 오류 핸들링 / 로깅 필터 추가
-        .addFilterBefore(new TokenAuthenticationFilter(tokenService),
-            SecurityContextPersistenceFilter.class) // 토큰 필터
-        .addFilterBefore(new TokenExceptionHandlingFilter(),
-            TokenAuthenticationFilter.class) // 오류 핸들링
-        .addFilterBefore(new LogFilter(), TokenExceptionHandlingFilter.class) // 로깅 필터
+        // 로깅 필터 추가
+        .addFilterBefore(new LogFilter(), SecurityContextPersistenceFilter.class)
     ;
 
     return http.build();

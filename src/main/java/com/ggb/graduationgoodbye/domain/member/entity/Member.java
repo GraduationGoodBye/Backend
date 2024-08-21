@@ -48,6 +48,6 @@ public class Member {
     this.phone = phone;
     this.gender = gender;
     this.age = age;
-    this.role = Role.USER;
+    this.role = Role.MEMBER;
   }
 }
