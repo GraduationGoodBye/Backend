@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.global.config;
 
-import com.ggb.graduationgoodbye.domain.auth.interceptor.AuthInterceptor;
+import com.ggb.graduationgoodbye.domain.auth.common.interceptor.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

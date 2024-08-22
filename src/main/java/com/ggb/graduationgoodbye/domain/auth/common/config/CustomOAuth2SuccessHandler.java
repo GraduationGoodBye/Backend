@@ -1,8 +1,8 @@
-package com.ggb.graduationgoodbye.domain.auth.config;
+package com.ggb.graduationgoodbye.domain.auth.common.config;
 
-import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
+import static com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil.writeResponse;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;

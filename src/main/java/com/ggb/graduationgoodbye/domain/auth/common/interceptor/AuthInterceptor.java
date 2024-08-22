@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.interceptor;
+package com.ggb.graduationgoodbye.domain.auth.common.interceptor;
 
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import jakarta.servlet.http.HttpServletRequest;

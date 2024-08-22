@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.test.controller;
 
-import com.ggb.graduationgoodbye.domain.auth.exception.ExpiredTokenException;
-import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.ExpiredTokenException;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.test.service.TestService;
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;

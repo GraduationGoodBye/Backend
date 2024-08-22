@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.entity;
+package com.ggb.graduationgoodbye.domain.auth.common.entity;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
