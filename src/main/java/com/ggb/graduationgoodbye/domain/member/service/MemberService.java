@@ -91,11 +91,6 @@ public class MemberService {
     String certificateUrl = s3Util.upload(certificate);
     String createId = String.valueOf(member.getId());
 
-    Member member1 = findByEmail("id").orElse(null);
-    member1.builder()
-        .address("aa")
-        .build();
-
     Artist artist = Artist.builder()
         .memberId(member)
         .universityId(university)

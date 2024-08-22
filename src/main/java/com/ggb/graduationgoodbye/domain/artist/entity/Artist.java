@@ -44,7 +44,6 @@ public class Artist {
       Admin adminId,
       String name,
       String createdId,
-      LocalDateTime updatedAt,
       String certificateUrl,
       LocalDateTime approvalDate
   ) {
@@ -56,7 +55,7 @@ public class Artist {
     this.createdId = createdId;
     this.createdAt = LocalDateTime.now();
     this.updatedId = createdId;
-    this.updatedAt = updatedAt;
+    this.updatedAt = LocalDateTime.now();
     this.certificateUrl = certificateUrl;
     this.approvalDate = approvalDate;
   }
