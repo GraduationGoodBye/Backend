@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.dto;
+package com.ggb.graduationgoodbye.domain.auth.common.dto;
 
 import lombok.Builder;
 import lombok.Getter;

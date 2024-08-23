@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.service;
+package com.ggb.graduationgoodbye.domain.auth.business;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;

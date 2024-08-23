@@ -1,13 +1,12 @@
-package com.ggb.graduationgoodbye.domain.auth.config;
+package com.ggb.graduationgoodbye.domain.auth.common.config;
 
-import com.ggb.graduationgoodbye.domain.auth.filter.TokenAuthenticationFilter;
-import com.ggb.graduationgoodbye.domain.auth.filter.TokenExceptionHandlingFilter;
-import com.ggb.graduationgoodbye.domain.auth.service.CustomOAuth2UserService;
+import com.ggb.graduationgoodbye.domain.auth.business.CustomOAuth2UserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.config.log.LogFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -15,11 +14,11 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
@@ -47,15 +46,6 @@ public class SecurityConfig {
         .sessionManagement(c -> c
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
 
-        // 요청에 따른 리소스 접근 설정
-        .authorizeHttpRequests(
-            request -> request
-                .requestMatchers(
-                    new AntPathRequestMatcher("/api/auth/**")
-                ).authenticated()
-                .anyRequest().permitAll()
-        )
-
         // OAuth2 설정
         .oauth2Login(oauth -> oauth
             .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
@@ -64,18 +54,8 @@ public class SecurityConfig {
             .failureHandler(new CustomOauth2FailHandler())
         )
 
-        // 예외 핸들링
-        .exceptionHandling(ex -> ex
-            .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-            .accessDeniedHandler(new CustomAccessDeniedHandler())
-        )
-
-        // JWT 필터, 오류 핸들링 / 로깅 필터 추가
-        .addFilterBefore(new TokenAuthenticationFilter(tokenService),
-            UsernamePasswordAuthenticationFilter.class) // JWT 인증 필터
-        .addFilterBefore(new TokenExceptionHandlingFilter(),
-            TokenAuthenticationFilter.class) // 오류 핸들링
-        .addFilterBefore(new LogFilter(), TokenExceptionHandlingFilter.class) // 로깅 필터
+        // 로깅 필터 추가
+        .addFilterBefore(new LogFilter(), SecurityContextHolderFilter.class)
     ;
 
     return http.build();

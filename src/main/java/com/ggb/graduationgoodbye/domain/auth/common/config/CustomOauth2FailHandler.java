@@ -1,8 +1,8 @@
-package com.ggb.graduationgoodbye.domain.auth.config;
+package com.ggb.graduationgoodbye.domain.auth.common.config;
 
-import static com.ggb.graduationgoodbye.domain.auth.utils.WriteResponseUtil.writeResponse;
+import static com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil.writeResponse;
 
-import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.NotJoinedUserException;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

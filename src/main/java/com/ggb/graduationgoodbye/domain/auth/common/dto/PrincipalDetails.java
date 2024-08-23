@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.dto;
+package com.ggb.graduationgoodbye.domain.auth.common.dto;
 
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import java.util.Collection;
