@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.controller;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;

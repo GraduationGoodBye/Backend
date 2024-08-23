@@ -3,6 +3,7 @@ package com.ggb.graduationgoodbye.domain.member.service;
 import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
 import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
 import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundMajorException;

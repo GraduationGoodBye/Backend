@@ -1,7 +1,7 @@
-package com.ggb.graduationgoodbye.domain.auth.service;
+package com.ggb.graduationgoodbye.domain.auth.business;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.PrincipalDetails;
-import com.ggb.graduationgoodbye.domain.auth.exception.NotJoinedUserException;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.PrincipalDetails;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.NotJoinedUserException;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import java.util.Map;

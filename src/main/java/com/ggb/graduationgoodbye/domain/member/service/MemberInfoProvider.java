@@ -2,7 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ggb.graduationgoodbye.domain.auth.exception.InvalidRegistrationIdException;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidRegistrationIdException;
 import com.ggb.graduationgoodbye.domain.member.dto.GoogleInfoDto;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
 import com.ggb.graduationgoodbye.domain.member.exception.OAuth2FeignException;

@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.exception;
+package com.ggb.graduationgoodbye.domain.auth.common.exception;
 
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.utils;
+package com.ggb.graduationgoodbye.domain.auth.common.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
