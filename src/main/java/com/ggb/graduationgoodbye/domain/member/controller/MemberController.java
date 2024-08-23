@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.controller;
 
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
+import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
@@ -15,8 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+
+/**
+ * 멤버 Controller.
+ */
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -49,5 +56,21 @@ public class MemberController {
     TokenResponse tokenResponse = new TokenResponse(token.getAccessToken(),
         token.getRefreshToken());
     return ApiResponse.ok(tokenResponse);
+  }
+
+
+  /**
+   * 작가 등업 신청 요청.
+   */
+  @PostMapping("promote-artist")
+  public ApiResponse<PromoteArtistDto.Response> promoteArtist(
+      @RequestPart("request") PromoteArtistDto.Request request,
+      @RequestPart("certificate") MultipartFile certificate) {
+
+    Artist artist = memberService.promoteArtist(request, certificate);
+
+    PromoteArtistDto.Response response = new PromoteArtistDto.Response(artist);
+
+    return ApiResponse.ok(response);
   }
 }

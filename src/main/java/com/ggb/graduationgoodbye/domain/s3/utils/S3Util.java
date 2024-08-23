@@ -29,7 +29,7 @@ public class S3Util {
       String extension = StringUtils.getFilenameExtension(fileName);
       String key = UUID.randomUUID() + "." + extension;
       S3Resource s3Resource = s3Template.upload(bucketName, key, file.getInputStream(),
-          ObjectMetadata.builder().contentType(file.getContentType()).build());
+              ObjectMetadata.builder().contentType(file.getContentType()).build());
       return s3Resource.getURL().toString();
     } catch (IOException e) {
       throw new UploadException();
