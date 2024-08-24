@@ -13,4 +13,10 @@
     <select id="findPendingCertificate" resultType="artist">
         SELECT * FROM artist WHERE approval_date IS NULL
     </select>
+    <select id="checkArtistDuplication" parameterType="Long" resultType="boolean">
+        SELECT EXISTS (
+        SELECT 1 FROM artist WHERE member_id = #{memberId}
+        )
+    </select>
+
 </mapper>

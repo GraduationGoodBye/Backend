@@ -21,4 +21,9 @@ public class ArtistRepository {
     mysql.insert("ArtistMapper.save", artist);
     return artist;
   }
+
+  public boolean checkArtistDuplication(Long memberId) {
+    return mysql.selectOne("ArtistMapper.checkArtistDuplication", memberId);
+  }
+
 }

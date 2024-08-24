@@ -1,8 +1,9 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
-import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
+import com.ggb.graduationgoodbye.domain.artist.exception.DuplicationArtistException;
 import com.ggb.graduationgoodbye.domain.artist.service.ArtistCreate;
+import com.ggb.graduationgoodbye.domain.artist.service.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.common.utils.AuthUtil;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
@@ -81,6 +82,11 @@ public class MemberService {
 
     Long memberId = authUtil.getCurrentMemberId();
     Member member = memberReader.findById(memberId).orElseThrow(NotFoundMemberException::new);
+
+    /* 작가 회원 요청 중복 검사 */
+    if (artistValidator.checkArtistDuplication(memberId)) {
+      throw new DuplicationArtistException();
+    }
 
     CommonCode university = universityReader.findUniversity(request.getUniversity())
         .orElseThrow(NotFoundUniversityException::new);

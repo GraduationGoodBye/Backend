@@ -22,6 +22,5 @@ public class NotFoundMajorException extends BusinessException {
   public NotFoundMajorException(final String message) {
     super(message);
     this.code = CommonCodeErrorType.NOT_FOUND_MAJOR.name();
-    ;
   }
 }
