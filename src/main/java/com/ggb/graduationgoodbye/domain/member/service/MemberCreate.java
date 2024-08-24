@@ -17,7 +17,7 @@ public class MemberCreate {
 
   private final MemberRepository memberRepository;
 
-  public void createMember(Member member) {
+  public void save(Member member) {
     memberRepository.save(member);
   }
 

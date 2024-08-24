@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
 import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
+import com.ggb.graduationgoodbye.domain.artist.service.ArtistCreate;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.common.utils.AuthUtil;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
@@ -34,7 +35,8 @@ public class MemberService {
 
   private final MemberCreate memberCreate;
   private final MemberReader memberReader;
-  private final ArtistRepository artistRepository;
+  private final ArtistCreate artistCreate;
+  private final ArtistValidator artistValidator;
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
   private final UniversityReader universityReader;
@@ -64,7 +66,7 @@ public class MemberService {
         .phone(request.phone())
         .build();
 
-    memberCreate.createMember(member);
+    memberCreate.save(member);
 
     Authentication authentication = tokenService.getAuthenticationByMember(member);
 
@@ -96,7 +98,7 @@ public class MemberService {
         .createdId(createId)
         .build();
 
-    return artistRepository.save(artist);
+    return artistCreate.save(artist);
   }
 
 
