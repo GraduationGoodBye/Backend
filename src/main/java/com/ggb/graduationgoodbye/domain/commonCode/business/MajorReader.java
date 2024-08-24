@@ -1,6 +1,6 @@
-package com.ggb.graduationgoodbye.domain.commonCode.service;
+package com.ggb.graduationgoodbye.domain.commonCode.business;
 
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.repository.CommonCodeRepository;
 import java.util.List;
 import java.util.Optional;

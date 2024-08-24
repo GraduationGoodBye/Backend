@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.artist.repository;
 
-import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;

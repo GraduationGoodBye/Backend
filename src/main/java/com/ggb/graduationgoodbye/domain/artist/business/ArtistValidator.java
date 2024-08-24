@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.artist.service;
+package com.ggb.graduationgoodbye.domain.artist.business;
 
 import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;

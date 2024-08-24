@@ -1,7 +1,7 @@
-package com.ggb.graduationgoodbye.domain.artist.entity;
+package com.ggb.graduationgoodbye.domain.artist.common.entity;
 
 import com.ggb.graduationgoodbye.domain.admin.entity.Admin;
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;

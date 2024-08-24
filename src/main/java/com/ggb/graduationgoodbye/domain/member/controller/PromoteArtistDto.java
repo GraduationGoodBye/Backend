@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.controller;
 
-import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import lombok.Getter;
 
 

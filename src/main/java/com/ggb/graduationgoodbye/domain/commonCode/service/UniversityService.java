@@ -1,7 +1,8 @@
 package com.ggb.graduationgoodbye.domain.commonCode.service;
 
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
-import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundUniversityException;
+import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundUniversityException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

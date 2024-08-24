@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.commonCode.repository;
 
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;

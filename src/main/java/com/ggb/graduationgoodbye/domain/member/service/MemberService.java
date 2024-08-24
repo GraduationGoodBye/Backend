@@ -1,17 +1,17 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
-import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
-import com.ggb.graduationgoodbye.domain.artist.exception.DuplicationArtistException;
-import com.ggb.graduationgoodbye.domain.artist.service.ArtistCreate;
-import com.ggb.graduationgoodbye.domain.artist.service.ArtistValidator;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
+import com.ggb.graduationgoodbye.domain.artist.common.exception.DuplicationArtistException;
+import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreate;
+import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.common.utils.AuthUtil;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
-import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundMajorException;
-import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundUniversityException;
-import com.ggb.graduationgoodbye.domain.commonCode.service.MajorReader;
-import com.ggb.graduationgoodbye.domain.commonCode.service.UniversityReader;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundUniversityException;
+import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
+import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
 import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;

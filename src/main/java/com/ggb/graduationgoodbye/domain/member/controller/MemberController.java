@@ -2,9 +2,8 @@ package com.ggb.graduationgoodbye.domain.member.controller;
 
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;

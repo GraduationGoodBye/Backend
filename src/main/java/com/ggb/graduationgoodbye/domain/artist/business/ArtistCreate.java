@@ -1,6 +1,6 @@
-package com.ggb.graduationgoodbye.domain.artist.service;
+package com.ggb.graduationgoodbye.domain.artist.business;
 
-import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
