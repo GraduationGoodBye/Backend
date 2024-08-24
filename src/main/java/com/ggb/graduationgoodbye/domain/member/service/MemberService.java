@@ -3,6 +3,7 @@ package com.ggb.graduationgoodbye.domain.member.service;
 import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
 import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.common.utils.AuthUtil;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundMajorException;
@@ -15,14 +16,11 @@ import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
-import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,13 +32,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class MemberService {
 
-  private final MemberRepository memberRepository;
+  private final MemberCreate memberCreate;
+  private final MemberReader memberReader;
   private final ArtistRepository artistRepository;
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
   private final UniversityReader universityReader;
   private final MajorReader majorReader;
   private final S3Util s3Util;
+  private final AuthUtil authUtil;
 
   /**
    * 회원 가입.
@@ -64,7 +64,7 @@ public class MemberService {
         .phone(request.phone())
         .build();
 
-    memberRepository.save(member);
+    memberCreate.createMember(member);
 
     Authentication authentication = tokenService.getAuthenticationByMember(member);
 
@@ -77,11 +77,8 @@ public class MemberService {
   public Artist promoteArtist(PromoteArtistDto.Request request,
       MultipartFile certificate) {
 
-    /* Authentication 관련 코드 추후 작성 위치 변경 필요 */
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    User user = (User) authentication.getPrincipal();
-    Long id = Long.parseLong(user.getUsername());
-    Member member = findById(id).orElseThrow(NotFoundMemberException::new);
+    Long memberId = authUtil.getCurrentMemberId();
+    Member member = memberReader.findById(memberId).orElseThrow(NotFoundMemberException::new);
 
     CommonCode university = universityReader.findUniversity(request.getUniversity())
         .orElseThrow(NotFoundUniversityException::new);
@@ -102,15 +99,16 @@ public class MemberService {
     return artistRepository.save(artist);
   }
 
+
   public Optional<Member> findByEmail(String email) {
-    return memberRepository.findByEmail(email);
+    return memberReader.findByEmail(email);
   }
 
-  public Optional<Member> findById(Long id) {
-    return memberRepository.findById(id);
+  public Member findById(Long id) {
+    return memberReader.findById(id).orElseThrow(NotFoundMemberException::new);
   }
 
   public boolean existsByEmail(String email) {
-    return memberRepository.findByEmail(email).isPresent();
+    return memberReader.findByEmail(email).isPresent();
   }
 }
