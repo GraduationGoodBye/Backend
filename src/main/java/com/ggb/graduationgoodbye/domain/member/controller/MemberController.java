@@ -9,6 +9,7 @@ import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -33,6 +34,9 @@ public class MemberController {
   private final MemberService memberService;
   private final TokenService tokenService;
 
+  /**
+   * 회원 가입/로그인.
+   */
   @PostMapping("/signup")
   public ApiResponse<TokenResponse> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
     TokenDto token = memberService.join(memberJoinRequest);
@@ -41,15 +45,21 @@ public class MemberController {
     return ApiResponse.ok(tokenResponse);
   }
 
+  /**
+   * Member 정보 반환.
+   */
   @GetMapping("/info")
   public ApiResponse<Member> info() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User u = (User) authentication.getPrincipal();
     Long id = Long.valueOf(u.getUsername());
-    Member member = memberService.findById(id).orElseThrow(NotFoundMemberException::new);
+    Member member = memberService.findById(id);
     return ApiResponse.ok(member);
   }
 
+  /**
+   * Token 재발급.
+   */
   @PostMapping("/reissue")
   public ApiResponse<TokenResponse> reissue(@RequestBody TokenReissueRequest tokenReissueRequest) {
     TokenDto token = tokenService.reissueToken(tokenReissueRequest);
@@ -60,9 +70,10 @@ public class MemberController {
 
 
   /**
-   * 작가 등업 신청 요청.
+   * 작가 등업 신청.
    */
   @PostMapping("promote-artist")
+  @PreAuthorize("hasAuthority('MEMBER')")
   public ApiResponse<PromoteArtistDto.Response> promoteArtist(
       @RequestPart("request") PromoteArtistDto.Request request,
       @RequestPart("certificate") MultipartFile certificate) {
