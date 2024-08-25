@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class WriteResponseUtil {
 
-  public static <T> void writeResponse(HttpServletResponse response, int status,
+  public <T> void writeResponse(HttpServletResponse response, int status,
       ApiResponse<T> apiResponse)
       throws IOException {
     response.setContentType("application/json");

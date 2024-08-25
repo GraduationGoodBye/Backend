@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.common.config;
 
 import com.ggb.graduationgoodbye.domain.auth.business.CustomOAuth2UserService;
+import com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.utils.RandomNicknameUtil;
 import com.ggb.graduationgoodbye.global.config.log.LogFilter;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
   private final CustomOAuth2UserService oAuth2UserService;
   private final RandomNicknameUtil randomNicknameUtil;
+  private final WriteResponseUtil writeResponseUtil;
   private final TokenService tokenService;
 
   @Bean
@@ -50,8 +52,8 @@ public class SecurityConfig {
         .oauth2Login(oauth -> oauth
             .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
             .userInfoEndpoint(c -> c.userService(oAuth2UserService))
-            .successHandler(new CustomOAuth2SuccessHandler(tokenService))
-            .failureHandler(new CustomOauth2FailHandler(randomNicknameUtil))
+            .successHandler(new CustomOAuth2SuccessHandler(writeResponseUtil, tokenService))
+            .failureHandler(new CustomOauth2FailHandler(writeResponseUtil, randomNicknameUtil))
         )
 
         // 로깅 필터 추가

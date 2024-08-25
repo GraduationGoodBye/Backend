@@ -1,8 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.common.config;
 
-import static com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil.writeResponse;
-
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,6 +17,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler {
 
+  private final WriteResponseUtil writeResponseUtil;
   private final TokenService tokenService;
 
   @Override
@@ -25,7 +25,7 @@ public class CustomOAuth2SuccessHandler implements AuthenticationSuccessHandler 
       Authentication authentication) throws IOException {
     TokenDto token = tokenService.getToken(authentication);
 
-    writeResponse(
+    writeResponseUtil.writeResponse(
         response,
         HttpStatus.UNAUTHORIZED.value(),
         ApiResponse.ok(

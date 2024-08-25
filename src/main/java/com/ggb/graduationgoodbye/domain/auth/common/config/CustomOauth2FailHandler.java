@@ -1,8 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.common.config;
 
-import static com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil.writeResponse;
-
 import com.ggb.graduationgoodbye.domain.auth.common.exception.NotJoinedUserException;
+import com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2FailDto;
 import com.ggb.graduationgoodbye.domain.member.utils.RandomNicknameUtil;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
@@ -20,13 +19,14 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 @RequiredArgsConstructor
 public class CustomOauth2FailHandler implements AuthenticationFailureHandler {
 
+  private final WriteResponseUtil writeResponseUtil;
   private final RandomNicknameUtil randomNicknameUtil;
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
       AuthenticationException exception) throws IOException {
     if (exception instanceof NotJoinedUserException e) {
-      writeResponse(
+      writeResponseUtil.writeResponse(
           response,
           HttpStatus.UNAUTHORIZED.value(),
           ApiResponse.error(
