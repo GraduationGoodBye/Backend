@@ -6,7 +6,7 @@ import com.ggb.graduationgoodbye.domain.auth.common.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
-import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueRequest;
+import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
@@ -36,9 +36,9 @@ public class TokenService {
   }
 
   // AccessToken & RefreshToken 재발급
-  public TokenDto reissueToken(TokenReissueRequest tokenReissueRequest) {
+  public TokenDto reissueToken(TokenReissueDto.Request tokenReissueRequest) {
 
-    String refreshToken = tokenReissueRequest.refreshToken();
+    String refreshToken = tokenReissueRequest.getRefreshToken();
 
     if (!StringUtils.hasText(refreshToken)) {
       throw new InvalidTokenException();
@@ -69,15 +69,15 @@ public class TokenService {
     return reissuedRefreshToken;
   }
 
-  private void saveOrUpdateToken(String userId, String refreshToken) {
-    Optional<Token> optionalToken = tokenRepository.findByUserId(userId);
+  private void saveOrUpdateToken(String memberId, String refreshToken) {
+    Optional<Token> optionalToken = tokenRepository.findByUserId(memberId);
     if (optionalToken.isPresent()) {
       Token token = optionalToken.get();
       token.updateRefreshToken(refreshToken);
       tokenRepository.update(token);
     } else {
       Token token = Token.builder()
-          .userId(userId)
+          .memberId(memberId)
           .refreshToken(refreshToken)
           .build();
       tokenRepository.save(token);

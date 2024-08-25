@@ -8,14 +8,14 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-public class OAuth2MemberInfo {
+public class OAuth2InfoDto {
 
   private String snsId;
   private String email;
   private String profile;
 
-  public static OAuth2MemberInfo ofGoogle(Map<String, Object> attributes) {
-    return OAuth2MemberInfo.builder()
+  public static OAuth2InfoDto ofGoogle(Map<String, Object> attributes) {
+    return OAuth2InfoDto.builder()
         .snsId(attributes.get("sub").toString())
         .email(attributes.get("email").toString())
         .profile(attributes.get("picture").toString())

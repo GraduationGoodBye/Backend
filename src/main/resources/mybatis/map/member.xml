@@ -3,17 +3,17 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="MemberMapper">
-  <select id="findById" parameterType="Long" resultType="member">
-    SELECT * FROM members WHERE id = #{id};
-  </select>
-
   <insert id="save" parameterType="member" keyProperty="id">
     INSERT INTO members (sns_type,sns_id,email,profile,nickname,address,gender,age,phone,role)
     VALUES (#{snsType}, #{snsId}, #{email}, #{profile}, #{nickname}, #{address}, #{gender}, #{age},
     #{phone}, #{role})
   </insert>
 
-  <select id="findByEmail" parameterType="String" resultType="member">
-    SELECT * FROM members WHERE email = #{email};
+  <select id="findById" parameterType="Long" resultType="member">
+    SELECT * FROM members WHERE id = #{id};
+  </select>
+
+  <select id="findBySns" parameterType="sns" resultType="member">
+    SELECT * FROM members WHERE sns_id = #{snsId} AND sns_type = #{snsType};
   </select>
 </mapper>
