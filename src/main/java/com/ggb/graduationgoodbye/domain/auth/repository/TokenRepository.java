@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.repository;
 
-import com.ggb.graduationgoodbye.domain.auth.entity.Token;
+import com.ggb.graduationgoodbye.domain.auth.common.entity.Token;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;

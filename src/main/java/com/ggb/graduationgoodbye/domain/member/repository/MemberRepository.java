@@ -8,6 +8,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * 멤버 Repository.
+ */
 @Repository
 @RequiredArgsConstructor
 public class MemberRepository {

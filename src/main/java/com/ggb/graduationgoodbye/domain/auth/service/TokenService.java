@@ -1,9 +1,10 @@
 package com.ggb.graduationgoodbye.domain.auth.service;
 
-import com.ggb.graduationgoodbye.domain.auth.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.entity.Token;
-import com.ggb.graduationgoodbye.domain.auth.exception.InvalidTokenException;
-import com.ggb.graduationgoodbye.domain.auth.exception.NotFoundTokenException;
+import com.ggb.graduationgoodbye.domain.auth.business.TokenProvider;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.common.entity.Token;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidTokenException;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
 import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
