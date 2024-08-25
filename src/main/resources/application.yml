@@ -5,6 +5,8 @@ spring:
     active: local
 
 
+# test
+
 springdoc:
   swagger-ui:
     path: /api/swagger # 접속 경로
