@@ -81,9 +81,7 @@ public class MemberService {
     Member member = memberReader.findById(memberId);
 
     /* 작가 회원 요청 중복 검사 */
-    if (artistValidator.checkArtistDuplication(memberId)) {
-      throw new DuplicationArtistException();
-    }
+    artistValidator.checkArtistDuplication(memberId);
 
     CommonCode university = universityReader.findUniversity(request.getUniversity());
     CommonCode major = majorReader.findByMajor(request.getMajor())

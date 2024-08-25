@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.artist.business;
 
+import com.ggb.graduationgoodbye.domain.artist.common.exception.DuplicationArtistException;
 import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +16,9 @@ public class ArtistValidator {
 
   private final ArtistRepository artistRepository;
 
-  public boolean checkArtistDuplication(Long memberId) {
-    return artistRepository.checkArtistDuplication(memberId);
+  public void checkArtistDuplication(Long memberId) {
+    artistRepository.findByMemberId(memberId)
+        .orElseThrow(DuplicationArtistException::new);
   }
 
 
