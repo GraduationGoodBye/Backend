@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MajorService {
 
-  private MajorReader majorReader;
+  private final MajorReader majorReader;
 
   public List<CommonCode> findMajorAll() {
     return majorReader.findMajorAll();

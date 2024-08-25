@@ -1,10 +1,8 @@
 package com.ggb.graduationgoodbye.domain.auth.business;
 
 import com.ggb.graduationgoodbye.domain.auth.common.dto.PrincipalDetails;
-import com.ggb.graduationgoodbye.domain.auth.common.exception.NotJoinedUserException;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberReader;
-import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -26,10 +24,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     String email = attr.get("email").toString();
 
-    Member member = memberReader.findByEmail(email).orElseThrow(() -> {
-      String accessToken = userRequest.getAccessToken().getTokenValue();
-      return new NotJoinedUserException(accessToken);
-    });
+    Member member = memberReader.findByEmail(email);
 
     String userNameAttributeName = userRequest.getClientRegistration()
         .getProviderDetails()
