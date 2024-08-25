@@ -5,7 +5,6 @@ import com.ggb.graduationgoodbye.domain.artist.common.exception.DuplicationArtis
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreator;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.common.utils.AuthUtil;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
@@ -43,7 +42,7 @@ public class MemberService {
   private final UniversityReader universityReader;
   private final MajorReader majorReader;
   private final S3Util s3Util;
-  private final AuthUtil authUtil;
+  private final MemberProvider memberProvider;
 
   /**
    * 회원 가입.
@@ -80,7 +79,7 @@ public class MemberService {
   public Artist promoteArtist(PromoteArtistDto.Request request,
       MultipartFile certificate) {
 
-    Long memberId = authUtil.getCurrentMemberId();
+    Long memberId = memberProvider.getCurrentMemberId();
     Member member = memberReader.findById(memberId).orElseThrow(NotFoundMemberException::new);
 
     /* 작가 회원 요청 중복 검사 */
