@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class ArtistCreate {
+public class ArtistCreator {
 
   private final ArtistRepository artistRepository;
 

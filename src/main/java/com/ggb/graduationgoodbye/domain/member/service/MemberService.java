@@ -2,7 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.artist.common.exception.DuplicationArtistException;
-import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreate;
+import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreator;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.common.utils.AuthUtil;
@@ -34,9 +34,9 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class MemberService {
 
-  private final MemberCreate memberCreate;
+  private final MemberCreator memberCreator;
   private final MemberReader memberReader;
-  private final ArtistCreate artistCreate;
+  private final ArtistCreator artistCreator;
   private final ArtistValidator artistValidator;
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
@@ -67,7 +67,7 @@ public class MemberService {
         .phone(request.phone())
         .build();
 
-    memberCreate.save(member);
+    memberCreator.save(member);
 
     Authentication authentication = tokenService.getAuthenticationByMember(member);
 
@@ -104,7 +104,7 @@ public class MemberService {
         .createdId(createId)
         .build();
 
-    return artistCreate.save(artist);
+    return artistCreator.save(artist);
   }
 
 
