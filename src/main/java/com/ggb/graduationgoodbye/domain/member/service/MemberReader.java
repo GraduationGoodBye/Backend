@@ -6,7 +6,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("MemberReaderA")
 @RequiredArgsConstructor
 public class MemberReader {
 
