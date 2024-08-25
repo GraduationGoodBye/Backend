@@ -29,4 +29,8 @@ public class MemberRepository {
   public Optional<Member> findBySns(SnsDto snsDto) {
     return Optional.ofNullable(mysql.selectOne("MemberMapper.findBySns", snsDto));
   }
+
+  public Optional<Member> findByNickname(String nickname) {
+    return Optional.ofNullable(mysql.selectOne("MemberMapper.findByNickname", nickname));
+  }
 }

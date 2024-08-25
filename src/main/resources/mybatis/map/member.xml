@@ -16,4 +16,8 @@
   <select id="findBySns" parameterType="sns" resultType="member">
     SELECT * FROM members WHERE sns_id = #{snsId} AND sns_type = #{snsType};
   </select>
+
+  <select id="findByNickname" parameterType="String" resultType="member">
+    SELECT * FROM members WHERE nickname = #{nickname};
+  </select>
 </mapper>

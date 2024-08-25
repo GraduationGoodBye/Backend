@@ -40,6 +40,7 @@ public class MemberService {
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
   private final UniversityReader universityReader;
+  private final MemberReader memberReader;
   private final MajorReader majorReader;
   private final S3Util s3Util;
 
@@ -115,5 +116,12 @@ public class MemberService {
    */
   public Optional<Member> findById(Long id) {
     return memberRepository.findById(id);
+  }
+
+  /**
+   * 회원 닉네임 중복 확인
+   */
+  public boolean checkNicknameExists(String nickname) {
+    return memberReader.findByNickname(nickname).isPresent();
   }
 }
