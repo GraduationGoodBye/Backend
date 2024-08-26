@@ -32,16 +32,17 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class MemberService {
 
+  private final MemberInfoProvider memberInfoProvider;
+  private final MemberProvider memberProvider;
   private final MemberCreator memberCreator;
   private final MemberReader memberReader;
+  private final MemberValidator memberValidator;
   private final ArtistCreator artistCreator;
   private final ArtistValidator artistValidator;
   private final TokenService tokenService;
-  private final MemberInfoProvider memberInfoProvider;
   private final UniversityReader universityReader;
   private final MajorReader majorReader;
   private final S3Util s3Util;
-  private final MemberProvider memberProvider;
 
   /**
    * 회원 가입.
@@ -100,6 +101,13 @@ public class MemberService {
         .build();
 
     return artistCreator.save(artist);
+  }
+
+  /**
+   * SNS 타입 유효성 검증
+   */
+  public void checkSnsType(String snsType) {
+    memberValidator.validateSnsType(snsType);
   }
 
   /**
