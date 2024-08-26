@@ -6,6 +6,7 @@ import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberReader;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -28,7 +29,10 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     SnsDto snsDto = new SnsDto(snsType, snsId);
 
 
-    Member member = memberReader.findBySns(snsDto);
+    Member member = memberReader.findMember(snsDto).orElseThrow(() -> {
+      String accessToken = userRequest.getAccessToken().getTokenValue();
+      return new AuthenticationException(accessToken){};
+    });
 
     String userNameAttributeName = userRequest.getClientRegistration()
         .getProviderDetails()

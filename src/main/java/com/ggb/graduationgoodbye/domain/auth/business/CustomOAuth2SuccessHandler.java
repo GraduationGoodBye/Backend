@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.auth.common.config;
+package com.ggb.graduationgoodbye.domain.auth.business;
 
 import static com.ggb.graduationgoodbye.domain.auth.common.utils.WriteResponseUtil.writeResponse;
 

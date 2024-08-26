@@ -4,6 +4,7 @@ import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,10 @@ import org.springframework.stereotype.Component;
 public class MemberReader {
 
   private final MemberRepository memberRepository;
+
+  public Optional<Member> findMember(SnsDto dto) {
+    return memberRepository.findBySns(dto);
+  }
 
   public Member findBySns(SnsDto dto) {
     return memberRepository.findBySns(dto).orElseThrow(NotFoundMemberException::new);
