@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
+import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
@@ -17,16 +18,16 @@ public class MemberReader {
 
   private final MemberRepository memberRepository;
 
-  public Member findByEmail(String email) {
-    return memberRepository.findByEmail(email).orElseThrow(NotFoundMemberException::new);
+  public Member findBySns(SnsDto dto) {
+    return memberRepository.findBySns(dto).orElseThrow(NotFoundMemberException::new);
   }
 
   public Member findById(Long id) {
     return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
   }
 
-  public boolean existsByEmail(String email) {
-    return memberRepository.findByEmail(email).isPresent();
+  public boolean existsByEmail(SnsDto dto) {
+    return memberRepository.findBySns(dto).isPresent();
   }
 
 }
