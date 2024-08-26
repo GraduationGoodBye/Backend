@@ -82,7 +82,10 @@ CREATE TABLE artist
 
 
 INSERT INTO members (sns_type,sns_id,email,nickname,role)
-VALUES ('GOOGLE','test','test@google.com','nickname','USER');
+VALUES ('GOOGLE','test','test@google.com','nickname','MEMBER');
+
+INSERT INTO members (sns_type,sns_id,email,nickname,role)
+VALUES ('GOOGLE','admin','admin@google.com','admin','ADMIN');
 
 
 INSERT INTO common_code (type, code, name, created_id, created_at)

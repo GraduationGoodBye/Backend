@@ -1,29 +1,26 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
-import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
-import com.ggb.graduationgoodbye.domain.artist.repository.ArtistRepository;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
+import com.ggb.graduationgoodbye.domain.artist.common.exception.DuplicationArtistException;
+import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreator;
+import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
-import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundMajorException;
-import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundUniversityException;
-import com.ggb.graduationgoodbye.domain.commonCode.service.MajorReader;
-import com.ggb.graduationgoodbye.domain.commonCode.service.UniversityReader;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
+import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
+import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2InfoDto;
 import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
-import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
-import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,13 +32,16 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class MemberService {
 
-  private final MemberRepository memberRepository;
-  private final ArtistRepository artistRepository;
+  private final MemberCreator memberCreator;
+  private final MemberReader memberReader;
+  private final ArtistCreator artistCreator;
+  private final ArtistValidator artistValidator;
   private final TokenService tokenService;
   private final MemberInfoProvider memberInfoProvider;
   private final UniversityReader universityReader;
   private final MajorReader majorReader;
   private final S3Util s3Util;
+  private final MemberProvider memberProvider;
 
   /**
    * 회원 가입.
@@ -65,7 +65,7 @@ public class MemberService {
         .phone(request.getPhone())
         .build();
 
-    memberRepository.save(member);
+    memberCreator.save(member);
 
     Authentication authentication = tokenService.getAuthenticationByMember(member);
 
@@ -78,14 +78,13 @@ public class MemberService {
   public Artist promoteArtist(PromoteArtistDto.Request request,
       MultipartFile certificate) {
 
-    /* Authentication 관련 코드 추후 작성 위치 변경 필요 */
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    User user = (User) authentication.getPrincipal();
-    Long id = Long.parseLong(user.getUsername());
-    Member member = findById(id).orElseThrow(NotFoundMemberException::new);
+    Long memberId = memberProvider.getCurrentMemberId();
+    Member member = memberReader.findById(memberId);
 
-    CommonCode university = universityReader.findUniversity(request.getUniversity())
-        .orElseThrow(NotFoundUniversityException::new);
+    /* 작가 회원 요청 중복 검사 */
+    artistValidator.checkArtistDuplication(memberId);
+
+    CommonCode university = universityReader.findUniversity(request.getUniversity());
     CommonCode major = majorReader.findByMajor(request.getMajor())
         .orElseThrow(NotFoundMajorException::new);
     String certificateUrl = s3Util.upload(certificate);
@@ -100,20 +99,20 @@ public class MemberService {
         .createdId(createId)
         .build();
 
-    return artistRepository.save(artist);
+    return artistCreator.save(artist);
   }
 
   /**
    * 회원 SNS 정보 조회
    */
-  public Optional<Member> findBySns(SnsDto dto) {
-    return memberRepository.findBySns(dto);
+  public Member findBySns(SnsDto dto) {
+    return memberReader.findBySns(dto);
   }
 
   /**
    * 회원 정보 조회
    */
-  public Optional<Member> findById(Long id) {
-    return memberRepository.findById(id);
+  public Member findById(Long id) {
+    return memberReader.findById(id);
   }
 }

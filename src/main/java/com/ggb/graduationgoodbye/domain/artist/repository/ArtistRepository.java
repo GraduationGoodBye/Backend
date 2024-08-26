@@ -1,7 +1,9 @@
 package com.ggb.graduationgoodbye.domain.artist.repository;
 
-import com.ggb.graduationgoodbye.domain.artist.entity.Artist;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
+import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -21,4 +23,9 @@ public class ArtistRepository {
     mysql.insert("ArtistMapper.save", artist);
     return artist;
   }
+
+  public Optional<Member> findByMemberId(Long memberId) {
+    return mysql.selectOne("ArtistMapper.findByMemberId", memberId);
+  }
+
 }

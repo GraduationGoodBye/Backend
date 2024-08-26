@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.commonCode.entity;
+package com.ggb.graduationgoodbye.domain.commonCode.common.entity;
 
 import java.time.LocalDateTime;
 import lombok.AccessLevel;

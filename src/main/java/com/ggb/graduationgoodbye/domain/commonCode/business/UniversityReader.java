@@ -1,9 +1,9 @@
-package com.ggb.graduationgoodbye.domain.commonCode.service;
+package com.ggb.graduationgoodbye.domain.commonCode.business;
 
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundUniversityException;
 import com.ggb.graduationgoodbye.domain.commonCode.repository.CommonCodeRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +22,8 @@ public class UniversityReader {
     return commonCodeRepository.findCommonCode("university");
   }
 
-  public Optional<CommonCode> findUniversity(String name) {
-    return commonCodeRepository.findCommonCode("university", name);
+  public CommonCode findUniversity(String name) {
+    return commonCodeRepository.findCommonCode("university", name)
+        .orElseThrow(NotFoundUniversityException::new);
   }
 }

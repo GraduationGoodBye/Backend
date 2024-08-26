@@ -13,4 +13,8 @@
     <select id="findPendingCertificate" resultType="artist">
         SELECT * FROM artist WHERE approval_date IS NULL
     </select>
+    <select id="findByMemberId" parameterType="Long" resultType="member">
+        SELECT * FROM artist WHERE member_id = #{memberId}
+    </select>
+
 </mapper>

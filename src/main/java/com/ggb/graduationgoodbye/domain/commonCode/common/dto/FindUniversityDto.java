@@ -1,6 +1,6 @@
-package com.ggb.graduationgoodbye.domain.commonCode.dto;
+package com.ggb.graduationgoodbye.domain.commonCode.common.dto;
 
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;

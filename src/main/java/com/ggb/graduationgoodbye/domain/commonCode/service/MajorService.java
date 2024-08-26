@@ -1,8 +1,9 @@
 package com.ggb.graduationgoodbye.domain.commonCode.service;
 
 
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
-import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundMajorException;
+import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MajorService {
 
-  private MajorReader majorReader;
+  private final MajorReader majorReader;
 
   public List<CommonCode> findMajorAll() {
     return majorReader.findMajorAll();

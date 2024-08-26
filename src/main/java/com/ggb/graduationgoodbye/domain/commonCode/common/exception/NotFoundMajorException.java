@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.commonCode.exception;
+package com.ggb.graduationgoodbye.domain.commonCode.common.exception;
 
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import lombok.Getter;
@@ -22,6 +22,5 @@ public class NotFoundMajorException extends BusinessException {
   public NotFoundMajorException(final String message) {
     super(message);
     this.code = CommonCodeErrorType.NOT_FOUND_MAJOR.name();
-    ;
   }
 }

@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.commonCode.service;
 
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
-import com.ggb.graduationgoodbye.domain.commonCode.exception.NotFoundUniversityException;
+import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +28,7 @@ public class UniversityService {
    * 대학 단일 조회.
    */
   public CommonCode findByUniversity(String name) {
-    return universityReader.findUniversity(name)
-        .orElseThrow(NotFoundUniversityException::new);
+    return universityReader.findUniversity(name);
   }
 
 

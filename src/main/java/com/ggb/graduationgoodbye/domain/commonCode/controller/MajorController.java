@@ -1,9 +1,7 @@
 package com.ggb.graduationgoodbye.domain.commonCode.controller;
 
-import com.ggb.graduationgoodbye.domain.commonCode.dto.FindMajorDto;
-import com.ggb.graduationgoodbye.domain.commonCode.dto.FindMajorDto.Response;
-import com.ggb.graduationgoodbye.domain.commonCode.dto.FindUniversityDto;
-import com.ggb.graduationgoodbye.domain.commonCode.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.dto.FindMajorDto;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.service.MajorService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import java.util.List;
