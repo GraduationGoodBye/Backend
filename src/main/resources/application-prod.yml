@@ -12,8 +12,8 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:13306/main
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password:
+    username: ${datasource.prod.usernames}
+    password: ${datasource.prod.password}
 
   # REDIS
   data:

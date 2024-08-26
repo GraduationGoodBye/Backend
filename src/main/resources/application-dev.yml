@@ -10,10 +10,10 @@ spring:
 
   # MYSQL
   datasource:
-    url: jdbc:mysql://mysql:3306/ggbTest?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mysql:3306/ggb?useSSL=false&allowPublicKeyRetrieval=true
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
+    username: ${datasource.dev.usernames}
+    password: ${datasource.dev.password}
 
   # REDIS
   data:
