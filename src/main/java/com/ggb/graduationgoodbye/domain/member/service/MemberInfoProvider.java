@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidRegistrationIdException;
 import com.ggb.graduationgoodbye.domain.member.dto.GoogleInfoDto;
-import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
+import com.ggb.graduationgoodbye.domain.member.dto.OAuth2InfoDto;
 import com.ggb.graduationgoodbye.domain.member.exception.OAuth2FeignException;
 import com.ggb.graduationgoodbye.domain.member.exception.UriSyntaxException;
 import com.ggb.graduationgoodbye.domain.member.feign.OAuth2FeignClient;
@@ -30,7 +30,7 @@ public class MemberInfoProvider {
   private final String CONTENT_TYPE = "application/x-www-form-urlencoded;charset=UTF-8";
   private final String BEARER = "Bearer ";
 
-  public OAuth2MemberInfo getInfo(String snsType, String accessToken) {
+  public OAuth2InfoDto getInfo(String snsType, String accessToken) {
 
     return switch (snsType) {
       case "google" -> getGoogleInfo(accessToken);
@@ -38,7 +38,7 @@ public class MemberInfoProvider {
     };
   }
 
-  private OAuth2MemberInfo getGoogleInfo(String accessToken) {
+  private OAuth2InfoDto getGoogleInfo(String accessToken) {
 
     String GOOGLE_URI = "https://www.googleapis.com/oauth2/v3/userinfo";
     try {
@@ -51,7 +51,7 @@ public class MemberInfoProvider {
           new TypeReference<HashMap<String, Object>>() {
           });
 
-      return OAuth2MemberInfo.ofGoogle(attributes);
+      return OAuth2InfoDto.ofGoogle(attributes);
     } catch (URISyntaxException e) {
       throw new UriSyntaxException();
     } catch (FeignException e) {

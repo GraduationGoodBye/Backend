@@ -6,6 +6,7 @@ import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
  * 멤버 Controller.
  */
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 @Slf4j
 public class MemberController {
@@ -37,11 +38,14 @@ public class MemberController {
    * 회원 가입/로그인.
    */
   @PostMapping("/signup")
-  public ApiResponse<TokenResponse> signup(@RequestBody MemberJoinRequest memberJoinRequest) {
-    TokenDto token = memberService.join(memberJoinRequest);
-    TokenResponse tokenResponse = new TokenResponse(token.getAccessToken(),
-        token.getRefreshToken());
-    return ApiResponse.ok(tokenResponse);
+  public ApiResponse<MemberJoinDto.Response> signup(
+      @Valid @RequestBody MemberJoinDto.Request request) {
+    TokenDto token = memberService.join(request);
+    MemberJoinDto.Response response = MemberJoinDto.Response.builder()
+        .accessToken(token.getAccessToken())
+        .refreshToken(token.getRefreshToken())
+        .build();
+    return ApiResponse.ok(response);
   }
 
   /**
@@ -60,11 +64,14 @@ public class MemberController {
    * Token 재발급.
    */
   @PostMapping("/reissue")
-  public ApiResponse<TokenResponse> reissue(@RequestBody TokenReissueRequest tokenReissueRequest) {
-    TokenDto token = tokenService.reissueToken(tokenReissueRequest);
-    TokenResponse tokenResponse = new TokenResponse(token.getAccessToken(),
-        token.getRefreshToken());
-    return ApiResponse.ok(tokenResponse);
+  public ApiResponse<TokenReissueDto.Response> reissue(
+      @Valid @RequestBody TokenReissueDto.Request request) {
+    TokenDto token = tokenService.reissueToken(request);
+    TokenReissueDto.Response response = TokenReissueDto.Response.builder()
+        .accessToken(token.getAccessToken())
+        .refreshToken(token.getRefreshToken())
+        .build();
+    return ApiResponse.ok(response);
   }
 
 

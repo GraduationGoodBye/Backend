@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.business;
 
 import com.ggb.graduationgoodbye.domain.auth.common.dto.PrincipalDetails;
+import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberReader;
 import java.util.Map;
@@ -22,9 +23,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     Map<String, Object> attr = super.loadUser(userRequest).getAttributes();
 
-    String email = attr.get("email").toString();
+    String snsType = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
+    String snsId = attr.get("sub").toString();
+    SnsDto snsDto = new SnsDto(snsType, snsId);
 
-    Member member = memberReader.findByEmail(email);
+
+    Member member = memberReader.findBySns(snsDto);
 
     String userNameAttributeName = userRequest.getClientRegistration()
         .getProviderDetails()

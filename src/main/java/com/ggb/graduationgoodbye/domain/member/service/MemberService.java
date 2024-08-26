@@ -10,9 +10,10 @@ import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
 import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
-import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinRequest;
+import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDto;
-import com.ggb.graduationgoodbye.domain.member.dto.OAuth2MemberInfo;
+import com.ggb.graduationgoodbye.domain.member.dto.OAuth2InfoDto;
+import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
@@ -45,23 +46,23 @@ public class MemberService {
   /**
    * 회원 가입.
    */
-  public TokenDto join(MemberJoinRequest request) {
+  public TokenDto join(MemberJoinDto.Request request) {
 
-    OAuth2MemberInfo memberInfo = memberInfoProvider.getInfo(request.snsType(),
-        request.accessToken());
+    OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(request.getSnsType(),
+        request.getAccessToken());
 
     log.info("OAuth2 Server Response >> {}", memberInfo);
 
     Member member = Member.builder()
-        .snsType(SnsType.valueOf(request.snsType().toUpperCase()))
+        .snsType(SnsType.valueOf(request.getSnsType().toUpperCase()))
         .snsId(memberInfo.getSnsId())
         .email(memberInfo.getEmail())
         .profile(memberInfo.getProfile())
-        .nickname(request.nickname())
-        .address(request.address())
-        .gender(request.gender())
-        .age(request.age())
-        .phone(request.phone())
+        .nickname(request.getNickname())
+        .address(request.getAddress())
+        .gender(request.getGender())
+        .age(request.getAge())
+        .phone(request.getPhone())
         .build();
 
     memberCreator.save(member);
@@ -101,16 +102,17 @@ public class MemberService {
     return artistCreator.save(artist);
   }
 
-
-  public Member findByEmail(String email) {
-    return memberReader.findByEmail(email);
+  /**
+   * 회원 SNS 정보 조회
+   */
+  public Member findBySns(SnsDto dto) {
+    return memberReader.findBySns(dto);
   }
 
+  /**
+   * 회원 정보 조회
+   */
   public Member findById(Long id) {
     return memberReader.findById(id);
-  }
-
-  public boolean existsByEmail(String email) {
-    return memberReader.findByEmail(email) != null;
   }
 }

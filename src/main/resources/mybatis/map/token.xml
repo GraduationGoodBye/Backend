@@ -4,8 +4,8 @@
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="TokenMapper">
   <insert id="save" parameterType="token" keyProperty="id">
-    INSERT INTO tokens (user_id, refresh_token)
-    VALUES (#{userId}, #{refreshToken});
+    INSERT INTO tokens (member_id, refresh_token)
+    VALUES (#{memberId}, #{refreshToken});
   </insert>
 
   <update id="update" parameterType="token">
@@ -23,6 +23,6 @@
   </select>
 
   <select id="findByUserId" parameterType="String" resultType="token">
-    SELECT * FROM tokens WHERE user_id = #{userId};
+    SELECT * FROM tokens WHERE member_id = #{memberId};
   </select>
 </mapper>
