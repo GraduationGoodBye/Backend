@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
+import com.ggb.graduationgoodbye.domain.auth.common.exception.NotJoinedUserException;
 import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
@@ -18,8 +19,9 @@ public class MemberReader {
 
   private final MemberRepository memberRepository;
 
-  public Member findBySns(SnsDto dto) {
-    return memberRepository.findBySns(dto).orElseThrow(NotFoundMemberException::new);
+  public Member findBySns(SnsDto dto, String accessToken) {
+    return memberRepository.findBySns(dto)
+        .orElseThrow(() -> new NotJoinedUserException(accessToken));
   }
 
   public Member findById(Long id) {
