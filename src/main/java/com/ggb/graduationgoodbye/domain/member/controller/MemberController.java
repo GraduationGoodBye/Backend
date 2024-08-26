@@ -47,10 +47,10 @@ public class MemberController {
   /**
    * 회원 가입/로그인.
    */
-  @PostMapping("/signup")
-  public ApiResponse<MemberJoinDto.Response> signup(
+  @PostMapping("/signup/{snsType}")
+  public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
       @Valid @RequestBody MemberJoinDto.Request request) {
-    TokenDto token = memberService.join(request);
+    TokenDto token = memberService.join(snsType, request);
     MemberJoinDto.Response response = MemberJoinDto.Response.builder()
         .accessToken(token.getAccessToken())
         .refreshToken(token.getRefreshToken())

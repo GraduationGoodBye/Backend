@@ -27,7 +27,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     String snsId = attr.get("sub").toString();
     SnsDto snsDto = new SnsDto(snsType, snsId);
 
-    Member member = memberReader.findBySns(snsDto, userRequest.getAccessToken().toString());
+    Member member = memberReader.findBySns(snsDto, userRequest.getAccessToken().getTokenValue());
 
     String userNameAttributeName = userRequest.getClientRegistration()
         .getProviderDetails()

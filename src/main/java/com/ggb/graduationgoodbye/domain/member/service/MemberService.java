@@ -1,15 +1,14 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
-import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
-import com.ggb.graduationgoodbye.domain.artist.common.exception.DuplicationArtistException;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreator;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
+import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
-import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
 import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
+import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.dto.OAuth2InfoDto;
@@ -17,7 +16,6 @@ import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -47,15 +45,15 @@ public class MemberService {
   /**
    * 회원 가입.
    */
-  public TokenDto join(MemberJoinDto.Request request) {
+  public TokenDto join(String snsType, MemberJoinDto.Request request) {
 
-    OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(request.getSnsType(),
+    OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(snsType,
         request.getAccessToken());
 
     log.info("OAuth2 Server Response >> {}", memberInfo);
 
     Member member = Member.builder()
-        .snsType(SnsType.valueOf(request.getSnsType().toUpperCase()))
+        .snsType(SnsType.valueOf(snsType.toUpperCase()))
         .snsId(memberInfo.getSnsId())
         .email(memberInfo.getEmail())
         .profile(memberInfo.getProfile())
