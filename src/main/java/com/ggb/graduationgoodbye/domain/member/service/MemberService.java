@@ -111,8 +111,8 @@ public class MemberService {
   /**
    * 회원 SNS 정보 조회
    */
-  public Member findBySns(SnsDto dto, String accessToken) {
-    return memberReader.findBySns(dto, accessToken);
+  public Member findBySns(SnsDto dto) {
+    return memberReader.findBySns(dto);
   }
 
   /**

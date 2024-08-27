@@ -1,5 +1,7 @@
-package com.ggb.graduationgoodbye.domain.auth.business;
+package com.ggb.graduationgoodbye.domain.auth.service;
 
+import com.ggb.graduationgoodbye.domain.auth.business.OAuthUserParser;
+import com.ggb.graduationgoodbye.domain.auth.business.OAuthUserProvider;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.PrincipalDetails;
 import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
@@ -16,28 +18,22 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
+  private final OAuthUserParser oAuthUserParser;
   private final MemberReader memberReader;
+  private final OAuthUserProvider oAuthUserProvider;
 
   @Override
   public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
     Map<String, Object> attr = super.loadUser(userRequest).getAttributes();
+    SnsDto snsDto = oAuthUserParser.getSnsDto(userRequest, attr);
 
-    String snsType = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
-    String snsId = attr.get("sub").toString();
-    SnsDto snsDto = new SnsDto(snsType, snsId);
+    String accessToken = userRequest.getAccessToken().getTokenValue();
+    Member member = memberReader.getMemberOrAuthException(snsDto, accessToken);
 
-    Member member = memberReader.findBySns(snsDto, userRequest.getAccessToken().getTokenValue());
+    PrincipalDetails principalDetails = oAuthUserProvider.getPrincipalDetails(userRequest, attr,
+        member);
 
-    String userNameAttributeName = userRequest.getClientRegistration()
-        .getProviderDetails()
-        .getUserInfoEndpoint()
-        .getUserNameAttributeName();
-
-    return PrincipalDetails.builder()
-        .member(member)
-        .attributes(attr)
-        .attributeKey(userNameAttributeName)
-        .build();
+    return principalDetails;
   }
 }

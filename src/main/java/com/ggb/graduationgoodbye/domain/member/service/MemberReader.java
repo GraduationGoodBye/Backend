@@ -1,12 +1,12 @@
 package com.ggb.graduationgoodbye.domain.member.service;
 
-import com.ggb.graduationgoodbye.domain.auth.common.exception.NotJoinedUserException;
 import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -19,9 +19,14 @@ public class MemberReader {
 
   private final MemberRepository memberRepository;
 
-  public Member findBySns(SnsDto dto, String accessToken) {
+  public Member getMemberOrAuthException(SnsDto dto, String accessToken) {
     return memberRepository.findBySns(dto)
-        .orElseThrow(() -> new NotJoinedUserException(accessToken));
+        .orElseThrow(() -> new AuthenticationException(accessToken) {
+        });
+  }
+
+  public Member findBySns(SnsDto dto) {
+    return memberRepository.findBySns(dto).orElseThrow(NotFoundMemberException::new);
   }
 
   public Member findById(Long id) {
