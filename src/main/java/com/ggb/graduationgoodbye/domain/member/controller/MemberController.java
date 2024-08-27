@@ -6,6 +6,7 @@ import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.io.IOException;
@@ -37,6 +38,10 @@ public class MemberController {
   private final MemberService memberService;
   private final TokenService tokenService;
 
+  /**
+   * 로그인.
+   */
+  @Hidden
   @GetMapping("/login/{snsType}")
   public void login(@PathVariable("snsType") String snsType, HttpServletResponse response)
       throws IOException {
@@ -45,7 +50,7 @@ public class MemberController {
   }
 
   /**
-   * 회원 가입/로그인.
+   * 회원 가입
    */
   @PostMapping("/signup/{snsType}")
   public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
