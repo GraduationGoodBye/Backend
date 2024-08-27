@@ -2,8 +2,10 @@ package com.ggb.graduationgoodbye.domain.member.service;
 
 import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.exception.DuplicateNicknameException;
 import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
@@ -37,4 +39,10 @@ public class MemberReader {
     return memberRepository.findBySns(dto).isPresent();
   }
 
+  public void checkNicknameExists(String nickname) {
+    memberRepository.findByNickname(nickname)
+        .ifPresent(e -> {
+          throw new DuplicateNicknameException();
+        });
+  }
 }
