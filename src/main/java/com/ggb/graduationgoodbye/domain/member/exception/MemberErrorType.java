@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public enum MemberErrorType {
 
+  INVALID_SNS_TYPE("유효하지 않은 SNS 타입입니다."),
+  
   OAUTH2_FEIGN_ERROR("OAuth2 리소스 서버와 통신을 실패했습니다."),
 
   URI_SYNTAX_ERROR("URI 형식이 잘못되었습니다."),

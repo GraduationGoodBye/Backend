@@ -9,7 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class OAuthUserProvider {
 
-  public PrincipalDetails getPrincipalDetails(OAuth2UserRequest userRequest, Map<String, Object> attr, Member member) {
+  public PrincipalDetails getPrincipalDetails(OAuth2UserRequest userRequest,
+      Map<String, Object> attr, Member member) {
     String userNameAttributeName = userRequest.getClientRegistration()
         .getProviderDetails()
         .getUserInfoEndpoint()

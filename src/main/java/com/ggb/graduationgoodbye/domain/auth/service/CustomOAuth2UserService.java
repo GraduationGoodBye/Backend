@@ -31,7 +31,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     String accessToken = userRequest.getAccessToken().getTokenValue();
     Member member = memberReader.getMemberOrAuthException(snsDto, accessToken);
 
-    PrincipalDetails principalDetails = oAuthUserProvider.getPrincipalDetails(userRequest, attr, member);
+    PrincipalDetails principalDetails = oAuthUserProvider.getPrincipalDetails(userRequest, attr,
+        member);
 
     return principalDetails;
   }
