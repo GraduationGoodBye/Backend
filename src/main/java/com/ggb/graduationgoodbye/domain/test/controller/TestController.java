@@ -81,8 +81,10 @@ public class TestController {
   public ApiResponse<?> authMember() {
     Map<String, String> map = new LinkedHashMap<>();
     map.put("name", SecurityContextHolder.getContext().getAuthentication().getName());
-    map.put("principal", SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-    map.put("authorities", SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+    map.put("principal",
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    map.put("authorities",
+        SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
     return ApiResponse.ok(map);
   }
 
@@ -91,8 +93,10 @@ public class TestController {
   public ApiResponse<?> authAdmin() {
     Map<String, String> map = new LinkedHashMap<>();
     map.put("name", SecurityContextHolder.getContext().getAuthentication().getName());
-    map.put("principal", SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-    map.put("authorities", SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
+    map.put("principal",
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+    map.put("authorities",
+        SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
     return ApiResponse.ok(map);
   }
 }

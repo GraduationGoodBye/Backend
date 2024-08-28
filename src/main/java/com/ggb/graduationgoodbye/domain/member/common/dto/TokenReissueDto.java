@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.controller;
+package com.ggb.graduationgoodbye.domain.member.common.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;

@@ -1,11 +1,10 @@
-package com.ggb.graduationgoodbye.domain.member.service;
+package com.ggb.graduationgoodbye.domain.member.business;
 
-import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.ggb.graduationgoodbye.domain.member.exception.DuplicateNicknameException;
-import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.exception.DuplicateNicknameException;
+import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;

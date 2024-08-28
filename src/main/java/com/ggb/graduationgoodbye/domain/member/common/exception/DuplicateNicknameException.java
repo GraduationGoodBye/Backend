@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.exception;
+package com.ggb.graduationgoodbye.domain.member.common.exception;
 
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package com.ggb.graduationgoodbye.domain.auth.business;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.ExpiredTokenException;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidJwtSignatureException;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidTokenException;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.global.error.exception.UnAuthenticatedException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

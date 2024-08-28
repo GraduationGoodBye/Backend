@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.controller;
+package com.ggb.graduationgoodbye.domain.member.common.dto;
 
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import lombok.Getter;
@@ -33,7 +33,7 @@ public class PromoteArtistDto {
     private String name;
     private String certificateUrl;
 
-    Response(Artist artist) {
+    public Response(Artist artist) {
       this.university = artist.getUniversityId().getName();
       this.major = artist.getMajorId().getName();
       this.name = artist.getName();

@@ -1,7 +1,7 @@
-package com.ggb.graduationgoodbye.domain.member.service;
+package com.ggb.graduationgoodbye.domain.member.business;
 
-import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
-import com.ggb.graduationgoodbye.domain.member.exception.InvalidSnsTypeException;
+import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
+import com.ggb.graduationgoodbye.domain.member.common.exception.InvalidSnsTypeException;
 import java.util.Arrays;
 import org.springframework.stereotype.Component;
 

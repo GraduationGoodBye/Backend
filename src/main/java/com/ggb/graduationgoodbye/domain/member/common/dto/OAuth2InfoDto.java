@@ -1,4 +1,4 @@
-package com.ggb.graduationgoodbye.domain.member.dto;
+package com.ggb.graduationgoodbye.domain.member.common.dto;
 
 import java.util.Map;
 import lombok.Builder;

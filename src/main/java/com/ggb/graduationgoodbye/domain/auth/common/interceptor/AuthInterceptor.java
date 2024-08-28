@@ -19,7 +19,8 @@ public class AuthInterceptor implements HandlerInterceptor {
   private final TokenService tokenService;
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+      Object handler) {
 
     boolean hasAnnotation = hasPreAuthorizeAnnotation(handler);
 

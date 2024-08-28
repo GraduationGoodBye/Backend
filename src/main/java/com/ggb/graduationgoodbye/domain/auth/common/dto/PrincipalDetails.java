@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.common.dto;
 
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
