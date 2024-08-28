@@ -67,6 +67,7 @@ public class MemberController {
   /**
    * Member 정보 반환.
    */
+  @PreAuthorize("hasAuthority('MEMBER')")
   @GetMapping("/info")
   public ApiResponse<Member> info() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
