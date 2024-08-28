@@ -28,8 +28,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     Map<String, Object> attr = super.loadUser(userRequest).getAttributes();
     SnsDto snsDto = oAuthUserParser.getSnsDto(userRequest, attr);
 
-    String accessToken = userRequest.getAccessToken().getTokenValue();
-    Member member = memberReader.getMemberOrAuthException(snsDto, accessToken);
+    String oauthToken = userRequest.getAccessToken().getTokenValue();
+    Member member = memberReader.getMemberOrAuthException(snsDto, oauthToken);
 
     PrincipalDetails principalDetails = oAuthUserProvider.getPrincipalDetails(userRequest, attr,
         member);

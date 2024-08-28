@@ -9,8 +9,8 @@ public class MemberJoinDto {
   @Getter
   public static class Request {
 
-    @NotBlank(message = "액세스 토큰을 함께 요청 바랍니다.")
-    private String accessToken;
+    @NotBlank(message = "oauth 토큰을 함께 요청 바랍니다.")
+    private String oauthToken;
     @NotBlank(message = "닉네임을 입력 바랍니다.")
     private String nickname;
     private String address;

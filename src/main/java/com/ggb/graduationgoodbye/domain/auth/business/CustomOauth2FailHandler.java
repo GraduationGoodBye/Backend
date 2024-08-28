@@ -24,7 +24,7 @@ public class CustomOauth2FailHandler implements AuthenticationFailureHandler {
         ApiResponse.error(
             AuthErrorType.NOT_JOINED_USER.name(),
             AuthErrorType.NOT_JOINED_USER.getMessage(),
-            exception.getMessage() // accessToken
+            exception.getMessage() // oauthToken
         )
     );
   }

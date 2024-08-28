@@ -21,9 +21,9 @@ public class MemberReader {
 
   private final MemberRepository memberRepository;
 
-  public Member getMemberOrAuthException(SnsDto dto, String accessToken) {
+  public Member getMemberOrAuthException(SnsDto dto, String oauthToken) {
     return memberRepository.findBySns(dto)
-        .orElseThrow(() -> new AuthenticationException(accessToken) {
+        .orElseThrow(() -> new AuthenticationException(oauthToken) {
         });
   }
 

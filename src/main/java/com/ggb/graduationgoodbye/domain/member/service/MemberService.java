@@ -48,7 +48,7 @@ public class MemberService {
   public TokenDto join(String snsType, MemberJoinDto.Request request) {
 
     OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(snsType,
-        request.getAccessToken());
+        request.getOauthToken());
 
     log.info("OAuth2 Server Response >> {}", memberInfo);
 
