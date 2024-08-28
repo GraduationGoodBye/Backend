@@ -121,4 +121,11 @@ public class MemberService {
   public Member findById(Long id) {
     return memberReader.findById(id);
   }
+
+  /**
+   * 회원 닉네임 중복 확인
+   */
+  public void checkNicknameExists(String nickname) {
+    memberReader.checkNicknameExists(nickname);
+  }
 }

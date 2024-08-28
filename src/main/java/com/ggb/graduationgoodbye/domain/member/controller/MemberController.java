@@ -4,6 +4,7 @@ import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.exception.DuplicateNicknameException;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
@@ -89,6 +90,14 @@ public class MemberController {
     return ApiResponse.ok(response);
   }
 
+  /**
+   * 회원 닉네임 중복 확인
+   */
+  @GetMapping("/check/nickname/{nickname}")
+  public ApiResponse<?> checkNickname(@PathVariable String nickname) {
+    memberService.checkNicknameExists(nickname);
+    return ApiResponse.ok();
+  }
 
   /**
    * 작가 등업 신청.
