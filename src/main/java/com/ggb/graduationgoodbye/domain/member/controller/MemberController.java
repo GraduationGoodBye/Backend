@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -75,7 +76,7 @@ public class MemberController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User u = (User) authentication.getPrincipal();
     Long id = Long.valueOf(u.getUsername());
-    Member member = memberService.findById(id);
+    Member member = memberService.getById(id);
     return ApiResponse.ok(member);
   }
 
@@ -100,6 +101,15 @@ public class MemberController {
   public ApiResponse<?> checkNickname(@PathVariable String nickname) {
     memberService.checkNicknameExists(nickname);
     return ApiResponse.ok();
+  }
+
+  /**
+   * 랜덤 닉네임 제공
+   */
+  @GetMapping("/serve/nickname")
+  public ApiResponse<?> serveRandomNicknames() {
+    List<String> nicknames = memberService.serveRandomNicknames();
+    return ApiResponse.ok(nicknames);
   }
 
   /**

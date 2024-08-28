@@ -38,6 +38,10 @@ public class MemberReader {
     return memberRepository.findBySns(dto).isPresent();
   }
 
+  public boolean existsByNickname(String nickname) {
+    return memberRepository.findByNickname(nickname).isPresent();
+  }
+
   public void checkNicknameExists(String nickname) {
     memberRepository.findByNickname(nickname)
         .ifPresent(e -> {
