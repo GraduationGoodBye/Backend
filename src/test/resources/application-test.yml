@@ -5,29 +5,6 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-  #S3
-  cloud:
-    aws:
-      credentials:
-        access-key: ggb
-        secret-key: ggb
-      region:
-        static: ggb # bucket region
-      s3:
-        bucket: ggb # bucket 명
-  security:
-    oauth2:
-      client:
-        registration:
-          google:
-            client-id: ggb
-            client-secret: ggb
-            scope:
-jwt:
-  secret: ggggggggggggggggggggggbbbbbbbbbbbbbbbbbbbbbb
-  expired:
-    access: 123
-    refresh: 123
 
 #  # REDIS
 #  data:
