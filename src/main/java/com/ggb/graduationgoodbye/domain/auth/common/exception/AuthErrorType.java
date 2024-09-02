@@ -16,7 +16,8 @@ public enum AuthErrorType {
   NOT_FOUND_TOKEN("토큰정보를 찾을 수 없습니다."),
 
   // Google
-  INVALID_REGISTRATION_ID("유효하지 않은 리소스 서버입니다.");
+  INVALID_REGISTRATION_ID("유효하지 않은 리소스 서버입니다."),
+  NOT_SUPPORTED_SNS_TYPE("지원하지 않는 SNS 타입입니다.");
 
   private final String message;
 

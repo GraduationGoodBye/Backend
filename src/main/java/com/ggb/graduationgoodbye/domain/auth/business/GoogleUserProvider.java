@@ -1,15 +1,11 @@
 package com.ggb.graduationgoodbye.domain.auth.business;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.GoogleInfoDto;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserTokenDto;
 import feign.FeignException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -43,7 +39,6 @@ public class GoogleUserProvider {
 
   public OAuthUserTokenDto getOAuthToken(String authCode)
       throws URISyntaxException, FeignException {
-
     return oauthUserFeign.requestOauthToken(
         new URI(GOOGLE_TOKEN_URI),
         GOOGLE_CLIENT_ID,
@@ -56,17 +51,13 @@ public class GoogleUserProvider {
 
   public OAuthUserInfoDto getOAuthInfo(String accessToken)
       throws URISyntaxException, FeignException {
-
     GoogleInfoDto googleInfoDto = oauthUserFeign.requestInfo(
         new URI(GOOGLE_INFO_URI),
         BEARER + accessToken,
         CONTENT_TYPE
     );
-
-    Map<String, Object> attributes = new ObjectMapper().convertValue(googleInfoDto,
-        new TypeReference<HashMap<String, Object>>() {
-        });
-
-    return OAuthUserInfoDto.ofGoogle(attributes);
+    OAuthUserInfoDto oAuthUserInfoDto = OAuthUserInfoDto.ofGoogle(googleInfoDto);
+    log.info("googleInfo : {}", oAuthUserInfoDto.toString());
+    return oAuthUserInfoDto;
   }
 }

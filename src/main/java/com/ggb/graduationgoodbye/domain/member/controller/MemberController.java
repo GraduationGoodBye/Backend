@@ -63,7 +63,8 @@ public class MemberController {
   @PostMapping("/signup/{snsType}")
   public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
       @Valid @RequestBody MemberJoinDto.Request request) {
-    TokenDto token = memberService.join(snsType, request);
+    OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
+    TokenDto token = memberService.join(snsType, oAuthUserInfoDto, request);
     MemberJoinDto.Response response = MemberJoinDto.Response.builder()
         .accessToken(token.getAccessToken())
         .refreshToken(token.getRefreshToken())
