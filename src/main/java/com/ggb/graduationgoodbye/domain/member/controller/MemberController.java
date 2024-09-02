@@ -106,6 +106,7 @@ public class MemberController {
   /**
    * 랜덤 닉네임 제공
    */
+  @Hidden
   @GetMapping("/serve/nickname")
   public ApiResponse<?> serveRandomNicknames() {
     List<String> nicknames = memberService.serveRandomNicknames();
