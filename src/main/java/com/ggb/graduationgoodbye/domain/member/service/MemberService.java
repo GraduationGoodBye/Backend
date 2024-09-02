@@ -3,6 +3,7 @@ package com.ggb.graduationgoodbye.domain.member.service;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreator;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
@@ -16,7 +17,6 @@ import com.ggb.graduationgoodbye.domain.member.business.MemberReader;
 import com.ggb.graduationgoodbye.domain.member.business.MemberValidator;
 import com.ggb.graduationgoodbye.domain.member.business.NicknameProvider;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
-import com.ggb.graduationgoodbye.domain.member.common.dto.OAuth2InfoDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
@@ -55,7 +55,7 @@ public class MemberService {
    */
   public TokenDto join(String snsType, MemberJoinDto.Request request) {
 
-    OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(snsType,
+    OAuthUserInfoDto memberInfo = memberInfoProvider.getInfo(snsType,
         request.getOauthToken());
 
     log.info("OAuth2 Server Response >> {}", memberInfo);
