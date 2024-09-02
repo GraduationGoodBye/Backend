@@ -1,6 +1,5 @@
 package com.ggb.graduationgoodbye.domain.auth.common.dto;
 
-import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -15,11 +14,11 @@ public class OAuthUserInfoDto {
   private String profile;
   private String oauthToken;
 
-  public static OAuthUserInfoDto ofGoogle(Map<String, Object> attributes) {
+  public static OAuthUserInfoDto ofGoogle(GoogleInfoDto googleInfoDto) {
     return OAuthUserInfoDto.builder()
-        .snsId(attributes.get("sub").toString())
-        .email(attributes.get("email").toString())
-        .profile(attributes.get("picture").toString())
+        .snsId(googleInfoDto.sub())
+        .email(googleInfoDto.email())
+        .profile(googleInfoDto.picture())
         .build();
   }
 

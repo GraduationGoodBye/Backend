@@ -11,7 +11,6 @@ import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
 import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.member.business.MemberCreator;
-import com.ggb.graduationgoodbye.domain.member.business.MemberInfoProvider;
 import com.ggb.graduationgoodbye.domain.member.business.MemberProvider;
 import com.ggb.graduationgoodbye.domain.member.business.MemberReader;
 import com.ggb.graduationgoodbye.domain.member.business.MemberValidator;
@@ -38,7 +37,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
   private final NicknameProvider nicknameProvider;
-  private final MemberInfoProvider memberInfoProvider;
   private final MemberProvider memberProvider;
   private final MemberCreator memberCreator;
   private final MemberReader memberReader;
@@ -53,18 +51,13 @@ public class MemberService {
   /**
    * 회원 가입.
    */
-  public TokenDto join(String snsType, MemberJoinDto.Request request) {
-
-    OAuthUserInfoDto memberInfo = memberInfoProvider.getInfo(snsType,
-        request.getOauthToken());
-
-    log.info("OAuth2 Server Response >> {}", memberInfo);
-
+  public TokenDto join(String snsType, OAuthUserInfoDto oAuthUserInfoDto,
+      MemberJoinDto.Request request) {
     Member member = Member.builder()
         .snsType(SnsType.valueOf(snsType.toUpperCase()))
-        .snsId(memberInfo.getSnsId())
-        .email(memberInfo.getEmail())
-        .profile(memberInfo.getProfile())
+        .snsId(oAuthUserInfoDto.getSnsId())
+        .email(oAuthUserInfoDto.getEmail())
+        .profile(oAuthUserInfoDto.getProfile())
         .nickname(request.getNickname())
         .address(request.getAddress())
         .gender(request.getGender())
