@@ -136,4 +136,8 @@ public class MemberService {
   public List<String> serveRandomNicknames() {
     return nicknameProvider.provideRandomNicknames();
   }
+
+  public Member checkMemberExists(SnsDto snsDto, String oauthToken) {
+    return memberReader.getMemberOrAuthException(snsDto, oauthToken);
+  }
 }

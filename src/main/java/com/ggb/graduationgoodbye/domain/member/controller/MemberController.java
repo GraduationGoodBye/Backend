@@ -8,6 +8,7 @@ import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberLoginDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
@@ -52,9 +53,10 @@ public class MemberController {
       @Valid @RequestBody MemberLoginDto.Request request) {
     // authCode -> oauthToken -> oauthUserInfo
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
-    log.info(oAuthUserInfoDto.toString());
-    // OAuthUserInfoDto 으로 회원가입 여부 확인
-    // token을 쿠키에 담아서 제공
+    SnsDto snsDto = new SnsDto(snsType, oAuthUserInfoDto.getSnsId());
+    Member member = memberService.checkMemberExists(snsDto, oAuthUserInfoDto.getOauthToken());
+    Authentication authentication = tokenService.getAuthenticationByMember(member);
+    TokenDto token = tokenService.getToken(authentication);
   }
 
   /**
