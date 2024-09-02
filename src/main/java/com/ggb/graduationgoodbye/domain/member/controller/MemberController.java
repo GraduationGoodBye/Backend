@@ -8,6 +8,7 @@ import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberLoginDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
@@ -48,13 +49,17 @@ public class MemberController {
    * 로그인.
    */
   @PostMapping("/login/{snsType}")
-  public void login(@PathVariable("snsType") String snsType,
+  public ApiResponse<MemberLoginDto.Response> login(@PathVariable("snsType") String snsType,
       @Valid @RequestBody MemberLoginDto.Request request) {
-    // authCode -> oauthToken -> oauthUserInfo
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
-    log.info(oAuthUserInfoDto.toString());
-    // OAuthUserInfoDto 으로 회원가입 여부 확인
-    // token을 쿠키에 담아서 제공
+    SnsDto snsDto = new SnsDto(snsType, oAuthUserInfoDto.getSnsId());
+    Member member = memberService.checkMemberExists(snsDto, oAuthUserInfoDto.getOauthToken());
+    TokenDto token = tokenService.getToken(member);
+    MemberLoginDto.Response response = MemberLoginDto.Response.builder()
+        .accessToken(token.getAccessToken())
+        .refreshToken(token.getRefreshToken())
+        .build();
+    return ApiResponse.ok(response);
   }
 
   /**
@@ -64,7 +69,8 @@ public class MemberController {
   public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
       @Valid @RequestBody MemberJoinDto.Request request) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
-    TokenDto token = memberService.join(snsType, oAuthUserInfoDto, request);
+    Member member = memberService.join(snsType, oAuthUserInfoDto, request);
+    TokenDto token = tokenService.getToken(member);
     MemberJoinDto.Response response = MemberJoinDto.Response.builder()
         .accessToken(token.getAccessToken())
         .refreshToken(token.getRefreshToken())
