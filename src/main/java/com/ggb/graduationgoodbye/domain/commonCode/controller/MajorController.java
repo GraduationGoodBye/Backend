@@ -43,6 +43,7 @@ public class MajorController {
   public ApiResponse<FindMajorDto.Response> findMajor(@RequestBody FindMajorDto.Request request) {
     CommonCode major = majorService.findByMajor(request.getName());
     FindMajorDto.Response response = FindMajorDto.Response.fromEntity(major);
-    return ApiResponse.ok(response);  }
+    return ApiResponse.ok(response);
+  }
 
 }

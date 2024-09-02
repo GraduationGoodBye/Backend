@@ -1,11 +1,10 @@
-package com.ggb.graduationgoodbye.domain.member.service;
+package com.ggb.graduationgoodbye.domain.member.business;
 
-import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.ggb.graduationgoodbye.domain.member.exception.DuplicateNicknameException;
-import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.exception.DuplicateNicknameException;
+import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
@@ -21,9 +20,9 @@ public class MemberReader {
 
   private final MemberRepository memberRepository;
 
-  public Member getMemberOrAuthException(SnsDto dto, String accessToken) {
+  public Member getMemberOrAuthException(SnsDto dto, String oauthToken) {
     return memberRepository.findBySns(dto)
-        .orElseThrow(() -> new AuthenticationException(accessToken) {
+        .orElseThrow(() -> new AuthenticationException(oauthToken) {
         });
   }
 
@@ -37,6 +36,10 @@ public class MemberReader {
 
   public boolean existsByEmail(SnsDto dto) {
     return memberRepository.findBySns(dto).isPresent();
+  }
+
+  public boolean existsByNickname(String nickname) {
+    return memberRepository.findByNickname(nickname).isPresent();
   }
 
   public void checkNicknameExists(String nickname) {

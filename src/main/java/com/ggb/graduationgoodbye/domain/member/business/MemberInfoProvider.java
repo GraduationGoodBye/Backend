@@ -1,13 +1,12 @@
-package com.ggb.graduationgoodbye.domain.member.service;
+package com.ggb.graduationgoodbye.domain.member.business;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidRegistrationIdException;
-import com.ggb.graduationgoodbye.domain.member.dto.GoogleInfoDto;
-import com.ggb.graduationgoodbye.domain.member.dto.OAuth2InfoDto;
-import com.ggb.graduationgoodbye.domain.member.exception.OAuth2FeignException;
-import com.ggb.graduationgoodbye.domain.member.exception.UriSyntaxException;
-import com.ggb.graduationgoodbye.domain.member.feign.OAuth2FeignClient;
+import com.ggb.graduationgoodbye.domain.member.common.dto.GoogleInfoDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.OAuth2InfoDto;
+import com.ggb.graduationgoodbye.domain.member.common.exception.OAuth2FeignException;
+import com.ggb.graduationgoodbye.domain.member.common.exception.UriSyntaxException;
 import feign.FeignException;
 import java.net.URI;
 import java.net.URISyntaxException;

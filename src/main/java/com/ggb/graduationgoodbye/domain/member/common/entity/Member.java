@@ -1,7 +1,7 @@
-package com.ggb.graduationgoodbye.domain.member.entity;
+package com.ggb.graduationgoodbye.domain.member.common.entity;
 
-import com.ggb.graduationgoodbye.domain.member.enums.Role;
-import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
+import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
+import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
-import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;

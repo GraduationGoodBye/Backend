@@ -3,9 +3,9 @@ package com.ggb.graduationgoodbye.domain.auth.service;
 import com.ggb.graduationgoodbye.domain.auth.business.OAuthUserParser;
 import com.ggb.graduationgoodbye.domain.auth.business.OAuthUserProvider;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.PrincipalDetails;
-import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.ggb.graduationgoodbye.domain.member.service.MemberReader;
+import com.ggb.graduationgoodbye.domain.member.business.MemberReader;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -28,8 +28,8 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     Map<String, Object> attr = super.loadUser(userRequest).getAttributes();
     SnsDto snsDto = oAuthUserParser.getSnsDto(userRequest, attr);
 
-    String accessToken = userRequest.getAccessToken().getTokenValue();
-    Member member = memberReader.getMemberOrAuthException(snsDto, accessToken);
+    String oauthToken = userRequest.getAccessToken().getTokenValue();
+    Member member = memberReader.getMemberOrAuthException(snsDto, oauthToken);
 
     PrincipalDetails principalDetails = oAuthUserProvider.getPrincipalDetails(userRequest, attr,
         member);

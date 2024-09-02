@@ -1,6 +1,6 @@
-package com.ggb.graduationgoodbye.domain.member.feign;
+package com.ggb.graduationgoodbye.domain.member.business;
 
-import com.ggb.graduationgoodbye.domain.member.dto.GoogleInfoDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.GoogleInfoDto;
 import java.net.URI;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpHeaders;

@@ -3,14 +3,17 @@ package com.ggb.graduationgoodbye.domain.member.controller;
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.ggb.graduationgoodbye.domain.member.exception.DuplicateNicknameException;
+import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -73,7 +76,7 @@ public class MemberController {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User u = (User) authentication.getPrincipal();
     Long id = Long.valueOf(u.getUsername());
-    Member member = memberService.findById(id);
+    Member member = memberService.getById(id);
     return ApiResponse.ok(member);
   }
 
@@ -98,6 +101,16 @@ public class MemberController {
   public ApiResponse<?> checkNickname(@PathVariable String nickname) {
     memberService.checkNicknameExists(nickname);
     return ApiResponse.ok();
+  }
+
+  /**
+   * 랜덤 닉네임 제공
+   */
+  @Hidden
+  @GetMapping("/serve/nickname")
+  public ApiResponse<?> serveRandomNicknames() {
+    List<String> nicknames = memberService.serveRandomNicknames();
+    return ApiResponse.ok(nicknames);
   }
 
   /**

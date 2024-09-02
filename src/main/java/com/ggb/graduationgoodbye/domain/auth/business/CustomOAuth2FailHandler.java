@@ -13,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Slf4j
-public class CustomOauth2FailHandler implements AuthenticationFailureHandler {
+public class CustomOAuth2FailHandler implements AuthenticationFailureHandler {
 
   @Override
   public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -24,7 +24,7 @@ public class CustomOauth2FailHandler implements AuthenticationFailureHandler {
         ApiResponse.error(
             AuthErrorType.NOT_JOINED_USER.name(),
             AuthErrorType.NOT_JOINED_USER.getMessage(),
-            exception.getMessage() // accessToken
+            exception.getMessage() // oauthToken
         )
     );
   }

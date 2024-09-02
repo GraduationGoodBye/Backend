@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.business;
 
 import com.ggb.graduationgoodbye.domain.auth.common.dto.PrincipalDetails;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import java.util.Map;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.stereotype.Component;

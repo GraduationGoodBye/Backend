@@ -9,13 +9,20 @@ import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
 import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
 import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
-import com.ggb.graduationgoodbye.domain.member.controller.MemberJoinDto;
-import com.ggb.graduationgoodbye.domain.member.controller.PromoteArtistDto;
-import com.ggb.graduationgoodbye.domain.member.dto.OAuth2InfoDto;
-import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
+import com.ggb.graduationgoodbye.domain.member.business.MemberCreator;
+import com.ggb.graduationgoodbye.domain.member.business.MemberInfoProvider;
+import com.ggb.graduationgoodbye.domain.member.business.MemberProvider;
+import com.ggb.graduationgoodbye.domain.member.business.MemberReader;
+import com.ggb.graduationgoodbye.domain.member.business.MemberValidator;
+import com.ggb.graduationgoodbye.domain.member.business.NicknameProvider;
+import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.OAuth2InfoDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -30,6 +37,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class MemberService {
 
+  private final NicknameProvider nicknameProvider;
   private final MemberInfoProvider memberInfoProvider;
   private final MemberProvider memberProvider;
   private final MemberCreator memberCreator;
@@ -48,7 +56,7 @@ public class MemberService {
   public TokenDto join(String snsType, MemberJoinDto.Request request) {
 
     OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(snsType,
-        request.getAccessToken());
+        request.getOauthToken());
 
     log.info("OAuth2 Server Response >> {}", memberInfo);
 
@@ -109,6 +117,13 @@ public class MemberService {
   }
 
   /**
+   * 회원 닉네임 중복 확인
+   */
+  public void checkNicknameExists(String nickname) {
+    memberReader.checkNicknameExists(nickname);
+  }
+
+  /**
    * 회원 SNS 정보 조회
    */
   public Member findBySns(SnsDto dto) {
@@ -118,14 +133,14 @@ public class MemberService {
   /**
    * 회원 정보 조회
    */
-  public Member findById(Long id) {
+  public Member getById(Long id) {
     return memberReader.findById(id);
   }
 
   /**
-   * 회원 닉네임 중복 확인
+   * 랜덤 닉네임 제공
    */
-  public void checkNicknameExists(String nickname) {
-    memberReader.checkNicknameExists(nickname);
+  public List<String> serveRandomNicknames() {
+    return nicknameProvider.provideRandomNicknames();
   }
 }

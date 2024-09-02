@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.auth.common.config;
 
+import com.ggb.graduationgoodbye.domain.auth.business.CustomOAuth2FailHandler;
 import com.ggb.graduationgoodbye.domain.auth.business.CustomOAuth2SuccessHandler;
-import com.ggb.graduationgoodbye.domain.auth.business.CustomOauth2FailHandler;
 import com.ggb.graduationgoodbye.domain.auth.service.CustomOAuth2UserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.config.log.LogFilter;
@@ -51,7 +51,7 @@ public class SecurityConfig {
             .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
             .userInfoEndpoint(c -> c.userService(oAuth2UserService))
             .successHandler(new CustomOAuth2SuccessHandler(tokenService))
-            .failureHandler(new CustomOauth2FailHandler())
+            .failureHandler(new CustomOAuth2FailHandler())
         )
 
         // 로깅 필터 추가
