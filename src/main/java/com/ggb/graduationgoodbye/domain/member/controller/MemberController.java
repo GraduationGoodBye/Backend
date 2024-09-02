@@ -1,5 +1,8 @@
 package com.ggb.graduationgoodbye.domain.member.controller;
 
+import static com.ggb.graduationgoodbye.global.utils.CookieUtil.addCookie;
+import static com.ggb.graduationgoodbye.global.utils.CookieUtil.createCookie;
+
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
@@ -14,10 +17,12 @@ import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,14 +54,19 @@ public class MemberController {
    * 로그인.
    */
   @PostMapping("/login/{snsType}")
-  public void login(@PathVariable("snsType") String snsType,
-      @Valid @RequestBody MemberLoginDto.Request request) {
-    // authCode -> oauthToken -> oauthUserInfo
+  public ApiResponse<?> login(@PathVariable("snsType") String snsType,
+      @Valid @RequestBody MemberLoginDto.Request request,
+      HttpServletResponse response) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
     SnsDto snsDto = new SnsDto(snsType, oAuthUserInfoDto.getSnsId());
     Member member = memberService.checkMemberExists(snsDto, oAuthUserInfoDto.getOauthToken());
     Authentication authentication = tokenService.getAuthenticationByMember(member);
     TokenDto token = tokenService.getToken(authentication);
+    ResponseCookie cookieForAccessToken = createCookie("accessToken", token.getAccessToken());
+    addCookie(response, cookieForAccessToken);
+    ResponseCookie cookieForRefreshToken = createCookie("refreshToken", token.getRefreshToken());
+    addCookie(response, cookieForRefreshToken);
+    return ApiResponse.ok();
   }
 
   /**
