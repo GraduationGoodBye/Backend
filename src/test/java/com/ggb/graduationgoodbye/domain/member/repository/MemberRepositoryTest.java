@@ -15,6 +15,8 @@ import java.util.Random;
 import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -210,40 +212,39 @@ class MemberRepositoryTest {
   }
 
 
-  @Test
+  @ParameterizedTest
+  @EnumSource(SnsType.class)
   @DisplayName("findBySns_올바른 값")
-  void findBySns_success() {
+  void findBySns_success(SnsType snsType) {
 
-    SnsType[] sns = {SnsType.GOOGLE, SnsType.KAKAO, SnsType.NAVER};
+    // Given
 
-    for (int i = 0; i < snsTypes.length; i++) {
-      System.out.println(snsTypes[i]);
-      // Given
-      Member memberTest = createMember(
-          snsTypes[i],
-          randomSnsId(),
-          randomEmail(),
-          randomString(),
-          randomProfile(),
-          randomAge(),
-          randomGender(),
-          randomString(),
-          randomPhone()
-      );
-      memberRepository.save(memberTest);
+    Member memberTest = createMember(
+        snsType,
+        randomSnsId(),
+        randomEmail(),
+        randomString(),
+        randomProfile(),
+        randomAge(),
+        randomGender(),
+        randomString(),
+        randomPhone()
+    );
 
-      SnsDto snsDto = new SnsDto(memberTest.getSnsType().toString() , memberTest.getSnsId());
+    memberRepository.save(memberTest);
 
-      // When
-      Member testMember = memberRepository.findBySns(snsDto)
-          .orElseThrow(NotFoundMemberException::new);
+    SnsDto snsDto = new SnsDto(memberTest.getSnsType().toString(), memberTest.getSnsId());
 
-      // Then
-      assertEquals(testMember.getId(), memberTest.getId());
-      assertEquals(testMember.getSnsType(), sns[i]);
+    // When
+    Member testMember = memberRepository.findBySns(snsDto)
+        .orElseThrow(NotFoundMemberException::new);
 
-    }
+    // Then
+    assertEquals(testMember.getId(), memberTest.getId());
+    assertEquals(testMember.getSnsType(), snsType);
+
   }
+
 
   @Test
   @DisplayName("findBySns_올바르지 않은 값")
