@@ -1,0 +1,18 @@
+<mapper namespace="DatabaseCleaner">
+
+  <!-- 모든 테이블 이름을 가져오는 쿼리 -->
+  <select id="getTableNames" resultType="string">
+    SELECT table_name FROM information_schema.tables WHERE table_schema = 'GGB';
+  </select>
+
+  <!-- 참조 무결성 비활성화 -->
+  <update id="setReferentialIntegrity">
+    SET REFERENTIAL_INTEGRITY #{value}
+  </update>
+
+  <!-- 특정 테이블의 TRUNCATE 쿼리 -->
+  <update id="truncateTable">
+    TRUNCATE TABLE ${tableName}
+  </update>
+
+</mapper>
