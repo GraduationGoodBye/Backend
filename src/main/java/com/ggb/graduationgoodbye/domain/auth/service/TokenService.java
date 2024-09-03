@@ -35,6 +35,11 @@ public class TokenService {
         .build();
   }
 
+  public TokenDto getToken(Member member) {
+    Authentication authentication = getAuthenticationByMember(member);
+    return getToken(authentication);
+  }
+
   // AccessToken & RefreshToken 재발급
   public TokenDto reissueToken(TokenReissueDto.Request tokenReissueRequest) {
 
@@ -94,7 +99,7 @@ public class TokenService {
     return tokenProvider.getAuthenticationByAccessToken(accessToken);
   }
 
-  public Authentication getAuthenticationByMember(Member member) {
+  private Authentication getAuthenticationByMember(Member member) {
     return tokenProvider.getAuthenticationByMember(member);
   }
 

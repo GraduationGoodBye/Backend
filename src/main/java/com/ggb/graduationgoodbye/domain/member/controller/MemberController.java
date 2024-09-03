@@ -58,10 +58,11 @@ public class MemberController {
       @Valid @RequestBody MemberLoginDto.Request request,
       HttpServletResponse response) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
+
     SnsDto snsDto = new SnsDto(snsType, oAuthUserInfoDto.getSnsId());
     Member member = memberService.checkMemberExists(snsDto, oAuthUserInfoDto.getOauthToken());
-    Authentication authentication = tokenService.getAuthenticationByMember(member);
-    TokenDto token = tokenService.getToken(authentication);
+    TokenDto token = tokenService.getToken(member);
+
     ResponseCookie cookieForAccessToken = createCookie("accessToken", token.getAccessToken());
     addCookie(response, cookieForAccessToken);
     ResponseCookie cookieForRefreshToken = createCookie("refreshToken", token.getRefreshToken());
@@ -74,14 +75,17 @@ public class MemberController {
    */
   @PostMapping("/signup/{snsType}")
   public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
-      @Valid @RequestBody MemberJoinDto.Request request) {
+      @Valid @RequestBody MemberJoinDto.Request request, HttpServletResponse response) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
-    TokenDto token = memberService.join(snsType, oAuthUserInfoDto, request);
-    MemberJoinDto.Response response = MemberJoinDto.Response.builder()
-        .accessToken(token.getAccessToken())
-        .refreshToken(token.getRefreshToken())
-        .build();
-    return ApiResponse.ok(response);
+
+    Member member = memberService.join(snsType, oAuthUserInfoDto, request);
+    TokenDto token = tokenService.getToken(member);
+
+    ResponseCookie cookieForAccessToken = createCookie("accessToken", token.getAccessToken());
+    addCookie(response, cookieForAccessToken);
+    ResponseCookie cookieForRefreshToken = createCookie("refreshToken", token.getRefreshToken());
+    addCookie(response, cookieForRefreshToken);
+    return ApiResponse.ok();
   }
 
   /**

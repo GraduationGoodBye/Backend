@@ -4,8 +4,6 @@ import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreator;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
-import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
 import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
 import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
@@ -24,7 +22,6 @@ import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,7 +40,6 @@ public class MemberService {
   private final MemberValidator memberValidator;
   private final ArtistCreator artistCreator;
   private final ArtistValidator artistValidator;
-  private final TokenService tokenService;
   private final UniversityReader universityReader;
   private final MajorReader majorReader;
   private final S3Util s3Util;
@@ -51,7 +47,7 @@ public class MemberService {
   /**
    * 회원 가입.
    */
-  public TokenDto join(String snsType, OAuthUserInfoDto oAuthUserInfoDto,
+  public Member join(String snsType, OAuthUserInfoDto oAuthUserInfoDto,
       MemberJoinDto.Request request) {
     Member member = Member.builder()
         .snsType(SnsType.valueOf(snsType.toUpperCase()))
@@ -66,10 +62,7 @@ public class MemberService {
         .build();
 
     memberCreator.save(member);
-
-    Authentication authentication = tokenService.getAuthenticationByMember(member);
-
-    return tokenService.getToken(authentication);
+    return member;
   }
 
   /**
