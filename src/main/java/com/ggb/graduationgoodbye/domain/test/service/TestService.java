@@ -13,17 +13,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class TestService {
 
   private final S3Util s3Util;
-  private final Base64Util base64Util;
 
   public String uploadImageTest(MultipartFile image) {
     return s3Util.upload(image);
   }
 
   public String encode(String data) {
-    return base64Util.encode(data);
+    return Base64Util.encode(data);
   }
 
   public String decode(String encodedData) {
-    return base64Util.decode(encodedData);
+    return Base64Util.decode(encodedData);
   }
 }
