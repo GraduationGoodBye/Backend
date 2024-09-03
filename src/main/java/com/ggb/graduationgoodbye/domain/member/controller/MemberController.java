@@ -54,7 +54,7 @@ public class MemberController {
    * 로그인.
    */
   @PostMapping("/login/{snsType}")
-  public ApiResponse<?> login(@PathVariable("snsType") String snsType,
+  public ApiResponse<Void> login(@PathVariable("snsType") String snsType,
       @Valid @RequestBody MemberLoginDto.Request request,
       HttpServletResponse response) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
@@ -74,7 +74,7 @@ public class MemberController {
    * 회원 가입
    */
   @PostMapping("/signup/{snsType}")
-  public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
+  public ApiResponse<Void> signup(@PathVariable String snsType,
       @Valid @RequestBody MemberJoinDto.Request request, HttpServletResponse response) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
 
