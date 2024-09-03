@@ -1,15 +1,5 @@
 package com.ggb.graduationgoodbye.domain.test.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.ggb.graduationgoodbye.domain.test.service.TestService;
 import com.ggb.graduationgoodbye.global.test.ControllerTest;
 import org.junit.jupiter.api.Test;
@@ -17,7 +7,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.multipart.MultipartFile;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(TestController.class)
 class TestControllerTest extends ControllerTest {
@@ -40,17 +35,20 @@ class TestControllerTest extends ControllerTest {
   }
 
   @Test
-  void 정상_이미지_업로드() throws Exception {
-    String url = "http://ggb-test.com";
-    when(testService.uploadImageTest(any(MultipartFile.class))).thenReturn(url);
+  void 정상_Base64_encode() throws Exception {
+    String data = "data";
+    String encodedData = "encodedData";
+    when(testService.encode(any(String.class))).thenReturn(encodedData);
 
-    mvc.perform(post("/test/image"))
+    mvc.perform(post("/test/base64/encode")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(gson.toJson(data)))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.code").value(HttpStatus.OK.name()))
         .andExpect(jsonPath("$.message").value(HttpStatus.OK.getReasonPhrase()))
-        .andExpect(jsonPath("$.data").value(url));
+        .andExpect(jsonPath("$.data").value(encodedData));
 
-    verify(testService, times(1)).uploadImageTest(any(MultipartFile.class));
+    verify(testService, times(1)).encode(any(String.class));
   }
 }
