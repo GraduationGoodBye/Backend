@@ -52,8 +52,8 @@ public class MemberController {
   public ApiResponse<MemberLoginDto.Response> login(@PathVariable("snsType") String snsType,
       @Valid @RequestBody MemberLoginDto.Request request) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
-    SnsDto snsDto = new SnsDto(snsType, oAuthUserInfoDto.getSnsId());
-    Member member = memberService.checkMemberExists(snsDto, oAuthUserInfoDto.getOauthToken());
+    Member member = memberService.getMemberOrAuthException(snsType, oAuthUserInfoDto.getSnsId(),
+        oAuthUserInfoDto.getOauthToken());
     TokenDto token = tokenService.getToken(member);
     MemberLoginDto.Response response = MemberLoginDto.Response.builder()
         .accessToken(token.getAccessToken())

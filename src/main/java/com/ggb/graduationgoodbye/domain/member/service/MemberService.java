@@ -130,7 +130,7 @@ public class MemberService {
     return nicknameProvider.provideRandomNicknames();
   }
 
-  public Member checkMemberExists(SnsDto snsDto, String oauthToken) {
-    return memberReader.getMemberOrAuthException(snsDto, oauthToken);
+  public Member getMemberOrAuthException(String snsType, String snsId, String oauthToken) {
+    return memberReader.getMemberOrAuthException(snsType, snsId, oauthToken);
   }
 }

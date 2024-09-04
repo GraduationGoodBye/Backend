@@ -20,8 +20,8 @@ public class MemberReader {
 
   private final MemberRepository memberRepository;
 
-  public Member getMemberOrAuthException(SnsDto dto, String oauthToken) {
-    return memberRepository.findBySns(dto)
+  public Member getMemberOrAuthException(String snsType, String snsId, String oauthToken) {
+    return memberRepository.findBySns(new SnsDto(snsType, snsId))
         .orElseThrow(() -> new AuthenticationException(oauthToken) {
         });
   }
