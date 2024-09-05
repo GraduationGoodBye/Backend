@@ -4,7 +4,6 @@ spring:
   profiles:
     active: local
 
-
 springdoc:
   swagger-ui:
     path: /api/swagger # 접속 경로
