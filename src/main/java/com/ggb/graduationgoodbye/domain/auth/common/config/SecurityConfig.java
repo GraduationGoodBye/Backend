@@ -1,6 +1,5 @@
 package com.ggb.graduationgoodbye.domain.auth.common.config;
 
-import com.ggb.graduationgoodbye.domain.auth.business.CustomOAuth2UserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.config.log.LogFilter;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.security.web.context.SecurityContextHolderFilter;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-  private final CustomOAuth2UserService oAuth2UserService;
   private final TokenService tokenService;
 
   @Bean
@@ -43,14 +41,6 @@ public class SecurityConfig {
                 HeadersConfigurer.FrameOptionsConfig::sameOrigin)) // X-Frame-Options sameOrigin 제한
         .sessionManagement(c -> c
             .sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 비활성화
-
-        // OAuth2 설정
-        .oauth2Login(oauth -> oauth
-            .authorizationEndpoint(c -> c.baseUri("/oauth2/authorize"))
-            .userInfoEndpoint(c -> c.userService(oAuth2UserService))
-            .successHandler(new CustomOAuth2SuccessHandler(tokenService))
-            .failureHandler(new CustomOauth2FailHandler())
-        )
 
         // 로깅 필터 추가
         .addFilterBefore(new LogFilter(), SecurityContextHolderFilter.class)

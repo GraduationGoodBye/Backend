@@ -1,6 +1,6 @@
 package com.ggb.graduationgoodbye.domain.auth.business;
 
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import io.jsonwebtoken.Claims;
 import java.util.Collections;
 import java.util.List;

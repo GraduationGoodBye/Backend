@@ -14,18 +14,22 @@ public class SwaggerConfig {
   @Bean
   public OpenAPI openAPI() {
     Info info = new Info();
-    info.title("GraduationGoodBye Api Documentation").description("GGB API 문서입니다.").version("1.0.0");
+    info.title("GraduationGoodBye Api Documentation").description("GGB API 문서입니다.")
+        .version("1.0.0");
 
-    SecurityScheme securityScheme = new SecurityScheme().type(SecurityScheme.Type.HTTP)
+    SecurityScheme jwtSecurityScheme = new SecurityScheme().type(SecurityScheme.Type.HTTP)
         .scheme("bearer")
         .bearerFormat("JWT")
         .in(SecurityScheme.In.HEADER)
         .name("Authorization");
 
-    SecurityRequirement schemaRequirement = new SecurityRequirement().addList("jwt");
+    SecurityRequirement schemaRequirement = new SecurityRequirement()
+        .addList("jwt");
 
     return new OpenAPI()
-        .components(new Components().addSecuritySchemes("jwt", securityScheme))
+        .components(new Components()
+            .addSecuritySchemes("jwt", jwtSecurityScheme)
+        )
         .addSecurityItem(schemaRequirement)
         .info(info);
   }

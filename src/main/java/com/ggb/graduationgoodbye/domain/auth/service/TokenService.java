@@ -6,8 +6,8 @@ import com.ggb.graduationgoodbye.domain.auth.common.entity.Token;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.InvalidTokenException;
 import com.ggb.graduationgoodbye.domain.auth.common.exception.NotFoundTokenException;
 import com.ggb.graduationgoodbye.domain.auth.repository.TokenRepository;
-import com.ggb.graduationgoodbye.domain.member.controller.TokenReissueDto;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +33,11 @@ public class TokenService {
         .accessToken(accessToken)
         .refreshToken(refreshToken)
         .build();
+  }
+
+  public TokenDto getToken(Member member) {
+    Authentication authentication = getAuthenticationByMember(member);
+    return getToken(authentication);
   }
 
   // AccessToken & RefreshToken 재발급
@@ -94,7 +99,7 @@ public class TokenService {
     return tokenProvider.getAuthenticationByAccessToken(accessToken);
   }
 
-  public Authentication getAuthenticationByMember(Member member) {
+  private Authentication getAuthenticationByMember(Member member) {
     return tokenProvider.getAuthenticationByMember(member);
   }
 
