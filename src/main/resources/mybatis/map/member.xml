@@ -5,9 +5,9 @@
 <mapper namespace="MemberMapper">
   <insert id="save" parameterType="member" keyProperty="id">
     INSERT INTO members (sns_type,sns_id,email,profile,nickname,address,gender,age,phone,created_id,
-    created_at, updated_id, updated_at, role)
+    created_at, updated_id, updated_at, deleted_at, role)
     VALUES (#{snsType}, #{snsId}, #{email}, #{profile}, #{nickname}, #{address}, #{gender}, #{age},
-    #{phone}, #{createdId}, #{createdAt}, #{updatedId}, #{updatedAt}, #{role})
+    #{phone}, #{createdId}, #{createdAt}, #{updatedId}, #{updatedAt}, #{deletedAt}, #{role})
   </insert>
 
   <select id="findById" parameterType="Long" resultType="member">
