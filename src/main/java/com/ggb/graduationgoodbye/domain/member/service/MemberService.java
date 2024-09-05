@@ -19,7 +19,7 @@ import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
-import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -126,8 +126,8 @@ public class MemberService {
   /**
    * 랜덤 닉네임 제공
    */
-  public List<String> serveRandomNicknames() {
-    return nicknameProvider.provideRandomNicknames();
+  public Set<String> serveRandomNicknames(int count) {
+    return nicknameProvider.provideRandomNicknames(count);
   }
 
   public Member getMemberOrAuthException(String snsType, String snsId, String oauthToken) {

@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public enum MemberErrorType {
 
+  NOT_EXISTS_REMAIN_NICKNAME("닉네임을 직접 입력 바랍니다."),
+
   DUPLICATE_NICKNAME("이미 사용중인 닉네임 입니다."),
 
   INVALID_SNS_TYPE("유효하지 않은 SNS 타입입니다."),

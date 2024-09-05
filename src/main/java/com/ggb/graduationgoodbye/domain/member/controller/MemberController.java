@@ -12,9 +12,8 @@ import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.validation.Valid;
-import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -117,10 +116,9 @@ public class MemberController {
   /**
    * 랜덤 닉네임 제공
    */
-  @Hidden
-  @GetMapping("/serve/nickname")
-  public ApiResponse<?> serveRandomNicknames() {
-    List<String> nicknames = memberService.serveRandomNicknames();
+  @GetMapping("/serve/nickname/{count}")
+  public ApiResponse<?> serveRandomNicknames(@PathVariable int count) {
+    Set<String> nicknames = memberService.serveRandomNicknames(count);
     return ApiResponse.ok(nicknames);
   }
 
