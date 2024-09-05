@@ -1,18 +1,19 @@
 package com.ggb.graduationgoodbye.domain.member.controller;
 
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
+import com.ggb.graduationgoodbye.domain.auth.service.OAuthUserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
+import com.ggb.graduationgoodbye.domain.member.common.dto.MemberLoginDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Hidden;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,18 +40,26 @@ import org.springframework.web.multipart.MultipartFile;
 @Slf4j
 public class MemberController {
 
+  private final OAuthUserService oAuthUserService;
   private final MemberService memberService;
   private final TokenService tokenService;
 
   /**
    * 로그인.
    */
-  @Hidden
-  @GetMapping("/login/{snsType}")
-  public void login(@PathVariable("snsType") String snsType, HttpServletResponse response)
-      throws IOException {
-    memberService.checkSnsType(snsType);
-    response.sendRedirect("/oauth2/authorize/" + snsType);
+  @PostMapping("/login/{snsType}")
+  public ApiResponse<MemberLoginDto.Response> login(@PathVariable("snsType") String snsType,
+      @Valid @RequestBody MemberLoginDto.Request request) {
+    OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
+    String snsId = oAuthUserInfoDto.getSnsId();
+    String oauthToken = oAuthUserInfoDto.getOauthToken();
+    Member member = memberService.getMemberOrAuthException(snsType, snsId, oauthToken);
+    TokenDto token = tokenService.getToken(member);
+    MemberLoginDto.Response response = MemberLoginDto.Response.builder()
+        .accessToken(token.getAccessToken())
+        .refreshToken(token.getRefreshToken())
+        .build();
+    return ApiResponse.ok(response);
   }
 
   /**
@@ -59,7 +68,9 @@ public class MemberController {
   @PostMapping("/signup/{snsType}")
   public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
       @Valid @RequestBody MemberJoinDto.Request request) {
-    TokenDto token = memberService.join(snsType, request);
+    OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
+    Member member = memberService.join(snsType, oAuthUserInfoDto, request);
+    TokenDto token = tokenService.getToken(member);
     MemberJoinDto.Response response = MemberJoinDto.Response.builder()
         .accessToken(token.getAccessToken())
         .refreshToken(token.getRefreshToken())

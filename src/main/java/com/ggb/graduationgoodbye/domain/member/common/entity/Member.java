@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.common.entity;
 
 import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,10 @@ public class Member {
   private String gender;
   private Integer age;
   private String phone;
+  private String createdId;
+  private LocalDateTime createdAt;
+  private String updatedId;
+  private LocalDateTime updatedAt;
   private Role role;
 
   @Builder
@@ -36,6 +41,8 @@ public class Member {
       Integer age,
       String phone
   ) {
+    LocalDateTime now = LocalDateTime.now();
+
     this.snsType = snsType;
     this.snsId = snsId;
     this.email = email;
@@ -45,6 +52,10 @@ public class Member {
     this.phone = phone;
     this.gender = gender;
     this.age = age;
+    this.createdId = "SIGNUP";
+    this.createdAt = now;
+    this.updatedId = "SIGNUP";
+    this.updatedAt = now;
     this.role = Role.MEMBER;
   }
 }

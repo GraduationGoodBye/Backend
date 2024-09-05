@@ -1,5 +1,7 @@
 package com.ggb.graduationgoodbye.global.error;
 
+import com.ggb.graduationgoodbye.domain.member.common.exception.MemberErrorType;
+import com.ggb.graduationgoodbye.domain.member.common.exception.NotSignUpException;
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.ServerException;
@@ -46,6 +48,10 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(UnAuthenticatedException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public ApiResponse<?> handler(UnAuthenticatedException e) {
+    if (e instanceof NotSignUpException) {
+      return ApiResponse.error(e.getCode(), MemberErrorType.NOT_SIGNUP_MEMBER.getMessage(),
+          e.getMessage());
+    }
     return ApiResponse.error(e.getCode(), e.getMessage());
   }
 

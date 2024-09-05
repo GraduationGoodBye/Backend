@@ -3,20 +3,17 @@ package com.ggb.graduationgoodbye.domain.member.service;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistCreator;
 import com.ggb.graduationgoodbye.domain.artist.business.ArtistValidator;
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
-import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
-import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
+import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
 import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
 import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
 import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
 import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.member.business.MemberCreator;
-import com.ggb.graduationgoodbye.domain.member.business.MemberInfoProvider;
 import com.ggb.graduationgoodbye.domain.member.business.MemberProvider;
 import com.ggb.graduationgoodbye.domain.member.business.MemberReader;
 import com.ggb.graduationgoodbye.domain.member.business.MemberValidator;
 import com.ggb.graduationgoodbye.domain.member.business.NicknameProvider;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
-import com.ggb.graduationgoodbye.domain.member.common.dto.OAuth2InfoDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
@@ -25,7 +22,6 @@ import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,14 +34,12 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberService {
 
   private final NicknameProvider nicknameProvider;
-  private final MemberInfoProvider memberInfoProvider;
   private final MemberProvider memberProvider;
   private final MemberCreator memberCreator;
   private final MemberReader memberReader;
   private final MemberValidator memberValidator;
   private final ArtistCreator artistCreator;
   private final ArtistValidator artistValidator;
-  private final TokenService tokenService;
   private final UniversityReader universityReader;
   private final MajorReader majorReader;
   private final S3Util s3Util;
@@ -53,18 +47,13 @@ public class MemberService {
   /**
    * 회원 가입.
    */
-  public TokenDto join(String snsType, MemberJoinDto.Request request) {
-
-    OAuth2InfoDto memberInfo = memberInfoProvider.getInfo(snsType,
-        request.getOauthToken());
-
-    log.info("OAuth2 Server Response >> {}", memberInfo);
-
+  public Member join(String snsType, OAuthUserInfoDto oAuthUserInfoDto,
+      MemberJoinDto.Request request) {
     Member member = Member.builder()
         .snsType(SnsType.valueOf(snsType.toUpperCase()))
-        .snsId(memberInfo.getSnsId())
-        .email(memberInfo.getEmail())
-        .profile(memberInfo.getProfile())
+        .snsId(oAuthUserInfoDto.getSnsId())
+        .email(oAuthUserInfoDto.getEmail())
+        .profile(oAuthUserInfoDto.getProfile())
         .nickname(request.getNickname())
         .address(request.getAddress())
         .gender(request.getGender())
@@ -73,10 +62,7 @@ public class MemberService {
         .build();
 
     memberCreator.save(member);
-
-    Authentication authentication = tokenService.getAuthenticationByMember(member);
-
-    return tokenService.getToken(authentication);
+    return member;
   }
 
   /**
@@ -142,5 +128,9 @@ public class MemberService {
    */
   public List<String> serveRandomNicknames() {
     return nicknameProvider.provideRandomNicknames();
+  }
+
+  public Member getMemberOrAuthException(String snsType, String snsId, String oauthToken) {
+    return memberReader.getMemberOrAuthException(snsType, snsId, oauthToken);
   }
 }

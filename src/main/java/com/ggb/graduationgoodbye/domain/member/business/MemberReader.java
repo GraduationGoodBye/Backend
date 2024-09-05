@@ -4,10 +4,10 @@ import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.exception.DuplicateNicknameException;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
+import com.ggb.graduationgoodbye.domain.member.common.exception.NotSignUpException;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 /**
@@ -20,10 +20,9 @@ public class MemberReader {
 
   private final MemberRepository memberRepository;
 
-  public Member getMemberOrAuthException(SnsDto dto, String oauthToken) {
-    return memberRepository.findBySns(dto)
-        .orElseThrow(() -> new AuthenticationException(oauthToken) {
-        });
+  public Member getMemberOrAuthException(String snsType, String snsId, String oauthToken) {
+    return memberRepository.findBySns(new SnsDto(snsType, snsId))
+        .orElseThrow(() -> new NotSignUpException(oauthToken));
   }
 
   public Member findBySns(SnsDto dto) {
