@@ -5,6 +5,8 @@ import lombok.Getter;
 @Getter
 public enum MemberErrorType {
 
+  MAX_NICKNAME_COUNT_EXCEEDED("닉네임 추천 가능 갯수를 초과했습니다."),
+
   NOT_EXISTS_REMAIN_NICKNAME("닉네임을 직접 입력 바랍니다."),
 
   DUPLICATE_NICKNAME("이미 사용중인 닉네임 입니다."),

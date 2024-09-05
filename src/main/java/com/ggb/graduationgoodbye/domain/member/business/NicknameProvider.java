@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.business;
 
+import com.ggb.graduationgoodbye.domain.member.common.exception.MaxNicknameCountExceededException;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotExistsRemainNicknameException;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,16 +18,24 @@ public class NicknameProvider {
 
   public Set<String> provideRandomNicknames(int count) {
     Set<String> nicknames = new HashSet<>();
+    validateCount(count);
     int maxCount = count + 10;
-    while (nicknames.size() < count) {
-      if (maxCount-- < 1) {
-        throw new NotExistsRemainNicknameException();
-      }
+    for (int i = 0; i < maxCount && nicknames.size() < count; i++) {
       String nickname = nicknameGenerator.generate();
       if (!memberReader.existsByNickname(nickname)) {
         nicknames.add(nickname);
       }
     }
+
+    if (nicknames.size() < count) {
+      throw new NotExistsRemainNicknameException();
+    }
     return nicknames;
+  }
+
+  private void validateCount(int count) {
+    if (count > 100) {
+      throw new MaxNicknameCountExceededException();
+    }
   }
 }
