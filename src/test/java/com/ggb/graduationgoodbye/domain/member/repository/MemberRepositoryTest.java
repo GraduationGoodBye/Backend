@@ -3,10 +3,10 @@ package com.ggb.graduationgoodbye.domain.member.repository;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.ggb.graduationgoodbye.domain.member.dto.SnsDto;
-import com.ggb.graduationgoodbye.domain.member.entity.Member;
-import com.ggb.graduationgoodbye.domain.member.enums.SnsType;
-import com.ggb.graduationgoodbye.domain.member.exception.NotFoundMemberException;
+import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
+import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
+import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
+import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
@@ -19,7 +19,6 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
 
 @SpringBootTest
 @ActiveProfiles("test")
