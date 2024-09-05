@@ -8,7 +8,6 @@ import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberLoginDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
-import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.service.MemberService;
@@ -52,8 +51,9 @@ public class MemberController {
   public ApiResponse<MemberLoginDto.Response> login(@PathVariable("snsType") String snsType,
       @Valid @RequestBody MemberLoginDto.Request request) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
-    Member member = memberService.getMemberOrAuthException(snsType, oAuthUserInfoDto.getSnsId(),
-        oAuthUserInfoDto.getOauthToken());
+    String snsId = oAuthUserInfoDto.getSnsId();
+    String oauthToken = oAuthUserInfoDto.getOauthToken();
+    Member member = memberService.getMemberOrAuthException(snsType, snsId, oauthToken);
     TokenDto token = tokenService.getToken(member);
     MemberLoginDto.Response response = MemberLoginDto.Response.builder()
         .accessToken(token.getAccessToken())
