@@ -19,8 +19,11 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+
 
 @SpringBootTest
+//@TestPropertySource(properties = "logging.config=classpath:logback-spring-test.xml")
 @ActiveProfiles("test")
 class MemberRepositoryTest {
 
@@ -57,11 +60,11 @@ class MemberRepositoryTest {
     System.out.println("Nickname: " + member.getNickname());
     System.out.println("Phone: " + member.getPhone());
     System.out.println("ROLE: " + member.getRole());
-//    System.out.println("CreatedAt: " + member.getCreatedAt());
-//    System.out.println("CreatedId: " + member.getCreatedId());
-//    System.out.println("UpdatedAt: " + member.getUpdatedAt());
-//    System.out.println("UpdatedId: " + member.getUpdatedId());
-//    System.out.println("DeletedAt: " + member.getDeletedAt());
+    System.out.println("CreatedAt: " + member.getCreatedAt());
+    System.out.println("CreatedId: " + member.getCreatedId());
+    System.out.println("UpdatedAt: " + member.getUpdatedAt());
+    System.out.println("UpdatedId: " + member.getUpdatedId());
+    System.out.println("DeletedAt: " + member.getDeletedAt());
     System.out.println("-------------");
   }
 
@@ -86,19 +89,20 @@ class MemberRepositoryTest {
     assertEquals(member.getGender(), testMember.getGender());
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
-//    assertEquals(member.getCreatedAt() , testMember.getCreatedAt());
-//    assertEquals(member.getCreatedId() , testMember.getCreatedId());
-//    assertEquals(member.getUpdatedAt() , testMember.getUpdatedAt());
-//    assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-//    assertEquals(member.getDeletedAt() , testMember.getDeletedAt());
+    assertEquals(member.getCreatedAt() , testMember.getCreatedAt());
+    assertEquals(member.getCreatedId() , testMember.getCreatedId());
+    assertEquals(member.getUpdatedAt() , testMember.getUpdatedAt());
+    assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
+    assertEquals(member.getDeletedAt() , testMember.getDeletedAt());
 
   }
 
-//   member table sql 최신화 전까지 테스트 불가 ( DB 내부 Not Null 지정 필요 )
 //  @Test
 //  @DisplayName("save_snsType 미입력")
 //  void save_null_snsType() {
 //    Member member = createMember();
+//    member.setSnsType(null);
+//
 //    memberRepository.save(member);
 //
 //  }
