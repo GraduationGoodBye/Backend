@@ -43,8 +43,24 @@ class MemberRepositoryTest {
 
   public Member createMember() {
     Member member = fixtureMonkey.giveMeOne(Member.class);
+    validationMembers(member);
     printMember(member);
     return member;
+  }
+
+  public void validationMembers(Member member){
+    member.setSnsId(removeCharacters(member.getSnsId()));
+    member.setEmail(removeCharacters(member.getEmail()));
+    member.setProfile(removeCharacters(member.getProfile()));
+    member.setNickname(removeCharacters(member.getNickname()));
+    member.setAddress(removeCharacters(member.getAddress()));
+    member.setPhone(removeCharacters(member.getPhone()));
+    member.setCreatedId(removeCharacters(member.getCreatedId()));
+    member.setUpdatedId(removeCharacters(member.getUpdatedId()));
+  }
+
+  private String removeCharacters(String input) {
+    return input == null ? null : input.replaceAll("[$/,]", "");
   }
 
 
@@ -73,7 +89,6 @@ class MemberRepositoryTest {
   void save() {
     // Given
     Member member = createMember();
-
     memberRepository.save(member);
 
     // When
@@ -175,7 +190,7 @@ class MemberRepositoryTest {
     Member memberTest = createMember();
     memberRepository.save(memberTest);
 
-    String randomType = Arrays.stream(snsTypes)
+      String randomType = Arrays.stream(snsTypes)
         .filter(type -> !type.equals(memberTest.getSnsType()))
         .map(SnsType::toString)
         .findAny()
