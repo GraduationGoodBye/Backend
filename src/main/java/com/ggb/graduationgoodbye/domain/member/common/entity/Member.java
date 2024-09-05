@@ -46,6 +46,7 @@ public class Member {
   @Size(max = 255)
   private String updatedId;
   private LocalDateTime updatedAt;
+  private LocalDateTime deletedAt;
   private Role role;
 
   @Builder
