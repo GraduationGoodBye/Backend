@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.domain.member.business;
 
 import com.ggb.graduationgoodbye.domain.member.common.exception.MaxNicknameCountExceededException;
+import com.ggb.graduationgoodbye.domain.member.common.exception.NegativeNicknameCountException;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotExistsRemainNicknameException;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +37,8 @@ public class NicknameProvider {
   private void validateCount(int count) {
     if (count > 100) {
       throw new MaxNicknameCountExceededException();
+    } else if (count < 0) {
+      throw new NegativeNicknameCountException();
     }
   }
 }
