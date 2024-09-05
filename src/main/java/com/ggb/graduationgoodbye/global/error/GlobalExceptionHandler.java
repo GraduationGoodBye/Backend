@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.global.error;
 
-import com.ggb.graduationgoodbye.domain.auth.common.exception.AuthErrorType;
+import com.ggb.graduationgoodbye.domain.member.common.exception.MemberErrorType;
+import com.ggb.graduationgoodbye.domain.member.common.exception.NotSignUpException;
 import com.ggb.graduationgoodbye.global.error.exception.BusinessException;
 import com.ggb.graduationgoodbye.global.error.exception.ForbiddenException;
 import com.ggb.graduationgoodbye.global.error.exception.ServerException;
@@ -11,7 +12,6 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -48,18 +48,11 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(UnAuthenticatedException.class)
   @ResponseStatus(HttpStatus.UNAUTHORIZED)
   public ApiResponse<?> handler(UnAuthenticatedException e) {
+    if (e instanceof NotSignUpException) {
+      return ApiResponse.error(e.getCode(), MemberErrorType.NOT_SIGNUP_MEMBER.getMessage(),
+          e.getMessage());
+    }
     return ApiResponse.error(e.getCode(), e.getMessage());
-  }
-
-  /**
-   * 가입되지 않은 회원인 경우 예외 처리
-   */
-  @ExceptionHandler(AuthenticationException.class)
-  @ResponseStatus(HttpStatus.UNAUTHORIZED)
-  public ApiResponse<?> handler(AuthenticationException e) {
-    return ApiResponse.error(AuthErrorType.NOT_JOINED_USER.name(),
-        AuthErrorType.NOT_JOINED_USER.getMessage(),
-        e.getMessage());
   }
 
   /**
