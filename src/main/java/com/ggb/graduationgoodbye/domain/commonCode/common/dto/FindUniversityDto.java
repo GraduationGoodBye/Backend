@@ -16,9 +16,10 @@ public class FindUniversityDto {
    * 대학 찾기 요청.
    */
   @Getter
-  @Schema(name = "FindUniversityDto_Request")
+  @Schema(name = "FindUniversity_Request")
   public static class Request {
 
+    @Schema(description = "대학명")
     String name;
   }
 
@@ -27,10 +28,12 @@ public class FindUniversityDto {
    */
   @Getter
   @Builder
-  @Schema(name = "FindUniversityDto_Response")
+  @Schema(name = "FindUniversity_Response")
   public static class Response {
 
+    @Schema(description = "대학 아이디")
     Long id;
+    @Schema(description = "대학명")
     String university;
 
     /**

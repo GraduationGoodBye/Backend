@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/major")
 @RequiredArgsConstructor
 @Slf4j
-public class MajorController {
+public class MajorController implements MajorApi {
 
   private final MajorService majorService;
 
@@ -28,6 +28,7 @@ public class MajorController {
   /**
    * 전체 학과 조회.
    */
+  @Override
   @GetMapping("/findMajorAll")
   public ApiResponse<List<FindMajorDto.Response>> findMajorAll() {
     List<CommonCode> majorList = majorService.findMajorAll();
@@ -39,6 +40,7 @@ public class MajorController {
   /**
    * 특정 학과 조회.
    */
+  @Override
   @PostMapping("/findMajor")
   public ApiResponse<FindMajorDto.Response> findMajor(@RequestBody FindMajorDto.Request request) {
     CommonCode major = majorService.findByMajor(request.getName());
