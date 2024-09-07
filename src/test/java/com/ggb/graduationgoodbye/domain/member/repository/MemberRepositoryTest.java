@@ -89,6 +89,7 @@ class MemberRepositoryTest {
   void save() {
     // Given
     Member member = createMember();
+    member.setDeletedAt(null);
     memberRepository.save(member);
 
     // When
