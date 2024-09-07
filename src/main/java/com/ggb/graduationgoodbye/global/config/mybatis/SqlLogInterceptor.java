@@ -3,6 +3,7 @@ package com.ggb.graduationgoodbye.global.config.mybatis;
 import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.mapping.BoundSql;
@@ -83,9 +84,9 @@ public class SqlLogInterceptor implements Interceptor {
 
   private String getParamValue(Object obj) {
     if (obj instanceof String) {
-      return "'" + obj + "'";
+      return Matcher.quoteReplacement("'" + obj + "'");
     } else {
-      return Objects.isNull(obj) ? "null" : obj.toString();
+      return Matcher.quoteReplacement(Objects.isNull(obj) ? "null" : obj.toString());
     }
   }
 
