@@ -86,8 +86,8 @@ class MemberRepositoryTest {
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
 //    assertEquals(member.getCreatedAt() , testMember.getCreatedAt());
-//    assertEquals(member.getCreatedId() , testMember.getCreatedId());
-    assertEquals(member.getUpdatedAt() , testMember.getUpdatedAt());
+    assertEquals(member.getCreatedId() , testMember.getCreatedId());
+//    assertEquals(member.getUpdatedAt() , testMember.getUpdatedAt());
     assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
 
   }
