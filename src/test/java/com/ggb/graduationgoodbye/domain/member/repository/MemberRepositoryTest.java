@@ -58,10 +58,9 @@ class MemberRepositoryTest {
     System.out.println("Phone: " + member.getPhone());
     System.out.println("ROLE: " + member.getRole());
 //    System.out.println("CreatedAt: " + member.getCreatedAt());
-//    System.out.println("CreatedId: " + member.getCreatedId());
-//    System.out.println("UpdatedAt: " + member.getUpdatedAt());
-//    System.out.println("UpdatedId: " + member.getUpdatedId());
-//    System.out.println("DeletedAt: " + member.getDeletedAt());
+    System.out.println("CreatedId: " + member.getCreatedId());
+    System.out.println("UpdatedAt: " + member.getUpdatedAt());
+    System.out.println("UpdatedId: " + member.getUpdatedId());
     System.out.println("-------------");
   }
 
@@ -87,10 +86,9 @@ class MemberRepositoryTest {
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
 //    assertEquals(member.getCreatedAt() , testMember.getCreatedAt());
-//    assertEquals(member.getCreatedId() , testMember.getCreatedId());
-//    assertEquals(member.getUpdatedAt() , testMember.getUpdatedAt());
-//    assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-//    assertEquals(member.getDeletedAt() , testMember.getDeletedAt());
+    assertEquals(member.getCreatedId() , testMember.getCreatedId());
+    assertEquals(member.getUpdatedAt() , testMember.getUpdatedAt());
+    assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
 
   }
 
