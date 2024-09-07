@@ -58,7 +58,7 @@ class MemberRepositoryTest {
     System.out.println("Phone: " + member.getPhone());
     System.out.println("ROLE: " + member.getRole());
 //    System.out.println("CreatedAt: " + member.getCreatedAt());
-    System.out.println("CreatedId: " + member.getCreatedId());
+//    System.out.println("CreatedId: " + member.getCreatedId());
     System.out.println("UpdatedAt: " + member.getUpdatedAt());
     System.out.println("UpdatedId: " + member.getUpdatedId());
     System.out.println("-------------");
