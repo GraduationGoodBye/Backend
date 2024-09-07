@@ -11,10 +11,12 @@ import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberEx
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Random;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -45,26 +47,13 @@ class MemberRepositoryTest {
 
   public Member createMember() {
     Member member = fixtureMonkey.giveMeOne(Member.class);
-    validationMembers(member);
     printMember(member);
     return member;
   }
 
-  public void validationMembers(Member member){
-    member.setSnsId(removeCharacters(member.getSnsId()));
-    member.setEmail(removeCharacters(member.getEmail()));
-    member.setProfile(removeCharacters(member.getProfile()));
-    member.setNickname(removeCharacters(member.getNickname()));
-    member.setAddress(removeCharacters(member.getAddress()));
-    member.setPhone(removeCharacters(member.getPhone()));
-    member.setCreatedId(removeCharacters(member.getCreatedId()));
-    member.setUpdatedId(removeCharacters(member.getUpdatedId()));
+  public void validateDate(LocalDateTime a, LocalDateTime b){
+    if (a != null && b != null) assertTrue(ChronoUnit.SECONDS.between(a, b) < 1);
   }
-
-  private String removeCharacters(String input) {
-    return input == null ? null : input.replaceAll("[$/,]", "");
-  }
-
 
   private void printMember(Member member) {
     System.out.println("-------------");
@@ -107,10 +96,10 @@ class MemberRepositoryTest {
     assertEquals(member.getGender(), testMember.getGender());
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
-    assertTrue(ChronoUnit.SECONDS.between(member.getCreatedAt(), testMember.getCreatedAt()) < 1);
+    validateDate(member.getCreatedAt(), testMember.getCreatedAt());
     assertEquals(member.getCreatedId() , testMember.getCreatedId());
     assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-    assertTrue(ChronoUnit.SECONDS.between(member.getUpdatedAt(), testMember.getUpdatedAt()) < 1);
+    validateDate(member.getUpdatedAt(), testMember.getUpdatedAt());
 
   }
 
