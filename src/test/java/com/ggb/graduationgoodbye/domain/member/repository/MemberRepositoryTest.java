@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.repository;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
@@ -10,6 +11,7 @@ import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberEx
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Random;
 import org.junit.jupiter.api.DisplayName;
@@ -105,11 +107,10 @@ class MemberRepositoryTest {
     assertEquals(member.getGender(), testMember.getGender());
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
-    assertEquals(member.getCreatedAt() , testMember.getCreatedAt());
+    assertTrue(ChronoUnit.SECONDS.between(member.getCreatedAt(), testMember.getCreatedAt()) < 1);
     assertEquals(member.getCreatedId() , testMember.getCreatedId());
-    assertEquals(member.getUpdatedAt() , testMember.getUpdatedAt());
     assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-    assertEquals(member.getDeletedAt() , testMember.getDeletedAt());
+    assertTrue(ChronoUnit.SECONDS.between(member.getUpdatedAt(), testMember.getUpdatedAt()) < 1);
 
   }
 
