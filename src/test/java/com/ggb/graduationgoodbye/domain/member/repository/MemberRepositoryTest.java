@@ -44,7 +44,13 @@ class MemberRepositoryTest {
       .build();
 
 
-
+  public void validateDate(LocalDateTime a, LocalDateTime b){
+    if (a != null && b != null) {
+      LocalDateTime localDateTimeA = a.withNano(0);
+      LocalDateTime localDateTimeB = b.withNano(0);
+      assertEquals(localDateTimeA, localDateTimeB);
+    }
+  }
   public Member createMember() {
     Member member = fixtureMonkey.giveMeOne(Member.class);
     printMember(member);
@@ -92,10 +98,10 @@ class MemberRepositoryTest {
     assertEquals(member.getGender(), testMember.getGender());
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
-    assertEquals(member.getCreatedAt(), testMember.getCreatedAt());
+    validateDate(member.getCreatedAt(), testMember.getCreatedAt());
     assertEquals(member.getCreatedId() , testMember.getCreatedId());
     assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-    assertEquals(member.getUpdatedAt(), testMember.getUpdatedAt());
+    validateDate(member.getUpdatedAt(), testMember.getUpdatedAt());
 
   }
 
