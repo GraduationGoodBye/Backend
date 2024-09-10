@@ -44,10 +44,14 @@ public class Member {
   private String createdId;
   @NotNull
   private LocalDateTime createdAt;
+  @NotNull @PastOrPresent
   @Size(max = 255)
   private String updatedId;
   private LocalDateTime updatedAt;
   private LocalDateTime deletedAt;
+  @PastOrPresent
+  @PastOrPresent
+  private Date deletedAt;
   private Role role;
 
   @Builder
