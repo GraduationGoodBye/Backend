@@ -51,10 +51,6 @@ class MemberRepositoryTest {
     return member;
   }
 
-  public void validateDate(LocalDateTime a, LocalDateTime b){
-    if (a != null && b != null) assertTrue(ChronoUnit.SECONDS.between(a, b) < 1);
-  }
-
   private void printMember(Member member) {
     System.out.println("-------------");
     System.out.println("SNS Type: " + member.getSnsType());
@@ -96,10 +92,10 @@ class MemberRepositoryTest {
     assertEquals(member.getGender(), testMember.getGender());
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
-    validateDate(member.getCreatedAt(), testMember.getCreatedAt());
+    assertEquals(member.getCreatedAt(), testMember.getCreatedAt());
     assertEquals(member.getCreatedId() , testMember.getCreatedId());
     assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-    validateDate(member.getUpdatedAt(), testMember.getUpdatedAt());
+    assertEquals(member.getUpdatedAt(), testMember.getUpdatedAt());
 
   }
 

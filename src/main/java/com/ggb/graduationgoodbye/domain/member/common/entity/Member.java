@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -61,7 +62,7 @@ public class Member {
       Integer age,
       String phone
   ) {
-    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
 
     this.snsType = snsType;
     this.snsId = snsId;
