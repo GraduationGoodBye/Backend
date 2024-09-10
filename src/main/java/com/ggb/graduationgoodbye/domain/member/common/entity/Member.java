@@ -3,11 +3,11 @@ package com.ggb.graduationgoodbye.domain.member.common.entity;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,14 +42,12 @@ public class Member {
   private String phone;
   @NotNull @Size(max = 255)
   private String createdId;
-  @NotNull
-  private LocalDateTime createdAt;
   @NotNull @PastOrPresent
+  private Date createdAt;
   @Size(max = 255)
   private String updatedId;
-  private LocalDateTime updatedAt;
-  private LocalDateTime deletedAt;
   @PastOrPresent
+  private Date updatedAt;
   @PastOrPresent
   private Date deletedAt;
   private Role role;
@@ -66,7 +64,7 @@ public class Member {
       Integer age,
       String phone
   ) {
-    LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MILLIS);
+    Date now = new Date();
 
     this.snsType = snsType;
     this.snsId = snsId;
