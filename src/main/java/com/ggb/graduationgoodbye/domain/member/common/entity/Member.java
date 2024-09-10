@@ -7,7 +7,7 @@ import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
 import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
-import java.util.Date;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,13 +43,13 @@ public class Member {
   @NotNull @Size(max = 255)
   private String createdId;
   @NotNull @PastOrPresent
-  private Date createdAt;
+  private LocalDateTime createdAt;
   @Size(max = 255)
   private String updatedId;
   @PastOrPresent
-  private Date updatedAt;
+  private LocalDateTime updatedAt;
   @PastOrPresent
-  private Date deletedAt;
+  private LocalDateTime deletedAt;
   private Role role;
 
   @Builder
@@ -64,7 +64,7 @@ public class Member {
       Integer age,
       String phone
   ) {
-    Date now = new Date();
+    LocalDateTime now = LocalDateTime.now();
 
     this.snsType = snsType;
     this.snsId = snsId;
