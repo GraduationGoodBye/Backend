@@ -1,49 +1,55 @@
 package com.ggb.graduationgoodbye.domain.member.common.entity;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
 import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
-import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.ibatis.type.Alias;
 
-@Schema(name = "Member", description = "회원 Entity")
 @Alias("member")
 @Getter
+@Setter
 @NoArgsConstructor
 public class Member {
 
-  @Schema(description = "회원 아이디", example = "1")
+  @NotNull
   private Long id;
-  @Schema(description = "SNS 타입", example = "google")
+  @NotNull
   private SnsType snsType;
-  @Schema(description = "SNS 아이디")
+  @NotNull @Size(max = 100)
   private String snsId;
-  @Schema(description = "이메일", example = "GGB@ggb.com")
+  @NotNull @Size(max = 100)
   private String email;
-  @Schema(description = "사진 URL")
+  @Size(max = 255)
   private String profile;
-  @Schema(description = "닉네임", example = "amumu")
+  @NotNull @Size(max = 50)
   private String nickname;
-  @Schema(description = "주소", example = "경기도 ~")
+  @Size(max = 255)
   private String address;
-  @Schema(description = "성별", example = "M/W")
+  @Size(max = 1)
   private String gender;
-  @Schema(description = "나이", example = "29")
+  @Min(1) @Max(100)
   private Integer age;
-  @Schema(description = "연락처", example = "01012345678")
+  @Size(max = 13)
   private String phone;
-  @Schema(description = "생성자", example = "SIGNUP")
+  @NotNull @Size(max = 255)
   private String createdId;
-  @Schema(description = "생성일자")
+  @NotNull @PastOrPresent
   private LocalDateTime createdAt;
-  @Schema(description = "수정자", example = "SIGNUP")
+  @Size(max = 255)
   private String updatedId;
-  @Schema(description = "수정일자")
+  @PastOrPresent
   private LocalDateTime updatedAt;
-  @Schema(description = "권한", example = "MEMBER")
+  @PastOrPresent
+  private LocalDateTime deletedAt;
   private Role role;
 
   @Builder
