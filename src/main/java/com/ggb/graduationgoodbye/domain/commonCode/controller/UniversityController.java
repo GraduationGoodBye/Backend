@@ -21,13 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/university")
 @RequiredArgsConstructor
 @Slf4j
-public class UniversityController {
+public class UniversityController implements UniversityApi {
 
   private final UniversityService universityService;
 
   /**
    * 전체 대학 조회.
    */
+  @Override
   @GetMapping("/findUniversityAll")
   public ApiResponse<List<FindUniversityDto.Response>> findUniversityAll() {
     List<CommonCode> universityList = universityService.findUniversityAll();
@@ -39,6 +40,7 @@ public class UniversityController {
   /**
    * 단일 대학 조회.
    */
+  @Override
   @PostMapping("/findUniversity")
   public ApiResponse<FindUniversityDto.Response> findUniversity(
       @RequestBody FindUniversityDto.Request request) {

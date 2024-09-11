@@ -38,7 +38,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/v1/members")
 @RequiredArgsConstructor
 @Slf4j
-public class MemberController {
+public class MemberController implements MemberApi {
 
   private final OAuthUserService oAuthUserService;
   private final MemberService memberService;
@@ -47,6 +47,7 @@ public class MemberController {
   /**
    * 로그인.
    */
+  @Override
   @PostMapping("/login/{snsType}")
   public ApiResponse<MemberLoginDto.Response> login(@PathVariable("snsType") String snsType,
       @Valid @RequestBody MemberLoginDto.Request request) {
@@ -65,6 +66,7 @@ public class MemberController {
   /**
    * 회원 가입
    */
+  @Override
   @PostMapping("/signup/{snsType}")
   public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
       @Valid @RequestBody MemberJoinDto.Request request) {
@@ -81,6 +83,7 @@ public class MemberController {
   /**
    * Member 정보 반환.
    */
+  @Override
   @PreAuthorize("hasAuthority('MEMBER')")
   @GetMapping("/info")
   public ApiResponse<Member> info() {
@@ -94,6 +97,7 @@ public class MemberController {
   /**
    * Token 재발급.
    */
+  @Override
   @PostMapping("/reissue")
   public ApiResponse<TokenReissueDto.Response> reissue(
       @Valid @RequestBody TokenReissueDto.Request request) {
@@ -108,6 +112,7 @@ public class MemberController {
   /**
    * 회원 닉네임 중복 확인
    */
+  @Override
   @GetMapping("/check/nickname/{nickname}")
   public ApiResponse<?> checkNickname(@PathVariable String nickname) {
     memberService.checkNicknameExists(nickname);
@@ -117,6 +122,7 @@ public class MemberController {
   /**
    * 랜덤 닉네임 제공
    */
+  @Override
   @GetMapping("/serve/nickname")
   public ApiResponse<?> serveRandomNicknames(@RequestParam int count) {
     Set<String> nicknames = memberService.serveRandomNicknames(count);
@@ -126,16 +132,14 @@ public class MemberController {
   /**
    * 작가 등업 신청.
    */
+  @Override
   @PostMapping("promote-artist")
   @PreAuthorize("hasAuthority('MEMBER')")
   public ApiResponse<PromoteArtistDto.Response> promoteArtist(
-      @RequestPart("request") PromoteArtistDto.Request request,
-      @RequestPart("certificate") MultipartFile certificate) {
-
+      @RequestPart("certificate") MultipartFile certificate,
+      @RequestPart("request") PromoteArtistDto.Request request) {
     Artist artist = memberService.promoteArtist(request, certificate);
-
     PromoteArtistDto.Response response = new PromoteArtistDto.Response(artist);
-
     return ApiResponse.ok(response);
   }
 }
