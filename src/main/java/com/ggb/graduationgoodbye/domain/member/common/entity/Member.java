@@ -50,8 +50,10 @@ public class Member {
   @NotNull
   @PastOrPresent
   private LocalDateTime createdAt;
+  @NotNull
   @Size(max = 255)
   private String updatedId;
+  @NotNull
   @PastOrPresent
   private LocalDateTime updatedAt;
   @PastOrPresent
