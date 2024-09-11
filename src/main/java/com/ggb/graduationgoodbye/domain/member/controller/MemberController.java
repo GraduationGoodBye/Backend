@@ -5,6 +5,7 @@ import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
 import com.ggb.graduationgoodbye.domain.auth.common.dto.TokenDto;
 import com.ggb.graduationgoodbye.domain.auth.service.OAuthUserService;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
+import com.ggb.graduationgoodbye.domain.member.common.dto.MemberInfoDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberLoginDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
@@ -86,12 +87,20 @@ public class MemberController implements MemberApi {
   @Override
   @PreAuthorize("hasAuthority('MEMBER')")
   @GetMapping("/info")
-  public ApiResponse<Member> info() {
+  public ApiResponse<MemberInfoDto.Response> info() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     User u = (User) authentication.getPrincipal();
     Long id = Long.valueOf(u.getUsername());
     Member member = memberService.getById(id);
-    return ApiResponse.ok(member);
+    MemberInfoDto.Response response = MemberInfoDto.Response.builder()
+        .id(member.getId())
+        .snsType(member.getSnsType().name())
+        .snsId(member.getSnsId())
+        .email(member.getEmail())
+        .profile(member.getProfile())
+        .nickname(member.getNickname())
+        .build();
+    return ApiResponse.ok(response);
   }
 
   /**

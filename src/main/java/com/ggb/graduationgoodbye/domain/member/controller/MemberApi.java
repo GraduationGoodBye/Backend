@@ -1,10 +1,10 @@
 package com.ggb.graduationgoodbye.domain.member.controller;
 
+import com.ggb.graduationgoodbye.domain.member.common.dto.MemberInfoDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberLoginDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.TokenReissueDto;
-import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.global.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -42,7 +42,7 @@ public interface MemberApi {
       @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "인증 실패"),
       @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 내부 오류")
   })
-  ApiResponse<Member> info();
+  ApiResponse<MemberInfoDto.Response> info();
 
   @Operation(summary = "액세스 토큰 재발급", tags = {"member"})
   @ApiResponses(value = {
