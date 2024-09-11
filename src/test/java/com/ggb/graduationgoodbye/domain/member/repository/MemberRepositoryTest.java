@@ -3,7 +3,6 @@ package com.ggb.graduationgoodbye.domain.member.repository;
 import static com.ggb.graduationgoodbye.global.util.CustomAssertions.assertDateTimeEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
@@ -12,19 +11,15 @@ import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberEx
 import com.navercorp.fixturemonkey.FixtureMonkey;
 import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
 import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Random;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.TestPropertySource;
 
 
 @SpringBootTest
@@ -97,16 +92,6 @@ class MemberRepositoryTest {
     assertDateTimeEquals(member.getUpdatedAt(), testMember.getUpdatedAt());
 
   }
-
-//  @Test
-//  @DisplayName("save_snsType 미입력")
-//  void save_null_snsType() {
-//    Member member = createMember();
-//    member.setSnsType(null);
-//
-//    memberRepository.save(member);
-//
-//  }
 
   @Test
   @DisplayName("findById_올바른 값")
