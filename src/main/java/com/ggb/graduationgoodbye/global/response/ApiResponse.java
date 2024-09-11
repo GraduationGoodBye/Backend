@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.global.response;
 
 import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -8,10 +9,18 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class ApiResponse<T> {
 
+  @Schema(example = "OK", description = "")
+
   @Nonnull
   private final String code;
+
+  @Schema(example = "OK", description = "")
+
   @Nonnull
   private final String message;
+
+  @Schema(example = "{}", description = "")
+
   private final T data;
 
   private ApiResponse(@Nonnull String code, @Nonnull String message, T data) {

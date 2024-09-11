@@ -28,25 +28,19 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/test")
-public class TestController {
+public class TestController implements TestApi {
 
   private final TestService testService;
 
-  @Operation(summary = "연결 확인")
+  @Override
   @GetMapping("/check")
   public ApiResponse<?> check() {
     return ApiResponse.ok("This service is available");
   }
 
+  @Override
   @GetMapping("/exception/{name}")
-  public void exception(
-      @Parameter(
-          in = ParameterIn.PATH,
-          schema = @Schema(type = "string", allowableValues = {"UNAUTHENTICATED", "FORBIDDEN",
-              "BAD_REQUEST",
-              "EXPIRED_TOKEN", "INVALID_TOKEN", "INTERNAL_SERVER_ERROR"})
-      )
-      @PathVariable String name) {
+  public void exception(@PathVariable String name) {
     switch (name) {
       case "UNAUTHENTICATED" -> throw new UnAuthenticatedException();
       case "FORBIDDEN" -> throw new ForbiddenException();
@@ -58,24 +52,28 @@ public class TestController {
     }
   }
 
+  @Override
   @PostMapping("/image")
-  public ApiResponse<String> image(@RequestPart(value = "file") MultipartFile file) {
+  public ApiResponse<?> image(@RequestPart(value = "file") MultipartFile file) {
     String url = testService.uploadImageTest(file);
     return ApiResponse.ok(url);
   }
 
+  @Override
   @PostMapping("/base64/encode")
-  public ApiResponse<String> encode(@RequestBody String data) {
+  public ApiResponse<?> encode(@RequestBody String data) {
     String encodedData = testService.encode(data);
     return ApiResponse.ok(encodedData);
   }
 
+  @Override
   @PostMapping("/base64/decode")
-  public ApiResponse<String> decode(@RequestBody String data) {
+  public ApiResponse<?> decode(@RequestBody String data) {
     String plainText = testService.decode(data);
     return ApiResponse.ok(plainText);
   }
 
+  @Override
   @GetMapping("/auth/member")
   @PreAuthorize("hasAuthority('MEMBER')")
   public ApiResponse<?> authMember() {
@@ -88,6 +86,7 @@ public class TestController {
     return ApiResponse.ok(map);
   }
 
+  @Override
   @GetMapping("/auth/admin")
   @PreAuthorize("hasAuthority('ADMIN')")
   public ApiResponse<?> authAdmin() {

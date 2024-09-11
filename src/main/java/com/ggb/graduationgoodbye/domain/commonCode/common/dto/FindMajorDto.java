@@ -16,20 +16,24 @@ public class FindMajorDto {
    * 단일 학과 찾기 요청.
    */
   @Getter
-  @Schema(name = "FindMajorDTO_Request")
+  @Schema(name = "FindMajor_Request")
   public static class Request {
 
+    @Schema(description = "전공명")
     String name;
   }
 
   /**
    * 학과 찾기 반환.
    */
+  @Schema(name = "FindMajor_Response")
   @Getter
   @Builder
   public static class Response {
 
+    @Schema(description = "전공 아이디")
     Long id;
+    @Schema(description = "전공명")
     String major;
 
     /**
