@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
+import static com.ggb.graduationgoodbye.global.util.CustomAssertions.assertDateTimeEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -43,14 +44,6 @@ class MemberRepositoryTest {
       .plugin(new JakartaValidationPlugin())
       .build();
 
-
-  public void validateDate(LocalDateTime a, LocalDateTime b){
-    if (a != null && b != null) {
-      LocalDateTime localDateTimeA = a.withNano(0);
-      LocalDateTime localDateTimeB = b.withNano(0);
-      assertEquals(localDateTimeA, localDateTimeB);
-    }
-  }
   public Member createMember() {
     Member member = fixtureMonkey.giveMeOne(Member.class);
     printMember(member);
@@ -98,10 +91,10 @@ class MemberRepositoryTest {
     assertEquals(member.getGender(), testMember.getGender());
     assertEquals(member.getNickname(), testMember.getNickname());
     assertEquals(member.getPhone(), testMember.getPhone());
-    validateDate(member.getCreatedAt(), testMember.getCreatedAt());
+    assertDateTimeEquals(member.getCreatedAt(), testMember.getCreatedAt());
     assertEquals(member.getCreatedId() , testMember.getCreatedId());
     assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-    validateDate(member.getUpdatedAt(), testMember.getUpdatedAt());
+    assertDateTimeEquals(member.getUpdatedAt(), testMember.getUpdatedAt());
 
   }
 
