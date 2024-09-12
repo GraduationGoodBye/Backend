@@ -5,25 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.ggb.graduationgoodbye.global.test.ServiceTest;
 import com.ggb.graduationgoodbye.global.utils.StringConverter;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class StringConverterTest extends ServiceTest {
 
   @Test
-  @DisplayName("convertToMasking_문자 패턴_성공")
-  void convertToMasking_character_success() {
+  void convertToMasking_문자_성공() {
     String input = "MEMBER";
     Character maskChar = '*';
+    String expected = "******";
 
     String maskedByChar = StringConverter.convertToMasking(input, maskChar);
 
-    assertEquals(maskedByChar, "******");
+    assertEquals(maskedByChar, expected);
   }
 
   @Test
-  @DisplayName("convertToMasking_문자 패턴_실패_null")
-  void convertToMasking_character_fail_null() {
+  void convertToMasking_문자_실패_null() {
     String input = "MEMBER";
     Character maskChar = null;
 
@@ -32,19 +30,18 @@ public class StringConverterTest extends ServiceTest {
   }
 
   @Test
-  @DisplayName("convertToMasking_문자열 패턴_성공")
-  void convertToMasking_String_success() {
+  void convertToMasking_문자열_성공() {
     String input = "Member";
     String maskStr = "@!";
+    String expected = "@!@!@!";
 
     String maskedByStr = StringConverter.convertToMasking(input, maskStr);
 
-    assertEquals(maskedByStr, "@!@!@!");
+    assertEquals(maskedByStr, expected);
   }
 
   @Test
-  @DisplayName("convertToMasking_문자열 패턴_실패_null")
-  void convertToMasking_String_fail_null() {
+  void convertToMasking_문자열_실패_null() {
     String input = "Member";
     String maskStr = null;
 
@@ -53,8 +50,7 @@ public class StringConverterTest extends ServiceTest {
   }
 
   @Test
-  @DisplayName("convertToMasking_문자열 패턴_실패_빈값")
-  void convertToMasking_String_fail_blank() {
+  void convertToMasking_문자열_실패_빈값() {
     String input = "Member";
     String maskStr = "";
 
@@ -63,8 +59,7 @@ public class StringConverterTest extends ServiceTest {
   }
 
   @Test
-  @DisplayName("convertToMasking_문자열 패턴_실패_공백")
-  void convertToMasking_String_fail_space() {
+  void convertToMasking_문자열_실패_공백() {
     String input = "Member";
     String maskStr = " ";
 
