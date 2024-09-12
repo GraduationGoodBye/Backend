@@ -11,8 +11,10 @@ import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajo
 import com.ggb.graduationgoodbye.domain.member.business.MemberCreator;
 import com.ggb.graduationgoodbye.domain.member.business.MemberProvider;
 import com.ggb.graduationgoodbye.domain.member.business.MemberReader;
+import com.ggb.graduationgoodbye.domain.member.business.MemberUpdater;
 import com.ggb.graduationgoodbye.domain.member.business.MemberValidator;
 import com.ggb.graduationgoodbye.domain.member.business.NicknameProvider;
+import com.ggb.graduationgoodbye.domain.member.business.WithdrawProcessor;
 import com.ggb.graduationgoodbye.domain.member.common.dto.MemberJoinDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
@@ -36,8 +38,10 @@ public class MemberService {
   private final NicknameProvider nicknameProvider;
   private final MemberProvider memberProvider;
   private final MemberCreator memberCreator;
+  private final MemberUpdater memberUpdater;
   private final MemberReader memberReader;
   private final MemberValidator memberValidator;
+  private final WithdrawProcessor withdrawProcessor;
   private final ArtistCreator artistCreator;
   private final ArtistValidator artistValidator;
   private final UniversityReader universityReader;
@@ -63,6 +67,16 @@ public class MemberService {
 
     memberCreator.save(member);
     return member;
+  }
+
+  /**
+   * 회원 탈퇴.
+   */
+  public void withdraw() {
+    Long memberId = memberProvider.getCurrentMemberId();
+    Member member = memberReader.findById(memberId);
+    member = withdrawProcessor.processToWithdraw(member);
+    memberUpdater.updateToWithdraw(member);
   }
 
   /**

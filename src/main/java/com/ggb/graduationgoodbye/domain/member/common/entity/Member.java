@@ -1,5 +1,7 @@
 package com.ggb.graduationgoodbye.domain.member.common.entity;
 
+import static com.ggb.graduationgoodbye.global.utils.StringConverter.convertToMasking;
+
 import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import jakarta.validation.constraints.Max;
@@ -88,5 +90,16 @@ public class Member {
     this.updatedId = "SIGNUP";
     this.updatedAt = now;
     this.role = Role.MEMBER;
+  }
+
+  public void withdraw() {
+    this.email = convertToMasking(this.email, "*");
+    this.profile = convertToMasking(this.profile, "*");
+    this.nickname = convertToMasking(this.nickname, "*");
+    this.address = convertToMasking(this.address, "*");
+    this.gender = convertToMasking(this.gender, "*");
+    this.age = null;
+    this.phone = convertToMasking(this.phone, "*");
+    this.deletedAt = LocalDateTime.now();
   }
 }

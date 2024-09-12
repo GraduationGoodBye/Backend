@@ -21,6 +21,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,6 +80,17 @@ public class MemberController implements MemberApi {
         .refreshToken(token.getRefreshToken())
         .build();
     return ApiResponse.ok(response);
+  }
+
+  /**
+   * 회원 탈퇴
+   */
+  @Override
+  @PreAuthorize("hasAnyAuthority('MEMBER')")
+  @DeleteMapping("/withdraw")
+  public ApiResponse<?> withdraw() {
+    memberService.withdraw();
+    return ApiResponse.ok();
   }
 
   /**
