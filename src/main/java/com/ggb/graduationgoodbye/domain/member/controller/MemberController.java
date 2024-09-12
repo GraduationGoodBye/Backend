@@ -95,7 +95,6 @@ public class MemberController implements MemberApi {
     MemberInfoDto.Response response = MemberInfoDto.Response.builder()
         .id(member.getId())
         .snsType(member.getSnsType().name())
-        .snsId(member.getSnsId())
         .email(member.getEmail())
         .profile(member.getProfile())
         .nickname(member.getNickname())

@@ -15,8 +15,6 @@ public class MemberInfoDto {
     private Long id;
     @Schema(description = "SNS 타입")
     private String snsType;
-    @Schema(description = "SNS ID")
-    private String snsId;
     @Schema(description = "이메일")
     private String email;
     @Schema(description = "프로필 이미지")
