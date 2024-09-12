@@ -36,6 +36,13 @@ public interface MemberApi {
       @Parameter String snsType,
       @RequestBody MemberJoinDto.Request request);
 
+  @Operation(summary = "회원탈퇴", tags = {"member"})
+  @ApiResponses(value = {
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),
+      @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "서버 내부 오류")
+  })
+  ApiResponse<?> withdraw();
+
   @Operation(summary = "회원정보 조회", tags = {"member"})
   @ApiResponses(value = {
       @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "회원 정보 조회 성공"),

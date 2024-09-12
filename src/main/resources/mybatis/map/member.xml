@@ -21,4 +21,17 @@
   <select id="findByNickname" parameterType="String" resultType="member">
     SELECT * FROM members WHERE nickname = #{nickname};
   </select>
+
+  <update id="withdraw" parameterType="member">
+    UPDATE members SET
+    email = #{email},
+    profile = #{profile},
+    nickname = #{nickname},
+    address = #{address},
+    gender = #{gender},
+    age = #{age},
+    phone = #{phone},
+    deleted_at = #{deletedAt}
+    WHERE id = #{id};
+  </update>
 </mapper>

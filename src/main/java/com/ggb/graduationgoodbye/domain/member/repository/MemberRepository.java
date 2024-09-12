@@ -33,4 +33,8 @@ public class MemberRepository {
   public Optional<Member> findByNickname(String nickname) {
     return Optional.ofNullable(mysql.selectOne("MemberMapper.findByNickname", nickname));
   }
+
+  public void withdraw(Member member) {
+    mysql.update("MemberMapper.withdraw", member);
+  }
 }

@@ -1,7 +1,6 @@
 package com.ggb.graduationgoodbye.global.response;
 
 import com.ggb.graduationgoodbye.global.error.type.ApiErrorType;
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
