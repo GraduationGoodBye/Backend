@@ -9,17 +9,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class ApiResponse<T> {
 
-  @Schema(example = "OK", description = "")
-
   @Nonnull
   private final String code;
 
-  @Schema(example = "OK", description = "")
-
   @Nonnull
   private final String message;
-
-  @Schema(example = "{}", description = "")
 
   private final T data;
 

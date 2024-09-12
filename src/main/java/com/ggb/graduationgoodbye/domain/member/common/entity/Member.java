@@ -1,12 +1,12 @@
 package com.ggb.graduationgoodbye.domain.member.common.entity;
 
+import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
+import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Size;
-import com.ggb.graduationgoodbye.domain.member.common.enums.Role;
-import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,28 +24,36 @@ public class Member {
   private Long id;
   @NotNull
   private SnsType snsType;
-  @NotNull @Size(max = 100)
+  @NotNull
+  @Size(max = 100)
   private String snsId;
-  @NotNull @Size(max = 100)
+  @NotNull
+  @Size(max = 100)
   private String email;
   @Size(max = 255)
   private String profile;
-  @NotNull @Size(max = 50)
+  @NotNull
+  @Size(max = 50)
   private String nickname;
   @Size(max = 255)
   private String address;
   @Size(max = 1)
   private String gender;
-  @Min(1) @Max(100)
+  @Min(1)
+  @Max(100)
   private Integer age;
   @Size(max = 13)
   private String phone;
-  @NotNull @Size(max = 255)
+  @NotNull
+  @Size(max = 255)
   private String createdId;
-  @NotNull @PastOrPresent
+  @NotNull
+  @PastOrPresent
   private LocalDateTime createdAt;
+  @NotNull
   @Size(max = 255)
   private String updatedId;
+  @NotNull
   @PastOrPresent
   private LocalDateTime updatedAt;
   @PastOrPresent
