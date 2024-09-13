@@ -1,5 +1,5 @@
 # workflow 이름 지정
-name: CI/CD
+name: Feature Branch Push - Test and Build
 
 # workflow trigger
 on:
