@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
+
 import static com.ggb.graduationgoodbye.global.util.CustomAssertions.assertDateTimeEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,11 +9,10 @@ import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
-import com.navercorp.fixturemonkey.FixtureMonkey;
-import com.navercorp.fixturemonkey.api.introspector.FieldReflectionArbitraryIntrospector;
-import com.navercorp.fixturemonkey.jakarta.validation.plugin.JakartaValidationPlugin;
+import com.ggb.graduationgoodbye.global.util.randomValue.RandomEntityPopulator;
 import java.util.Arrays;
 import java.util.Random;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,11 +20,13 @@ import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @SpringBootTest
 //@TestPropertySource(properties = "logging.config=classpath:logback-spring-test.xml")
 @ActiveProfiles("test")
+@Transactional
 class MemberRepositoryTest {
 
   @Autowired
@@ -33,14 +35,13 @@ class MemberRepositoryTest {
   private final SnsType[] snsTypes = SnsType.values();
   private final String NotFoundMemberMessage = "존재하지 않는 회원입니다.";
   private final Random random = new Random();
+  private final RandomEntityPopulator randomEntityPopulator;
 
-  FixtureMonkey fixtureMonkey = FixtureMonkey.builder()
-      .objectIntrospector(FieldReflectionArbitraryIntrospector.INSTANCE)
-      .plugin(new JakartaValidationPlugin())
-      .build();
-
+  public MemberRepositoryTest(@Autowired SqlSessionFactory sqlSessionFactory) {
+    this.randomEntityPopulator = new RandomEntityPopulator(sqlSessionFactory);
+  }
   public Member createMember() {
-    Member member = fixtureMonkey.giveMeOne(Member.class);
+    Member member = (Member) randomEntityPopulator.getPopulatedEntity(Member.class,"MEMBERS");
     printMember(member);
     return member;
   }
@@ -65,12 +66,11 @@ class MemberRepositoryTest {
     System.out.println("-------------");
   }
 
-  @Test
+  @Test()
   @DisplayName("save_올바른 값")
   void save() {
     // Given
     Member member = createMember();
-    member.setDeletedAt(null);
     memberRepository.save(member);
 
     // When
@@ -133,11 +133,14 @@ class MemberRepositoryTest {
   @ParameterizedTest
   @EnumSource(SnsType.class)
   @DisplayName("findBySns_올바른 값")
-  void findBySns_success(SnsType snsType) {
+    void findBySns_success(SnsType snsType) {
 
     // Given
-    Member memberTest = createMember();
-    memberTest.setSnsType(snsType);
+    Member memberTest = (Member) randomEntityPopulator
+        .setValue("SnsType", snsType)
+        .getPopulatedEntity(Member.class, "MEMBERS");
+    printMember(memberTest);
+
 
     memberRepository.save(memberTest);
 
