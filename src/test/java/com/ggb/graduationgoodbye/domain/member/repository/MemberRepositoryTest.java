@@ -1,7 +1,7 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
 
-import static com.ggb.graduationgoodbye.global.util.CustomAssertions.assertDateTimeEquals;
+import static com.ggb.graduationgoodbye.global.util.CustomAssertions.customAssertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,6 +13,7 @@ import com.ggb.graduationgoodbye.global.util.randomValue.RandomEntityPopulator;
 import java.util.Arrays;
 import java.util.Random;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,30 +41,15 @@ class MemberRepositoryTest {
   public MemberRepositoryTest(@Autowired SqlSessionFactory sqlSessionFactory) {
     this.randomEntityPopulator = new RandomEntityPopulator(sqlSessionFactory);
   }
-  public Member createMember() {
-    Member member = (Member) randomEntityPopulator.getPopulatedEntity(Member.class,"MEMBERS");
-    printMember(member);
-    return member;
+
+  @BeforeEach
+  public void setUp() {
+    randomEntityPopulator.setValue("deletedAt",null);
   }
 
-  private void printMember(Member member) {
-    System.out.println("-------------");
-    System.out.println("SNS Type: " + member.getSnsType());
-    System.out.println("SNS ID: " + member.getSnsId());
-    System.out.println("Email: " + member.getEmail());
-    System.out.println("Address: " + member.getAddress());
-    System.out.println("Profile: " + member.getProfile());
-    System.out.println("Age: " + member.getAge());
-    System.out.println("Gender: " + member.getGender());
-    System.out.println("Nickname: " + member.getNickname());
-    System.out.println("Phone: " + member.getPhone());
-    System.out.println("ROLE: " + member.getRole());
-    System.out.println("CreatedAt: " + member.getCreatedAt());
-    System.out.println("CreatedId: " + member.getCreatedId());
-    System.out.println("UpdatedAt: " + member.getUpdatedAt());
-    System.out.println("UpdatedId: " + member.getUpdatedId());
-    System.out.println("DeletedAt: " + member.getDeletedAt());
-    System.out.println("-------------");
+  public Member createMember() {
+    return (Member) randomEntityPopulator
+        .getPopulatedEntity(Member.class, "MEMBERS");
   }
 
   @Test()
@@ -78,18 +64,7 @@ class MemberRepositoryTest {
         .orElseThrow(NotFoundMemberException::new);
 
     // Then
-    assertEquals(member.getSnsType(), testMember.getSnsType());
-    assertEquals(member.getEmail(), testMember.getEmail());
-    assertEquals(member.getAddress(), testMember.getAddress());
-    assertEquals(member.getProfile(), testMember.getProfile());
-    assertEquals(member.getAge(), testMember.getAge());
-    assertEquals(member.getGender(), testMember.getGender());
-    assertEquals(member.getNickname(), testMember.getNickname());
-    assertEquals(member.getPhone(), testMember.getPhone());
-    assertDateTimeEquals(member.getCreatedAt(), testMember.getCreatedAt());
-    assertEquals(member.getCreatedId() , testMember.getCreatedId());
-    assertEquals(member.getUpdatedId() , testMember.getUpdatedId());
-    assertDateTimeEquals(member.getUpdatedAt(), testMember.getUpdatedAt());
+    customAssertEquals(member, testMember);
 
   }
 
@@ -105,7 +80,7 @@ class MemberRepositoryTest {
         .orElseThrow(NotFoundMemberException::new);
 
     // Then
-    assertEquals(testMember.getId(), findMember1.getId());
+    customAssertEquals(testMember , findMember1);
 
   }
 
@@ -118,7 +93,7 @@ class MemberRepositoryTest {
 
     // When
     Long testMemberId = testMember.getId();
-    Long id =  testMemberId + random.nextInt(1 , 9999);
+    Long id = testMemberId + random.nextInt(1, 9999);
 
     NotFoundMemberException thrown = assertThrows(NotFoundMemberException.class, () -> {
       memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
@@ -133,14 +108,12 @@ class MemberRepositoryTest {
   @ParameterizedTest
   @EnumSource(SnsType.class)
   @DisplayName("findBySns_올바른 값")
-    void findBySns_success(SnsType snsType) {
+  void findBySns_success(SnsType snsType) {
 
     // Given
     Member memberTest = (Member) randomEntityPopulator
         .setValue("SnsType", snsType)
         .getPopulatedEntity(Member.class, "MEMBERS");
-    printMember(memberTest);
-
 
     memberRepository.save(memberTest);
 
@@ -151,8 +124,7 @@ class MemberRepositoryTest {
         .orElseThrow(NotFoundMemberException::new);
 
     // Then
-    assertEquals(testMember.getId(), memberTest.getId());
-    assertEquals(testMember.getSnsType(), snsType);
+    customAssertEquals(testMember , memberTest);
 
   }
 
@@ -164,7 +136,7 @@ class MemberRepositoryTest {
     Member memberTest = createMember();
     memberRepository.save(memberTest);
 
-      String randomType = Arrays.stream(snsTypes)
+    String randomType = Arrays.stream(snsTypes)
         .filter(type -> !type.equals(memberTest.getSnsType()))
         .map(SnsType::toString)
         .findAny()
