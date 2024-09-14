@@ -3,40 +3,50 @@ package com.ggb.graduationgoodbye.global.util.randomValue;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
 
-@RequiredArgsConstructor
 public class ColumnInfo {
 
   private final DatabaseMetaData metaData;
   private final String tableName;
-  private final String columnName;
+  private final List<ColumnDetail> columnDetails = new ArrayList<>();
 
-  private ResultSet getColumnResultSet() {
-    try {
-      return metaData.getColumns(null, null, tableName, columnName);
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return null;
+  public ColumnInfo(DatabaseMetaData metaData, String tableName) throws SQLException {
+    this.metaData = metaData;
+    this.tableName = tableName;
+    loadColumnDetails();
+  }
+
+  private void loadColumnDetails() throws SQLException {
+    try (ResultSet columns = metaData.getColumns(null, null, tableName, "%")) {
+      while (columns.next()) {
+        String columnName = columns.getString("COLUMN_NAME");
+        int columnSize = columns.getInt("COLUMN_SIZE");
+        boolean isNullable = isColumnNullable(columns);
+
+        columnDetails.add(new ColumnDetail(columnName, columnSize, isNullable));
+      }
     }
   }
 
-  public Integer getColumnSize() throws SQLException {
-    try (ResultSet columns = getColumnResultSet()) {
-      if (columns != null && columns.next()) {
-        return columns.getInt("COLUMN_SIZE");
-      }
-    }
-    return 0;
+  private boolean isColumnNullable(ResultSet columns) throws SQLException {
+    int nullable = columns.getInt("NULLABLE");
+    return nullable == DatabaseMetaData.columnNullable;
   }
 
-  public boolean isColumnNullable() throws SQLException {
-    try (ResultSet columns = getColumnResultSet()) {
-      if (columns != null && columns.next()) {
-        int nullable = columns.getInt("NULLABLE");
-        return nullable == DatabaseMetaData.columnNullable;
-      }
-    }
-    return false;
+
+  public Integer getColumnSize(String columnName) {
+    return getColumnDetail(columnName).map(ColumnDetail::getColumnSize).orElse(0);
+  }
+
+  public Boolean isColumnNullable(String columnName) {
+    return getColumnDetail(columnName).map(ColumnDetail::isNullable).orElse(false);
+  }
+
+  private java.util.Optional<ColumnDetail> getColumnDetail(String columnName) {
+    return columnDetails.stream()
+        .filter(detail -> detail.getName().equalsIgnoreCase(columnName))
+        .findFirst();
   }
 }

@@ -3,7 +3,6 @@ package com.ggb.graduationgoodbye.global.util.randomValue;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,8 +24,10 @@ public class RandomEntityPopulator {
       Connection connection = session.getConnection();
       DatabaseMetaData metaData = connection.getMetaData();
 
-      Object response = clazz.getDeclaredConstructor().newInstance();
-      populateFields(response, clazz.getDeclaredFields(), metaData, tableName);
+      ColumnInfo columnInfo = new ColumnInfo(metaData, tableName);
+
+        Object response = clazz.getDeclaredConstructor().newInstance();
+      populateFields(response, clazz.getDeclaredFields(), columnInfo);
 
       return response;
     } catch (Exception e) {
@@ -40,7 +41,7 @@ public class RandomEntityPopulator {
   }
 
   private void populateFields(Object entity, Field[] fields
-      , DatabaseMetaData metaData, String tableName) throws Exception {
+      , ColumnInfo columnInfo) throws Exception {
 
     for (Field field : fields) {
       field.setAccessible(true);
@@ -49,21 +50,20 @@ public class RandomEntityPopulator {
       if (customValues.containsKey(columnName)) {
         field.set(entity, customValues.get(columnName));
       } else {
-        Object value = generateRandomValue(field, metaData, tableName, columnName);
+        Object value = generateRandomValue(field, columnInfo, columnName);
         field.set(entity, value);
       }
     }
   }
 
 
-  public Object generateRandomValue(Field field, DatabaseMetaData metaData
-      , String tableName, String columnName) throws SQLException {
+  public Object generateRandomValue(Field field, ColumnInfo columnInfo
+      , String columnName) {
 
-    ColumnInfo columnInfo = new ColumnInfo(metaData, tableName, columnName);
-
-    int columnSize = columnInfo.getColumnSize();
+    int columnSize = columnInfo.getColumnSize(columnName);
     int size = columnSize > 0 ? random.nextInt(columnSize) : 0;
-    boolean nullable = columnInfo.isColumnNullable();
+    boolean nullable = columnInfo.isColumnNullable(columnName);
+
 
     if (size == 0 && nullable && !Enum.class.isAssignableFrom(field.getType())) {
       return null;
