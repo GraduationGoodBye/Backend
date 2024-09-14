@@ -21,11 +21,15 @@ public class CustomAssertions {
   }
 
   private static void printFieldComparison(String fieldName, Object value, Object value2) {
-    System.out.println("Field: " + fieldName);
-    System.out.println("실제 : " + value);
-    System.out.println("테스트 : " + value2);
-    System.out.println("-------------");
+    StringBuilder sb = new StringBuilder();
+    sb.append("Field: ").append(fieldName).append("\n")
+        .append("실제 : ").append(value).append("\n")
+        .append("테스트 : ").append(value2).append("\n")
+        .append("-------------");
+
+    System.out.println(sb);
   }
+
 
 
   public static void customAssertEquals(Object obj1, Object obj2) {
