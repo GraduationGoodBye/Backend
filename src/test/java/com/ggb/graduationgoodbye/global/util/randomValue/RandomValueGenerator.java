@@ -35,7 +35,7 @@ public class RandomValueGenerator {
     }
 
   public static LocalDateTime getRandomLocalDateTime() {
-    return LocalDateTime.now().minusDays(random.nextInt(365));
+    return LocalDateTime.now().minusDays(random.nextInt(365)).withNano(0);
   }
 
   private static byte[] getRandomByte() {
