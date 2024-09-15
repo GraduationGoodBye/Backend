@@ -39,7 +39,7 @@ class MemberRepositoryTest {
   private final RandomEntityPopulator randomEntityPopulator;
 
   public MemberRepositoryTest(@Autowired SqlSessionFactory sqlSessionFactory) {
-    this.randomEntityPopulator = new RandomEntityPopulator(sqlSessionFactory);
+    this.randomEntityPopulator = new RandomEntityPopulator(sqlSessionFactory, "MEMBERS");
   }
 
   @BeforeEach
@@ -49,9 +49,8 @@ class MemberRepositoryTest {
 
   public Member createMember() {
     return (Member) randomEntityPopulator
-        .getPopulatedEntity(Member.class, "MEMBERS");
+        .getPopulatedEntity(Member.class);
   }
-
   @Test()
   @DisplayName("save_올바른 값")
   void save() {
@@ -113,7 +112,7 @@ class MemberRepositoryTest {
     // Given
     Member memberTest = (Member) randomEntityPopulator
         .setValue("SnsType", snsType)
-        .getPopulatedEntity(Member.class, "MEMBERS");
+        .getPopulatedEntity(Member.class);
 
     memberRepository.save(memberTest);
 

@@ -11,22 +11,32 @@ import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
-@RequiredArgsConstructor
 public class RandomEntityPopulator {
 
   private final SqlSessionFactory sqlSessionFactory;
   private final Map<String, Object> customValues = new HashMap<>();
 
+  private final ColumnInfo columnInfo;
+
+
   Random random = new Random();
 
-  public Object getPopulatedEntity(Class<?> clazz, String tableName) {
+  public RandomEntityPopulator(SqlSessionFactory sqlSessionFactory, String tableName) {
+    this.sqlSessionFactory = sqlSessionFactory;
+
     try (SqlSession session = sqlSessionFactory.openSession()) {
       Connection connection = session.getConnection();
       DatabaseMetaData metaData = connection.getMetaData();
+      columnInfo = new ColumnInfo(metaData, tableName);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to initialize ColumnInfo", e);
+    }
+  }
 
-      ColumnInfo columnInfo = new ColumnInfo(metaData, tableName);
+  public Object getPopulatedEntity(Class<?> clazz) {
+    try {
 
-        Object response = clazz.getDeclaredConstructor().newInstance();
+      Object response = clazz.getDeclaredConstructor().newInstance();
       populateFields(response, clazz.getDeclaredFields(), columnInfo);
 
       return response;
