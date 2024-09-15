@@ -10,18 +10,12 @@ import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
 public class RandomEntityPopulator {
 
   private final SqlSessionFactory sqlSessionFactory;
   private final Map<String, Object> customValues = new HashMap<>();
-
-  @Autowired
-  private final RandomValueGenerator randomValueGenerator;
 
   Random random = new Random();
 
@@ -82,23 +76,23 @@ public class RandomEntityPopulator {
 
   private Object generateValueForType(Class<?> fieldType, int size) {
     if (String.class.isAssignableFrom(fieldType)) {
-      return randomValueGenerator.getRandomString(size);
+      return RandomValueGenerator.getRandomString(size);
     } else if (Integer.class.isAssignableFrom(fieldType)
         || int.class.isAssignableFrom(fieldType)) {
-      return randomValueGenerator.getRandomInt(size);
+      return RandomValueGenerator.getRandomInt(size);
     } else if (Long.class.isAssignableFrom(fieldType)
         || long.class.isAssignableFrom(fieldType)) {
-      return randomValueGenerator.getRandomLong(size);
+      return RandomValueGenerator.getRandomLong(size);
     } else if (Double.class.isAssignableFrom(fieldType)
         || double.class.isAssignableFrom(fieldType)) {
-      return randomValueGenerator.getRandomDouble(size);
+      return RandomValueGenerator.getRandomDouble(size);
     } else if (Boolean.class.isAssignableFrom(fieldType)
         || boolean.class.isAssignableFrom(fieldType)) {
-      return randomValueGenerator.getRandomBoolean();
+      return RandomValueGenerator.getRandomBoolean();
     } else if (LocalDateTime.class.isAssignableFrom(fieldType)) {
-      return randomValueGenerator.getRandomLocalDateTime();
+      return RandomValueGenerator.getRandomLocalDateTime();
     } else if (Enum.class.isAssignableFrom(fieldType)) {
-      return randomValueGenerator.getRandomEnum(fieldType);
+      return RandomValueGenerator.getRandomEnum(fieldType);
     } else {
       return null;
     }
