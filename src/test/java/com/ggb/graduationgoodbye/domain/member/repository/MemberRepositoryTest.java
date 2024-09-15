@@ -10,6 +10,7 @@ import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.global.util.randomValue.RandomEntityPopulator;
+import com.ggb.graduationgoodbye.global.util.randomValue.RandomValueGenerator;
 import java.util.Arrays;
 import java.util.Random;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -36,10 +37,12 @@ class MemberRepositoryTest {
   private final SnsType[] snsTypes = SnsType.values();
   private final String NotFoundMemberMessage = "존재하지 않는 회원입니다.";
   private final Random random = new Random();
+  @Autowired
   private final RandomEntityPopulator randomEntityPopulator;
 
-  public MemberRepositoryTest(@Autowired SqlSessionFactory sqlSessionFactory) {
-    this.randomEntityPopulator = new RandomEntityPopulator(sqlSessionFactory);
+  public MemberRepositoryTest(@Autowired SqlSessionFactory sqlSessionFactory, @Autowired
+      RandomValueGenerator randomValueGenerator) {
+    this.randomEntityPopulator = new RandomEntityPopulator(sqlSessionFactory,randomValueGenerator);
   }
 
   @BeforeEach

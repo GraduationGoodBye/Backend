@@ -6,46 +6,48 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import org.springframework.stereotype.Component;
 
+@Component
 public class RandomValueGenerator {
 
   private static final Random random = new Random();
 
-  public static String getRandomString(int size) {
+  public String getRandomString(int size) {
     byte[] array = getRandomByte();
     Charset charset = getCharset();
     String str = new String(array, charset);
     return str.length() < size ? str : str.substring(0, size);
   }
 
-  public static int getRandomInt(int size) {
+  public int getRandomInt(int size) {
     return random.nextInt(size);
   }
 
-  public static long getRandomLong(int size) {
+  public long getRandomLong(int size) {
     return random.nextLong();
   }
 
-  public static boolean getRandomBoolean() {
+  public boolean getRandomBoolean() {
     return random.nextBoolean();
   }
 
-  public static double getRandomDouble(int size) {
+  public double getRandomDouble(int size) {
     return random.nextDouble() * size;
     }
 
-  public static LocalDateTime getRandomLocalDateTime() {
+  public LocalDateTime getRandomLocalDateTime() {
     return LocalDateTime.now().minusDays(random.nextInt(365)).withNano(0);
   }
 
-  private static byte[] getRandomByte() {
+  private byte[] getRandomByte() {
     int randomByteLength = random.nextInt(0, 200);
     byte[] array = new byte[randomByteLength];
     random.nextBytes(array);
     return array;
   }
 
-  public static <T> T getRandomEnum(Class<T> clazz) {
+  public <T> T getRandomEnum(Class<T> clazz) {
     T[] enumConstants = clazz.getEnumConstants();
     return enumConstants[random.nextInt(enumConstants.length)];
   }
