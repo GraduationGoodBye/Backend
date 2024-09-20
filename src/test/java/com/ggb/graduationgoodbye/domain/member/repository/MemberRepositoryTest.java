@@ -2,16 +2,15 @@ package com.ggb.graduationgoodbye.domain.member.repository;
 
 
 import static com.ggb.graduationgoodbye.global.util.CustomAssertions.customAssertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
 
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
-import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.global.test.IntegrationTest;
 import com.ggb.graduationgoodbye.global.util.randomValue.RandomEntityPopulator;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.Random;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +51,7 @@ class MemberRepositoryTest extends IntegrationTest {
 
     // When
     Member testMember = memberRepository.findById(member.getId())
-        .orElseThrow(NotFoundMemberException::new);
+        .orElse(null);
 
     // Then
     customAssertEquals(member, testMember);
@@ -63,15 +62,15 @@ class MemberRepositoryTest extends IntegrationTest {
   @DisplayName("findById_올바른 값")
   void findById_success() {
     // Given
-    Member testMember = createMember();
-    memberRepository.save(testMember);
+    Member member = createMember();
+    memberRepository.save(member);
 
     // When
-    Member findMember1 = memberRepository.findById(testMember.getId())
-        .orElseThrow(NotFoundMemberException::new);
+    Member testMember = memberRepository.findById(member.getId())
+        .orElse(null);
 
     // Then
-    customAssertEquals(testMember , findMember1);
+    customAssertEquals(member , testMember);
 
   }
 
@@ -79,19 +78,17 @@ class MemberRepositoryTest extends IntegrationTest {
   @DisplayName("findById_올바르지 않은 값")
   void findById_fail() {
     // Given
-    Member testMember = createMember();
-    memberRepository.save(testMember);
+    Member member = createMember();
+    memberRepository.save(member);
 
     // When
-    Long testMemberId = testMember.getId();
+    Long testMemberId = member.getId();
     Long id = testMemberId + random.nextInt(1, 9999);
 
-    NotFoundMemberException thrown = assertThrows(NotFoundMemberException.class, () -> {
-      memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
-    });
+    Optional<Member> testMember = memberRepository.findById(id);
 
     // Then
-    assertEquals(NotFoundMemberMessage, thrown.getMessage());
+    assertTrue(testMember.isEmpty());
 
   }
 
@@ -102,20 +99,23 @@ class MemberRepositoryTest extends IntegrationTest {
   void findBySns_success(SnsType snsType) {
 
     // Given
-    Member memberTest = (Member) randomEntityPopulator
+    Member member = (Member) randomEntityPopulator
         .setValue("SnsType", snsType)
         .getPopulatedEntity(Member.class);
 
-    memberRepository.save(memberTest);
+    memberRepository.save(member);
 
-    SnsDto snsDto = new SnsDto(memberTest.getSnsType().toString(), memberTest.getSnsId());
+    String memberSnsType = member.getSnsType().toString();
+    String memberSnsId = member.getSnsId();
+
+    SnsDto snsDto = new SnsDto(memberSnsType, memberSnsId);
 
     // When
     Member testMember = memberRepository.findBySns(snsDto)
-        .orElseThrow(NotFoundMemberException::new);
+        .orElse(null);
 
     // Then
-    customAssertEquals(testMember , memberTest);
+    customAssertEquals(testMember , member);
 
   }
 
@@ -124,24 +124,23 @@ class MemberRepositoryTest extends IntegrationTest {
   @DisplayName("findBySns_올바르지 않은 값")
   void findBySns_fail() {
     // Given
-    Member memberTest = createMember();
-    memberRepository.save(memberTest);
+    Member member = createMember();
+    memberRepository.save(member);
 
     String randomType = Arrays.stream(snsTypes)
-        .filter(type -> !type.equals(memberTest.getSnsType()))
+        .filter(type -> !type.equals(member.getSnsType()))
         .map(SnsType::toString)
         .findAny()
         .orElseThrow();
 
-    SnsDto snsDto = new SnsDto(randomType, memberTest.getSnsId());
+    SnsDto snsDto = new SnsDto(randomType, member.getSnsId());
 
     // When
-    NotFoundMemberException thrown = assertThrows(NotFoundMemberException.class, () -> {
-      memberRepository.findBySns(snsDto).orElseThrow(NotFoundMemberException::new);
-    });
+    Member testMember = memberRepository.findBySns(snsDto)
+        .orElse(null);
 
     // Then
-    assertEquals(NotFoundMemberMessage, thrown.getMessage());
+    customAssertEquals(testMember , member);
   }
 
 }
