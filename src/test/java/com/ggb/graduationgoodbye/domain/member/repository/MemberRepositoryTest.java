@@ -9,6 +9,7 @@ import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
+import com.ggb.graduationgoodbye.global.test.IntegrationTest;
 import com.ggb.graduationgoodbye.global.util.randomValue.RandomEntityPopulator;
 import java.util.Arrays;
 import java.util.Random;
@@ -19,16 +20,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
-
-
-@SpringBootTest
-//@TestPropertySource(properties = "logging.config=classpath:logback-spring-test.xml")
-@ActiveProfiles("test")
-@Transactional
-class MemberRepositoryTest {
+class MemberRepositoryTest extends IntegrationTest {
 
   @Autowired
   private MemberRepository memberRepository;
