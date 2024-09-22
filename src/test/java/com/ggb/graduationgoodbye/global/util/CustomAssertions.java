@@ -6,9 +6,9 @@ import org.apache.coyote.BadRequestException;
 
 public class CustomAssertions {
 
-  private static void assertSameClass(Object obj1, Object obj2) throws BadRequestException {
+  private static void assertSameClass(Object obj1, Object obj2) {
     if (!obj1.getClass().equals(obj2.getClass())) {
-      throw new BadRequestException();
+      throw new AssertionError();
     }
   }
 
