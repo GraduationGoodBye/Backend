@@ -45,7 +45,7 @@ public class CustomAssertions {
 
 
     } catch (Exception e) {
-      System.out.println("error: " + e.getMessage());
+      throw new AssertionError("customAssertEquals failed: " + e.getMessage());
     }
   }
 }
