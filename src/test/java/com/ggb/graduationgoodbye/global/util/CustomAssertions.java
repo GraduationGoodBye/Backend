@@ -2,7 +2,7 @@ package com.ggb.graduationgoodbye.global.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Field;
-import org.apache.coyote.BadRequestException;
+import java.util.Optional;
 
 public class CustomAssertions {
 
@@ -48,4 +48,10 @@ public class CustomAssertions {
       throw new AssertionError("customAssertEquals failed: " + e.getMessage());
     }
   }
+
+  public static <T> T customAssertPresent(Optional<T> object) {
+    return object.orElseThrow(() -> new AssertionError("customIsPresentTrue failed"));
+  }
+
+
 }
