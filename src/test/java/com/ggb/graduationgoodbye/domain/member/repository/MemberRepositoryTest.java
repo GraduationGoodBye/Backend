@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.repository;
 
 
 import static com.ggb.graduationgoodbye.global.util.CustomAssertions.customAssertEquals;
+import static com.ggb.graduationgoodbye.global.util.CustomAssertions.customAssertPresent;
 import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
 
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
@@ -25,7 +26,6 @@ class MemberRepositoryTest extends IntegrationTest {
   private MemberRepository memberRepository;
 
   private final SnsType[] snsTypes = SnsType.values();
-  private final String NotFoundMemberMessage = "존재하지 않는 회원입니다.";
   private final Random random = new Random();
   private final RandomEntityPopulator randomEntityPopulator;
 
@@ -50,8 +50,9 @@ class MemberRepositoryTest extends IntegrationTest {
     memberRepository.save(member);
 
     // When
-    Member testMember = memberRepository.findById(member.getId())
-        .orElse(null);
+    Member testMember = customAssertPresent (
+        memberRepository.findById(member.getId())
+    );
 
     // Then
     customAssertEquals(member, testMember);
@@ -66,8 +67,9 @@ class MemberRepositoryTest extends IntegrationTest {
     memberRepository.save(member);
 
     // When
-    Member testMember = memberRepository.findById(member.getId())
-        .orElse(null);
+    Member testMember = customAssertPresent (
+        memberRepository.findById(member.getId())
+    );
 
     // Then
     customAssertEquals(member , testMember);
@@ -111,8 +113,9 @@ class MemberRepositoryTest extends IntegrationTest {
     SnsDto snsDto = new SnsDto(memberSnsType, memberSnsId);
 
     // When
-    Member testMember = memberRepository.findBySns(snsDto)
-        .orElse(null);
+    Member testMember = customAssertPresent (
+        memberRepository.findBySns(snsDto)
+    );
 
     // Then
     customAssertEquals(testMember , member);
@@ -136,11 +139,10 @@ class MemberRepositoryTest extends IntegrationTest {
     SnsDto snsDto = new SnsDto(randomType, member.getSnsId());
 
     // When
-    Member testMember = memberRepository.findBySns(snsDto)
-        .orElse(null);
+    Optional<Member> testMember = memberRepository.findBySns(snsDto);
 
     // Then
-    customAssertEquals(testMember , member);
+    assertTrue(testMember.isEmpty());
   }
 
 }
