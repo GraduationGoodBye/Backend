@@ -16,11 +16,13 @@ public class NicknameProvider {
 
   private final MemberReader memberReader;
   private final NicknameGenerator nicknameGenerator;
+  static final int ALLOWABLE_RANGE = 10;
+  static final int MAX_REQUEST_COUNT = 100;
 
   public Set<String> provideRandomNicknames(int count) {
     Set<String> nicknames = new HashSet<>();
     validateCount(count);
-    int maxCount = count + 10;
+    int maxCount = count + ALLOWABLE_RANGE;
     for (int i = 0; i < maxCount && nicknames.size() < count; i++) {
       String nickname = nicknameGenerator.generate();
       if (!memberReader.existsByNickname(nickname)) {
@@ -35,7 +37,7 @@ public class NicknameProvider {
   }
 
   private void validateCount(int count) {
-    if (count > 100) {
+    if (count > MAX_REQUEST_COUNT) {
       throw new MaxNicknameCountExceededException();
     } else if (count < 0) {
       throw new NegativeNicknameCountException();
