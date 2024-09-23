@@ -13,11 +13,10 @@ public class StringConverterTest extends ServiceTest {
   void convertToMasking_문자_성공() {
     String input = "MEMBER";
     Character maskChar = '*';
-    String expected = "******";
 
     String maskedByChar = StringConverter.convertToMasking(input, maskChar);
 
-    assertEquals(maskedByChar, expected);
+    assertEquals(maskedByChar, "******");
   }
 
   @Test
@@ -33,11 +32,10 @@ public class StringConverterTest extends ServiceTest {
   void convertToMasking_문자열_성공() {
     String input = "Member";
     String maskStr = "@!";
-    String expected = "@!@!@!";
 
     String maskedByStr = StringConverter.convertToMasking(input, maskStr);
 
-    assertEquals(maskedByStr, expected);
+    assertEquals(maskedByStr, "@!@!@!");
   }
 
   @Test
