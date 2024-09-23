@@ -14,5 +14,4 @@ public class MemberProvider {
   public Long getCurrentMemberId() {
     return Long.valueOf(SecurityContextHolder.getContext().getAuthentication().getName());
   }
-
 }
