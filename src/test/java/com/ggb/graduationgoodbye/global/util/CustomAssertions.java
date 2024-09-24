@@ -1,6 +1,7 @@
 package com.ggb.graduationgoodbye.global.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.lang.reflect.Field;
 import java.util.Optional;
 
@@ -12,7 +13,8 @@ public class CustomAssertions {
     }
   }
 
-  private static void assertFieldsEqual(Field field, Object obj1, Object obj2) throws IllegalAccessException {
+  private static void assertFieldsEqual(Field field, Object obj1, Object obj2)
+      throws IllegalAccessException {
     field.setAccessible(true);
     Object value1 = field.get(obj1);
     Object value2 = field.get(obj2);
@@ -31,7 +33,6 @@ public class CustomAssertions {
   }
 
 
-
   public static void customAssertEquals(Object obj1, Object obj2) {
     try {
 
@@ -40,7 +41,7 @@ public class CustomAssertions {
       Field[] fields = obj1.getClass().getDeclaredFields();
       for (Field field : fields) {
         assertFieldsEqual(field, obj1, obj2);
-        printFieldComparison(field.getName() , field.get(obj1), field.get(obj2));
+        printFieldComparison(field.getName(), field.get(obj1), field.get(obj2));
       }
 
 

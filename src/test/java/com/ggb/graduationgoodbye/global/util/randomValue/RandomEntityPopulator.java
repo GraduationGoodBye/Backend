@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
-import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 
@@ -74,14 +73,12 @@ public class RandomEntityPopulator {
     int size = columnSize > 0 ? random.nextInt(columnSize) : 0;
     boolean nullable = columnInfo.isColumnNullable(columnName);
 
-
     if (size == 0 && nullable && !Enum.class.isAssignableFrom(field.getType())) {
       return null;
     }
 
     return generateValueForType(field.getType(), size);
   }
-
 
 
   private Object generateValueForType(Class<?> fieldType, int size) {
@@ -107,7 +104,6 @@ public class RandomEntityPopulator {
       return null;
     }
   }
-
 
 
 }

@@ -40,8 +40,10 @@ class TokenServiceTest extends ServiceTest {
   void getToken() {
     //given
     TokenDto tokenDto = tokenDto();
-    when(tokenProvider.createAccessToken(any(Authentication.class))).thenReturn(tokenDto.getAccessToken());
-    when(tokenProvider.createRefreshToken(any(Authentication.class))).thenReturn(tokenDto.getRefreshToken());
+    when(tokenProvider.createAccessToken(any(Authentication.class))).thenReturn(
+        tokenDto.getAccessToken());
+    when(tokenProvider.createRefreshToken(any(Authentication.class))).thenReturn(
+        tokenDto.getRefreshToken());
     when(tokenRepository.findByUserId(any(String.class))).thenReturn(Optional.empty());
     doNothing().when(tokenRepository).save(any(Token.class));
     Authentication authentication = authentication();

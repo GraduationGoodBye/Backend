@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public class ColumnDetail {
+
   private final String name;
   private final int columnSize;
   private final boolean isNullable;
