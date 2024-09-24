@@ -6,19 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.member.common.exception.InvalidSnsTypeException;
 import com.ggb.graduationgoodbye.global.test.ServiceTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.mockito.Spy;
 
 public class MemberValidatorTest extends ServiceTest {
 
+  @Spy
   private MemberValidator memberValidator;
-
-  @BeforeEach
-  void setUp() {
-    memberValidator = new MemberValidator();
-  }
 
   @ParameterizedTest
   @EnumSource(SnsType.class)

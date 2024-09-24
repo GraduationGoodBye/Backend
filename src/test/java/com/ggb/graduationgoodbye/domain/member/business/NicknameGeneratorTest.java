@@ -7,11 +7,13 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
 
 @Slf4j
 public class NicknameGeneratorTest extends ServiceTest {
 
-  private final NicknameGenerator nicknameGenerator = new NicknameGenerator();
+  @Spy
+  private NicknameGenerator nicknameGenerator;
 
   @Test
   void generateNickname_무작위생성확인() {

@@ -7,10 +7,12 @@ import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.global.test.ServiceTest;
 import org.junit.jupiter.api.Test;
+import org.mockito.Spy;
 
 public class WithdrawProcessorTest extends ServiceTest {
 
-  private final WithdrawProcessor withdrawProcessor = new WithdrawProcessor();
+  @Spy
+  private WithdrawProcessor withdrawProcessor;
 
   @Test
   void processToWithdraw_성공() {
