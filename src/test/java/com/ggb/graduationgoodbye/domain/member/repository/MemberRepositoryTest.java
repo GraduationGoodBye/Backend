@@ -1,9 +1,7 @@
 package com.ggb.graduationgoodbye.domain.member.repository;
 
-
-import static com.ggb.graduationgoodbye.global.util.CustomAssertions.customAssertEquals;
-import static com.ggb.graduationgoodbye.global.util.CustomAssertions.customAssertPresent;
 import static com.mongodb.internal.connection.tlschannel.util.Util.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
@@ -20,7 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
 class MemberRepositoryTest extends IntegrationTest {
 
   @Autowired
@@ -36,14 +33,13 @@ class MemberRepositoryTest extends IntegrationTest {
 
   @BeforeEach
   public void setUp() {
-    randomEntityPopulator.setValue("deletedAt", null);
+    randomEntityPopulator.setValue("deletedAt",null);
   }
 
   public Member createMember() {
     return (Member) randomEntityPopulator
         .getPopulatedEntity(Member.class);
   }
-
   @Test()
   @DisplayName("save_올바른 값")
   void save() {
@@ -52,13 +48,13 @@ class MemberRepositoryTest extends IntegrationTest {
     memberRepository.save(member);
 
     // When
-    Member testMember = customAssertPresent(
-        memberRepository.findById(member.getId())
-    );
+    Member testMember = memberRepository.findById(member.getId()).orElseThrow(AssertionError::new);
+
 
     // Then
-    customAssertEquals(member, testMember);
-
+    assertThat(testMember)
+        .usingRecursiveComparison()
+        .isEqualTo(member);
   }
 
   @Test
@@ -69,13 +65,12 @@ class MemberRepositoryTest extends IntegrationTest {
     memberRepository.save(member);
 
     // When
-    Member testMember = customAssertPresent(
-        memberRepository.findById(member.getId())
-    );
+    Member testMember = memberRepository.findById(member.getId()).orElseThrow(AssertionError::new);
 
     // Then
-    customAssertEquals(member, testMember);
-
+    assertThat(testMember)
+        .usingRecursiveComparison()
+        .isEqualTo(member);
   }
 
   @Test
@@ -93,7 +88,6 @@ class MemberRepositoryTest extends IntegrationTest {
 
     // Then
     assertTrue(testMember.isEmpty());
-
   }
 
 
@@ -115,13 +109,12 @@ class MemberRepositoryTest extends IntegrationTest {
     SnsDto snsDto = new SnsDto(memberSnsType, memberSnsId);
 
     // When
-    Member testMember = customAssertPresent(
-        memberRepository.findBySns(snsDto)
-    );
+    Member testMember = memberRepository.findBySns(snsDto).orElseThrow(AssertionError::new);
 
     // Then
-    customAssertEquals(testMember, member);
-
+    assertThat(testMember)
+        .usingRecursiveComparison()
+        .isEqualTo(member);
   }
 
 
