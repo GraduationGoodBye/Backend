@@ -92,8 +92,7 @@ public class MemberService {
     artistValidator.checkArtistDuplication(memberId);
 
     CommonCode university = universityReader.findUniversity(request.getUniversity());
-    CommonCode major = majorReader.findByMajor(request.getMajor())
-        .orElseThrow(NotFoundMajorException::new);
+    CommonCode major = majorReader.findByMajor(request.getMajor());
     String certificateUrl = s3Util.upload(certificate);
     String createId = String.valueOf(member.getId());
 

@@ -1,10 +1,8 @@
 package com.ggb.graduationgoodbye.domain.member.business;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
-@RequiredArgsConstructor
 public class NicknameGenerator {
 
   private static final String[] ADJECTIVE = {
