@@ -93,18 +93,17 @@ public class MemberReaderTest extends ServiceTest {
     verify(memberRepository, times(1)).findBySns(any(SnsDto.class));
   }
 
-  // NOTE : 어떻게 테스트할지 고민 - id를 설정하는 방법... 테스트를 위해서 setId() 메서드를 만드는게 맞을까?
   @Test
   void findById_성공() {
     Long id = 1L;
-    TestMember testMember = TestMember.testBuilder().build();
-    testMember.setId(id);
-    when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(testMember));
+    TestMember mockMember = new TestMember();
+    mockMember.setId(id);
+    when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(mockMember));
 
     Member member = memberReader.findById(id);
 
     assertNotNull(member);
-    assertEquals(id, member.getId());
+    assertEquals(mockMember.getId(), member.getId());
     verify(memberRepository, times(1)).findById(any(Long.class));
   }
 

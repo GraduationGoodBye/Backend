@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Builder(builderMethodName = "testBuilder")
 @Setter
 public class TestMember extends Member {
 
