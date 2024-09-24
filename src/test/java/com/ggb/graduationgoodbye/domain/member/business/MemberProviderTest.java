@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
+import com.ggb.graduationgoodbye.domain.auth.common.exception.AuthenticationNameNullException;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.AuthenticationNullException;
+import com.ggb.graduationgoodbye.domain.auth.common.exception.NotParsedValueException;
 import com.ggb.graduationgoodbye.global.test.ServiceTest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -33,14 +36,13 @@ public class MemberProviderTest extends ServiceTest {
 
   @Test
   void getCurrentMemberId_실패_id_null() {
-    Long memberId = null;
     Authentication authentication = Mockito.mock(Authentication.class);
-    when(authentication.getName()).thenReturn(String.valueOf(memberId));
+    when(authentication.getName()).thenReturn(null);
     SecurityContext context = Mockito.mock(SecurityContext.class);
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
-    assertThrows(Exception.class, memberProvider::getCurrentMemberId);
+    assertThrows(AuthenticationNameNullException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
@@ -52,7 +54,7 @@ public class MemberProviderTest extends ServiceTest {
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
-    assertThrows(Exception.class, memberProvider::getCurrentMemberId);
+    assertThrows(AuthenticationNameNullException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
@@ -64,7 +66,7 @@ public class MemberProviderTest extends ServiceTest {
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
-    assertThrows(Exception.class, memberProvider::getCurrentMemberId);
+    assertThrows(AuthenticationNameNullException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
@@ -76,7 +78,7 @@ public class MemberProviderTest extends ServiceTest {
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
-    assertThrows(Exception.class, memberProvider::getCurrentMemberId);
+    assertThrows(NotParsedValueException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
@@ -85,6 +87,6 @@ public class MemberProviderTest extends ServiceTest {
     Mockito.when(context.getAuthentication()).thenReturn(null);
     SecurityContextHolder.setContext(context);
 
-    assertThrows(Exception.class, memberProvider::getCurrentMemberId);
+    assertThrows(AuthenticationNullException.class, memberProvider::getCurrentMemberId);
   }
 }
