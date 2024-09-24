@@ -32,7 +32,7 @@ public class RandomValueGenerator {
 
   public static double getRandomDouble(int size) {
     return random.nextDouble() * size;
-    }
+  }
 
   public static LocalDateTime getRandomLocalDateTime() {
     return LocalDateTime.now().minusDays(random.nextInt(365)).withNano(0);
@@ -49,8 +49,6 @@ public class RandomValueGenerator {
     T[] enumConstants = clazz.getEnumConstants();
     return enumConstants[random.nextInt(enumConstants.length)];
   }
-
-
 
 
   private static Charset getCharset() {

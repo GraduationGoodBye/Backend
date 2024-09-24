@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ArtistMapper">
 
-    <insert id="save" parameterType="artist" keyProperty="id">
-        INSERT INTO artist ( member_id, common_university_id, common_major_id, admin_id, name, created_id, created_at, updated_id, updated_at, certificate_url, approval_date
-        ) VALUES ( #{memberId.id}, #{universityId.id}, #{majorId.id}, #{adminId.id}, #{name}, #{createdId}, #{createdAt}, #{updatedId}, #{updatedAt}, #{certificateUrl}, #{approvalDate}
-        )
-    </insert>
+  <insert id="save" parameterType="artist" keyProperty="id">
+    INSERT INTO artist ( member_id, common_university_id, common_major_id, admin_id, name,
+    created_id, created_at, updated_id, updated_at, certificate_url, approval_date
+    ) VALUES ( #{memberId.id}, #{universityId.id}, #{majorId.id}, #{adminId.id}, #{name},
+    #{createdId}, #{createdAt}, #{updatedId}, #{updatedAt}, #{certificateUrl}, #{approvalDate}
+    )
+  </insert>
 
-    <select id="findPendingCertificate" resultType="artist">
-        SELECT * FROM artist WHERE approval_date IS NULL
-    </select>
-    <select id="findByMemberId" parameterType="Long" resultType="member">
-        SELECT * FROM artist WHERE member_id = #{memberId}
-    </select>
+  <select id="findPendingCertificate" resultType="artist">
+    SELECT * FROM artist WHERE approval_date IS NULL
+  </select>
+  <select id="findByMemberId" parameterType="Long" resultType="member">
+    SELECT * FROM artist WHERE member_id = #{memberId}
+  </select>
 
 </mapper>

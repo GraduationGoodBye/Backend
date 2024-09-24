@@ -8,6 +8,9 @@ public enum AuthErrorType {
   // Common
   NOT_JOINED_USER("가입되지 않은 회원입니다."),
   NOT_EXISTS_TOKEN("인증 토큰이 존재하지 않습니다."),
+  AUTHENTICATION_NULL_ERROR("Authentication 이 NULL 입니다."),
+  AUTHENTICATION_NAME_NULL_ERROR("Authentication name 이 NULL 입니다."),
+  NOT_PARSED_VALUE_ERROR("파싱되지 않는 값입니다."),
 
   // JWT
   EXPIRED_TOKEN("만료된 토큰입니다."),

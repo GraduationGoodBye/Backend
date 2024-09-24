@@ -33,10 +33,6 @@ public class MemberReader {
     return memberRepository.findById(id).orElseThrow(NotFoundMemberException::new);
   }
 
-  public boolean existsByEmail(SnsDto dto) {
-    return memberRepository.findBySns(dto).isPresent();
-  }
-
   public boolean existsByNickname(String nickname) {
     return memberRepository.findByNickname(nickname).isPresent();
   }

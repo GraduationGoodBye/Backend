@@ -50,9 +50,6 @@ public class RandomValueGenerator {
   }
 
 
-
-
-
   private static Charset getCharset() {
     Set<String> charset = Charset.availableCharsets().keySet();
     List<String> list = new ArrayList<>(charset);
