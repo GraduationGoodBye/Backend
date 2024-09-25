@@ -20,12 +20,15 @@ public class MemberUpdaterTest extends ServiceTest {
 
   @Test
   void updateToWithdraw_성공() {
+    // given
     Member member = Member.builder()
         .nickname("*")
         .build();
 
+    // when
     memberUpdater.updateToWithdraw(member);
 
+    //then
     verify(memberRepository, times(1)).withdraw(any(Member.class));
   }
 }

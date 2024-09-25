@@ -36,17 +36,20 @@ public class MemberProviderTest extends ServiceTest {
 
   @Test
   void getCurrentMemberId_실패_id_null() {
+    // given
     Authentication authentication = Mockito.mock(Authentication.class);
     when(authentication.getName()).thenReturn(null);
     SecurityContext context = Mockito.mock(SecurityContext.class);
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
+    // when then
     assertThrows(AuthenticationNameNullException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
   void getCurrentMemberId_실패_id_빈값() {
+    // given
     String memberId = "";
     Authentication authentication = Mockito.mock(Authentication.class);
     when(authentication.getName()).thenReturn(memberId);
@@ -54,11 +57,13 @@ public class MemberProviderTest extends ServiceTest {
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
+    // when then
     assertThrows(AuthenticationNameNullException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
   void getCurrentMemberId_실패_id_공백() {
+    // given
     String memberId = " ";
     Authentication authentication = Mockito.mock(Authentication.class);
     when(authentication.getName()).thenReturn(memberId);
@@ -66,11 +71,13 @@ public class MemberProviderTest extends ServiceTest {
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
+    // when then
     assertThrows(AuthenticationNameNullException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
   void getCurrentMemberId_실패_id_숫자가아닌값() {
+    // given
     String memberId = "memberId";
     Authentication authentication = Mockito.mock(Authentication.class);
     when(authentication.getName()).thenReturn(memberId);
@@ -78,15 +85,18 @@ public class MemberProviderTest extends ServiceTest {
     Mockito.when(context.getAuthentication()).thenReturn(authentication);
     SecurityContextHolder.setContext(context);
 
+    // when then
     assertThrows(NotParsedValueException.class, memberProvider::getCurrentMemberId);
   }
 
   @Test
   void getCurrentMemberId_실패_authentication_null() {
+    // given
     SecurityContext context = Mockito.mock(SecurityContext.class);
     Mockito.when(context.getAuthentication()).thenReturn(null);
     SecurityContextHolder.setContext(context);
 
+    // when then
     assertThrows(AuthenticationNullException.class, memberProvider::getCurrentMemberId);
   }
 }

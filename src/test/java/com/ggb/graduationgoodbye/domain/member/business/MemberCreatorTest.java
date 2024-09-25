@@ -21,6 +21,7 @@ public class MemberCreatorTest extends ServiceTest {
 
   @Test
   void save_성공() {
+    // given
     Member member = Member.builder()
         .snsId("test1")
         .snsType(SnsType.GOOGLE)
@@ -29,11 +30,10 @@ public class MemberCreatorTest extends ServiceTest {
         .nickname("nick")
         .build();
 
+    // when
     memberCreator.save(member);
 
-    // verify() : 모의 객체의 동작을 검증.
-    // save() : memberRepository.save 메서드가 정확히 1번 호출되었는지 확인.
-    // any() : 호출 시 인자로 Member 클래스의 어떤 인스턴스라도 받아들였는지 확인합니다.
+    // then
     verify(memberRepository, times(1)).save(any(Member.class));
   }
 }

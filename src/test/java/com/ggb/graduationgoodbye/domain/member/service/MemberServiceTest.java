@@ -65,6 +65,7 @@ public class MemberServiceTest extends ServiceTest {
 
   @Test
   void join_성공() {
+    // given
     SnsType snsType = SnsType.GOOGLE;
     String snsId = "testSnsId";
     String email = "test@test.com";
@@ -86,8 +87,10 @@ public class MemberServiceTest extends ServiceTest {
         .nickname(nickname)
         .build();
 
+    // when
     Member member = memberService.join(snsType.name(), oAuthUserInfoDto, request);
 
+    // then
     assertNotNull(member);
     assertEquals(mockMember.getSnsType(), member.getSnsType());
     assertEquals(mockMember.getSnsId(), member.getSnsId());
@@ -99,6 +102,7 @@ public class MemberServiceTest extends ServiceTest {
 
   @Test
   void withdraw_성공() {
+    // given
     Long memberId = 1L;
     Member mockMember = Member.builder().build();
     Member mockProcessedMember = Member.builder().build();
@@ -106,8 +110,10 @@ public class MemberServiceTest extends ServiceTest {
     when(memberReader.findById(memberId)).thenReturn(mockMember);
     when(withdrawProcessor.processToWithdraw(mockMember)).thenReturn(mockProcessedMember);
 
+    // when
     memberService.withdraw();
 
+    // then
     verify(memberProvider, times(1)).getCurrentMemberId();
     verify(memberReader, times(1)).findById(any(Long.class));
     verify(withdrawProcessor, times(1)).processToWithdraw(any(Member.class));
@@ -116,6 +122,7 @@ public class MemberServiceTest extends ServiceTest {
 
   @Test
   void promoteArtist_성공() {
+    // given
     Long memberId = 1L;
     String name = "testName";
     String university = "testUniversity";
@@ -143,8 +150,10 @@ public class MemberServiceTest extends ServiceTest {
     when(s3Util.upload(certificate)).thenReturn(certificateUrl);
     when(artistCreator.save(any(Artist.class))).thenReturn(mockArtist);
 
+    // when
     Artist artist = memberService.promoteArtist(request, certificate);
 
+    // then
     assertNotNull(artist);
     assertEquals(mockArtist.getMemberId(), artist.getMemberId());
     assertEquals(mockArtist.getUniversityId(), artist.getUniversityId());
@@ -156,59 +165,75 @@ public class MemberServiceTest extends ServiceTest {
 
   @Test
   void checkSnsType_성공() {
+    // given
     String snsType = SnsType.GOOGLE.name();
 
+    // when
     memberService.checkSnsType(snsType);
 
+    // then
     verify(memberValidator, times(1)).validateSnsType(any(String.class));
   }
 
   @Test
   void checkNicknameExists_성공() {
+    // given
     String nickname = "testNick";
 
+    // when
     memberService.checkNicknameExists(nickname);
 
+    // then
     verify(memberReader, times(1)).checkNicknameExists(any(String.class));
   }
 
   @Test
   void findBySns_성공() {
+    // given
     SnsType snsType = SnsType.GOOGLE;
     String snsId = "testSnsId";
     SnsDto snsDto = new SnsDto(snsType.name(), snsId);
     Member mockMember = Member.builder().build();
     when(memberReader.findBySns(snsDto)).thenReturn(mockMember);
 
+    // when
     Member member = memberService.findBySns(snsDto);
 
+    // then
     assertNotNull(member);
     verify(memberReader, times(1)).findBySns(any(SnsDto.class));
   }
 
   @Test
   void getById_성공() {
+    // given
     Long memberId = 1L;
     Member mockMember = Member.builder().build();
     when(memberReader.findById(memberId)).thenReturn(mockMember);
 
+    // when
     Member member = memberService.getById(memberId);
 
+    // then
     assertNotNull(member);
     verify(memberReader, times(1)).findById(any(Long.class));
   }
 
   @Test
   void serveRandomNicknames_성공() {
+    // given
     int count = 1;
 
+    // when
     memberService.serveRandomNicknames(count);
 
+    // then
     verify(nicknameProvider, times(1)).provideRandomNicknames(any(Integer.class));
   }
 
   @Test
   void getMemberOrAuthException_성공() {
+    // given
     String snsType = "testSnsType";
     String snsId = "testSnsId";
     String oauthToken = "testOauthToken";
@@ -216,8 +241,10 @@ public class MemberServiceTest extends ServiceTest {
     when(memberReader.getMemberOrAuthException(any(String.class), any(String.class),
         any(String.class))).thenReturn(mockMember);
 
+    // when
     Member member = memberService.getMemberOrAuthException(snsType, snsId, oauthToken);
 
+    // then
     assertNotNull(member);
     verify(memberReader, times(1)).getMemberOrAuthException(any(String.class), any(String.class),
         any(String.class));
