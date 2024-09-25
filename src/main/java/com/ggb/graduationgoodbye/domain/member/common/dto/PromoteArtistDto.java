@@ -2,6 +2,7 @@ package com.ggb.graduationgoodbye.domain.member.common.dto;
 
 import com.ggb.graduationgoodbye.domain.artist.common.entity.Artist;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Getter;
 
 
@@ -14,6 +15,7 @@ public class PromoteArtistDto {
    * 작가 전환 요청 Request.
    */
   @Schema(name = "PromoteArtist_Request", description = "작가 전환 요청 DTO")
+  @Builder
   @Getter
   public static class Request {
 

@@ -16,6 +16,7 @@ public class WithdrawProcessorTest extends ServiceTest {
 
   @Test
   void processToWithdraw_성공() {
+    // given
     SnsType snsType = SnsType.GOOGLE;
     String snsId = "testSnsId";
     String mockData = "12345";
@@ -27,8 +28,10 @@ public class WithdrawProcessorTest extends ServiceTest {
         .nickname(mockData)
         .build();
 
+    // when
     withdrawProcessor.processToWithdraw(mockMember);
 
+    // then
     assertEquals(snsType, mockMember.getSnsType());
     assertEquals(snsId, mockMember.getSnsId());
     assertNotEquals(mockData, mockMember.getEmail());

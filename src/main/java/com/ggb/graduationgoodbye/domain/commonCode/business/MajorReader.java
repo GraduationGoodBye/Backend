@@ -1,9 +1,9 @@
 package com.ggb.graduationgoodbye.domain.commonCode.business;
 
 import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
+import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.commonCode.repository.CommonCodeRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,8 +22,8 @@ public class MajorReader {
     return commonCodeRepository.findCommonCode("major");
   }
 
-  public Optional<CommonCode> findByMajor(String name) {
-    return commonCodeRepository.findCommonCode("major", name);
+  public CommonCode findByMajor(String name) {
+    return commonCodeRepository.findCommonCode("major", name)
+        .orElseThrow(NotFoundMajorException::new);
   }
-
 }

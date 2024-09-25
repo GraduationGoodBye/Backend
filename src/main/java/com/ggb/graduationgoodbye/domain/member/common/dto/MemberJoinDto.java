@@ -8,6 +8,7 @@ import lombok.Getter;
 public class MemberJoinDto {
 
   @Schema(name = "MemberJoin_Request", description = "회원가입 요청 DTO")
+  @Builder
   @Getter
   public static class Request {
 

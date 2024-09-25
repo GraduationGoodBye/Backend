@@ -19,37 +19,44 @@ public class MemberValidatorTest extends ServiceTest {
   @ParameterizedTest
   @EnumSource(SnsType.class)
   void validateSnsType_성공_대문자(SnsType snsType) {
+    // when then
     assertDoesNotThrow(() -> memberValidator.validateSnsType(snsType.name().toUpperCase()));
   }
 
   @ParameterizedTest
   @EnumSource(SnsType.class)
   void validateSnsType_성공_소문자(SnsType snsType) {
+    // when then
     assertDoesNotThrow(() -> memberValidator.validateSnsType(snsType.name().toLowerCase()));
   }
 
   @Test
   void validateSnsType_실패_null() {
+    // when then
     assertThrows(InvalidSnsTypeException.class, () -> memberValidator.validateSnsType(null));
   }
 
   @Test
   void validateSnsType_실패_빈값() {
+    // when then
     assertThrows(InvalidSnsTypeException.class, () -> memberValidator.validateSnsType(""));
   }
 
   @Test
   void validateSnsType_실패_공백() {
+    // when then
     assertThrows(InvalidSnsTypeException.class, () -> memberValidator.validateSnsType(" "));
   }
 
   @Test
   void validateSnsType_실패_다른타입() {
+    // when then
     assertThrows(InvalidSnsTypeException.class, () -> memberValidator.validateSnsType("FACEBOOK"));
   }
 
   @Test
   void validateSnsType_실패_글자사이공백() {
+    // when then
     assertThrows(InvalidSnsTypeException.class, () -> memberValidator.validateSnsType("goo gle"));
   }
 }

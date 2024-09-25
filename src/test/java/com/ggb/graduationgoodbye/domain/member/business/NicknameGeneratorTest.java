@@ -17,6 +17,7 @@ public class NicknameGeneratorTest extends ServiceTest {
 
   @Test
   void generateNickname_무작위생성확인() {
+    // given
     int validCount = 100;
     int randomCount = 5;
     int allowableRange = 80;
@@ -24,6 +25,7 @@ public class NicknameGeneratorTest extends ServiceTest {
     for (int i = 0; i < validCount; i++) {
       Set<String> nicknames = new HashSet<>();
       for (int j = 0; j < randomCount; j++) {
+        // when
         nicknames.add(nicknameGenerator.generate());
       }
       if (nicknames.size() == randomCount) {
@@ -31,6 +33,7 @@ public class NicknameGeneratorTest extends ServiceTest {
       }
     }
     log.info("성공 횟수 : {}", hit);
+    // then
     assertTrue(allowableRange <= hit);
   }
 }
