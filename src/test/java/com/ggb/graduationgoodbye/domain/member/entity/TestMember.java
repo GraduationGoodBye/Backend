@@ -22,7 +22,7 @@ public class TestMember extends Member {
   public static Member testMember() {
     SnsType snsType = RandomValueGenerator.getRandomEnum(SnsType.class);
     String snsId = RandomValueGenerator.getRandomString(SNS_ID_LENGTH, "UTF-8");
-    String email = RandomValueGenerator.getRandomString(EMAIL_LENGTH, "UTF-8");
+    String email = RandomValueGenerator.getRandomEmail("UTF-8");
     String profile = RandomValueGenerator.getRandomString(PROFILE_LENGTH, "UTF-8");
     String nickname = RandomValueGenerator.getRandomString(NICKNAME_LENGTH, "UTF-8");
     String address = RandomValueGenerator.getRandomString(ADDRESS_LENGTH, "UTF-8");

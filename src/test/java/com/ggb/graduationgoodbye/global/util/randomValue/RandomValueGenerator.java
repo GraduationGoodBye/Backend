@@ -29,6 +29,13 @@ public class RandomValueGenerator {
     return str.length() < size ? str : str.substring(0, size);
   }
 
+  public static String getRandomEmail(String charset) {
+    String email = getRandomString(10, charset);
+    String domain = getRandomString(5, charset);
+    String subDomain = getRandomString(3, charset);
+    return email + "@" + domain + "." + subDomain;
+  }
+
   public static int getRandomInt(int size) {
     return random.nextInt(size);
   }
