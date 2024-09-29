@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import org.springframework.util.StringUtils;
 
 public class RandomValueGenerator {
 
@@ -16,6 +17,23 @@ public class RandomValueGenerator {
     Charset charset = getCharset();
     String str = new String(array, charset);
     return str.length() < size ? str : str.substring(0, size);
+  }
+
+  public static String getRandomString(int size, String charsetStr) {
+    byte[] array = getRandomByte();
+    if (!StringUtils.hasText(charsetStr) || !isSupportedCharset(charsetStr)) {
+      throw new RuntimeException("잘못된 형식의 charSet 입니다.");
+    }
+    Charset character = Charset.forName(charsetStr);
+    String str = new String(array, character);
+    return str.length() < size ? str : str.substring(0, size);
+  }
+
+  public static String getRandomEmail(String charset) {
+    String email = getRandomString(10, charset);
+    String domain = getRandomString(5, charset);
+    String subDomain = getRandomString(3, charset);
+    return email + "@" + domain + "." + subDomain;
   }
 
   public static int getRandomInt(int size) {
@@ -58,4 +76,7 @@ public class RandomValueGenerator {
     return Charset.forName(list.get(randomIndex));
   }
 
+  private static boolean isSupportedCharset(String charset) {
+    return Charset.isSupported(charset);
+  }
 }

@@ -26,8 +26,10 @@ import com.ggb.graduationgoodbye.domain.member.common.dto.PromoteArtistDto;
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
+import com.ggb.graduationgoodbye.domain.member.entity.TestMember;
 import com.ggb.graduationgoodbye.domain.s3.utils.S3Util;
 import com.ggb.graduationgoodbye.global.test.ServiceTest;
+import com.ggb.graduationgoodbye.global.util.randomValue.RandomValueGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -66,29 +68,18 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void join_성공() {
     // given
-    SnsType snsType = SnsType.GOOGLE;
-    String snsId = "testSnsId";
-    String email = "test@test.com";
-    String profile = "testProfile";
-    String nickname = "testNick";
+    Member mockMember = TestMember.testMember();
     OAuthUserInfoDto oAuthUserInfoDto = OAuthUserInfoDto.builder()
-        .snsId(snsId)
-        .email(email)
-        .profile(profile)
+        .snsId(mockMember.getSnsId())
+        .email(mockMember.getEmail())
+        .profile(mockMember.getProfile())
         .build();
     MemberJoinDto.Request request = MemberJoinDto.Request.builder()
-        .nickname(nickname)
-        .build();
-    Member mockMember = Member.builder()
-        .snsType(snsType)
-        .snsId(snsId)
-        .email(email)
-        .profile(profile)
-        .nickname(nickname)
+        .nickname(mockMember.getNickname())
         .build();
 
     // when
-    Member member = memberService.join(snsType.name(), oAuthUserInfoDto, request);
+    Member member = memberService.join(mockMember.getSnsType().name(), oAuthUserInfoDto, request);
 
     // then
     assertNotNull(member);
@@ -103,9 +94,10 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void withdraw_성공() {
     // given
-    Long memberId = 1L;
-    Member mockMember = Member.builder().build();
-    Member mockProcessedMember = Member.builder().build();
+    Long memberId = RandomValueGenerator.getRandomLong(1);
+    Member mockMember = TestMember.testMember();
+    Member mockProcessedMember = TestMember.testMember();
+
     when(memberProvider.getCurrentMemberId()).thenReturn(memberId);
     when(memberReader.findById(memberId)).thenReturn(mockMember);
     when(withdrawProcessor.processToWithdraw(mockMember)).thenReturn(mockProcessedMember);
@@ -123,12 +115,12 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void promoteArtist_성공() {
     // given
-    Long memberId = 1L;
-    String name = "testName";
-    String university = "testUniversity";
-    String major = "testMajor";
-    String certificateUrl = "testCertificateUrl";
-    Member mockMember = Member.builder().build();
+    Long memberId = RandomValueGenerator.getRandomLong(1);
+    String name = RandomValueGenerator.getRandomString(20);
+    String university = RandomValueGenerator.getRandomString(20);
+    String major = RandomValueGenerator.getRandomString(20);
+    String certificateUrl = RandomValueGenerator.getRandomString(30);
+    Member mockMember = TestMember.testMember();
     CommonCode mockUniversity = CommonCode.builder().build();
     CommonCode mockMajor = CommonCode.builder().build();
     Artist mockArtist = Artist.builder()
@@ -142,7 +134,9 @@ public class MemberServiceTest extends ServiceTest {
         .major(major)
         .name(name)
         .build();
-    MultipartFile certificate = new MockMultipartFile("testCert", new byte[1]);
+    MultipartFile certificate = new MockMultipartFile(RandomValueGenerator.getRandomString(5),
+        new byte[1]);
+
     when(memberProvider.getCurrentMemberId()).thenReturn(memberId);
     when(memberReader.findById(memberId)).thenReturn(mockMember);
     when(universityReader.findUniversity(university)).thenReturn(mockUniversity);
@@ -166,7 +160,7 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void checkSnsType_성공() {
     // given
-    String snsType = SnsType.GOOGLE.name();
+    String snsType = RandomValueGenerator.getRandomEnum(SnsType.class).name();
 
     // when
     memberService.checkSnsType(snsType);
@@ -178,7 +172,7 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void checkNicknameExists_성공() {
     // given
-    String nickname = "testNick";
+    String nickname = RandomValueGenerator.getRandomString(20);
 
     // when
     memberService.checkNicknameExists(nickname);
@@ -190,10 +184,11 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void findBySns_성공() {
     // given
-    SnsType snsType = SnsType.GOOGLE;
-    String snsId = "testSnsId";
+    SnsType snsType = RandomValueGenerator.getRandomEnum(SnsType.class);
+    String snsId = RandomValueGenerator.getRandomString(20);
     SnsDto snsDto = new SnsDto(snsType.name(), snsId);
-    Member mockMember = Member.builder().build();
+    Member mockMember = TestMember.testMember();
+
     when(memberReader.findBySns(snsDto)).thenReturn(mockMember);
 
     // when
@@ -207,8 +202,9 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void getById_성공() {
     // given
-    Long memberId = 1L;
-    Member mockMember = Member.builder().build();
+    Long memberId = RandomValueGenerator.getRandomLong(1);
+    Member mockMember = TestMember.testMember();
+
     when(memberReader.findById(memberId)).thenReturn(mockMember);
 
     // when
@@ -234,10 +230,11 @@ public class MemberServiceTest extends ServiceTest {
   @Test
   void getMemberOrAuthException_성공() {
     // given
-    String snsType = "testSnsType";
-    String snsId = "testSnsId";
-    String oauthToken = "testOauthToken";
-    Member mockMember = Member.builder().build();
+    String snsType = RandomValueGenerator.getRandomEnum(SnsType.class).name();
+    String snsId = RandomValueGenerator.getRandomString(20);
+    String oauthToken = RandomValueGenerator.getRandomString(20);
+    Member mockMember = TestMember.testMember();
+
     when(memberReader.getMemberOrAuthException(any(String.class), any(String.class),
         any(String.class))).thenReturn(mockMember);
 

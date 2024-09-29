@@ -16,13 +16,13 @@ import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
 import com.ggb.graduationgoodbye.domain.member.common.exception.DuplicateNicknameException;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotFoundMemberException;
 import com.ggb.graduationgoodbye.domain.member.common.exception.NotSignUpException;
-import com.ggb.graduationgoodbye.domain.member.entity.TestMember;
 import com.ggb.graduationgoodbye.domain.member.repository.MemberRepository;
 import com.ggb.graduationgoodbye.global.test.ServiceTest;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class MemberReaderTest extends ServiceTest {
 
@@ -108,8 +108,8 @@ public class MemberReaderTest extends ServiceTest {
   void findById_성공() {
     // given
     Long id = 1L;
-    TestMember mockMember = new TestMember();
-    mockMember.setId(id);
+    Member mockMember = Member.builder().build();
+    ReflectionTestUtils.setField(mockMember, "id", id);
     when(memberRepository.findById(any(Long.class))).thenReturn(Optional.of(mockMember));
 
     // when
