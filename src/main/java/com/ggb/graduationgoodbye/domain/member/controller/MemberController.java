@@ -70,7 +70,7 @@ public class MemberController implements MemberApi {
    */
   @Override
   @PostMapping("/signup/{snsType}")
-  public ApiResponse<MemberJoinDto.Response> signup(@PathVariable String snsType,
+  public ApiResponse<MemberJoinDto.Response> signup(@PathVariable("snsType") String snsType,
       @Valid @RequestBody MemberJoinDto.Request request) {
     OAuthUserInfoDto oAuthUserInfoDto = oAuthUserService.getOAuthUserInfo(snsType, request);
     Member member = memberService.join(snsType, oAuthUserInfoDto, request);
@@ -134,7 +134,7 @@ public class MemberController implements MemberApi {
    */
   @Override
   @GetMapping("/check/nickname/{nickname}")
-  public ApiResponse<?> checkNickname(@PathVariable String nickname) {
+  public ApiResponse<?> checkNickname(@PathVariable("nickname") String nickname) {
     memberService.checkNicknameExists(nickname);
     return ApiResponse.ok();
   }
@@ -144,7 +144,7 @@ public class MemberController implements MemberApi {
    */
   @Override
   @GetMapping("/serve/nickname")
-  public ApiResponse<?> serveRandomNicknames(@RequestParam int count) {
+  public ApiResponse<?> serveRandomNicknames(@RequestParam("count") int count) {
     Set<String> nicknames = memberService.serveRandomNicknames(count);
     return ApiResponse.ok(nicknames);
   }
