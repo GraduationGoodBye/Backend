@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ggb.graduationgoodbye.domain.member.common.dto.SnsDto;
 import com.ggb.graduationgoodbye.domain.member.common.entity.Member;
 import com.ggb.graduationgoodbye.domain.member.common.enums.SnsType;
-import com.ggb.graduationgoodbye.global.test.IntegrationTest;
+import com.ggb.graduationgoodbye.global.test.MyBatisTest;
 import com.ggb.graduationgoodbye.global.util.randomValue.RandomEntityPopulator;
 import java.util.Arrays;
 import java.util.Optional;
@@ -18,7 +18,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
-class MemberRepositoryTest extends IntegrationTest {
+import org.springframework.context.annotation.Import;
+
+
+@Import(MemberRepository.class)   
+class MemberRepositoryTest extends MyBatisTest {
 
   @Autowired
   private MemberRepository memberRepository;
