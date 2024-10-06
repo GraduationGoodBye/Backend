@@ -18,9 +18,6 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -100,10 +97,7 @@ public class MemberController implements MemberApi {
   @PreAuthorize("hasAuthority('MEMBER')")
   @GetMapping("/info")
   public ApiResponse<MemberInfoDto.Response> info() {
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    User u = (User) authentication.getPrincipal();
-    Long id = Long.valueOf(u.getUsername());
-    Member member = memberService.getById(id);
+    Member member = memberService.getInfo();
     MemberInfoDto.Response response = MemberInfoDto.Response.builder()
         .id(member.getId())
         .snsType(member.getSnsType().name())

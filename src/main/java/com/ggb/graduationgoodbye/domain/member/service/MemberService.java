@@ -7,7 +7,6 @@ import com.ggb.graduationgoodbye.domain.auth.common.dto.OAuthUserInfoDto;
 import com.ggb.graduationgoodbye.domain.commonCode.business.MajorReader;
 import com.ggb.graduationgoodbye.domain.commonCode.business.UniversityReader;
 import com.ggb.graduationgoodbye.domain.commonCode.common.entity.CommonCode;
-import com.ggb.graduationgoodbye.domain.commonCode.common.exception.NotFoundMajorException;
 import com.ggb.graduationgoodbye.domain.member.business.MemberCreator;
 import com.ggb.graduationgoodbye.domain.member.business.MemberProvider;
 import com.ggb.graduationgoodbye.domain.member.business.MemberReader;
@@ -132,8 +131,9 @@ public class MemberService {
   /**
    * 회원 정보 조회
    */
-  public Member getById(Long id) {
-    return memberReader.findById(id);
+  public Member getInfo() {
+    Long memberId = memberProvider.getCurrentMemberId();
+    return memberReader.findById(memberId);
   }
 
   /**
