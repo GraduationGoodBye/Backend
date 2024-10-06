@@ -1,5 +1,6 @@
 package com.ggb.graduationgoodbye.global.test;
 
+import com.ggb.graduationgoodbye.domain.auth.common.interceptor.AuthInterceptor;
 import com.ggb.graduationgoodbye.domain.auth.service.TokenService;
 import com.ggb.graduationgoodbye.global.error.GlobalExceptionHandler;
 import com.google.gson.Gson;
@@ -19,15 +20,19 @@ abstract public class ControllerTest {
   @Autowired
   protected MockMvc mvc;
 
-  protected final Gson gson = new Gson();
+  @Autowired
+  protected AuthInterceptor authInterceptor;
 
   @MockBean
   protected TokenService tokenService;
+
+  protected final Gson gson = new Gson();
 
   @BeforeEach
   void setUp() {
     mvc = MockMvcBuilders.standaloneSetup(initController())
         .setControllerAdvice(GlobalExceptionHandler.class)
+        .addInterceptors(authInterceptor)
         .build();
   }
 

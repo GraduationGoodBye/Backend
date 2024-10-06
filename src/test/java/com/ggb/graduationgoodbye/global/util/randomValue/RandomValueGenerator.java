@@ -13,14 +13,11 @@ public class RandomValueGenerator {
   private static final Random random = new Random();
 
   public static String getRandomString(int size) {
-    byte[] array = getRandomByte();
-    Charset charset = getCharset();
-    String str = new String(array, charset);
-    return str.length() < size ? str : str.substring(0, size);
+    return getRandomString(size, "UTF-8");
   }
 
   public static String getRandomString(int size, String charsetStr) {
-    byte[] array = getRandomByte();
+    byte[] array = getRandomByte(size);
     if (!StringUtils.hasText(charsetStr) || !isSupportedCharset(charsetStr)) {
       throw new RuntimeException("잘못된 형식의 charSet 입니다.");
     }
@@ -56,10 +53,11 @@ public class RandomValueGenerator {
     return LocalDateTime.now().minusDays(random.nextInt(365)).withNano(0);
   }
 
-  private static byte[] getRandomByte() {
-    int randomByteLength = random.nextInt(0, 200);
-    byte[] array = new byte[randomByteLength];
-    random.nextBytes(array);
+  private static byte[] getRandomByte(int size) {
+    byte[] array = new byte[size];
+    for (int i = 0; i < size; i++) {
+      array[i] = (byte) random.nextInt(32, 127);
+    }
     return array;
   }
 

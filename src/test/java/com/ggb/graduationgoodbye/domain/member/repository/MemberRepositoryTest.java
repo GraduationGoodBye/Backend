@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
+
 class MemberRepositoryTest extends IntegrationTest {
 
   @Autowired
@@ -33,13 +34,14 @@ class MemberRepositoryTest extends IntegrationTest {
 
   @BeforeEach
   public void setUp() {
-    randomEntityPopulator.setValue("deletedAt",null);
+    randomEntityPopulator.setValue("deletedAt", null);
   }
 
   public Member createMember() {
     return (Member) randomEntityPopulator
         .getPopulatedEntity(Member.class);
   }
+
   @Test()
   @DisplayName("save_올바른 값")
   void save() {
@@ -49,7 +51,6 @@ class MemberRepositoryTest extends IntegrationTest {
 
     // When
     Member testMember = memberRepository.findById(member.getId()).orElseThrow(AssertionError::new);
-
 
     // Then
     assertThat(testMember)

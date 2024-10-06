@@ -2,14 +2,16 @@ package com.ggb.graduationgoodbye.domain.member.common.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
 public class MemberJoinDto {
 
   @Schema(name = "MemberJoin_Request", description = "회원가입 요청 DTO")
-  @Builder
   @Getter
+  @Builder
+  @AllArgsConstructor
   public static class Request {
 
     @Schema(description = "소셜토큰")

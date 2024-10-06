@@ -200,15 +200,16 @@ public class MemberServiceTest extends ServiceTest {
   }
 
   @Test
-  void getById_성공() {
+  void getInfo_성공() {
     // given
     Long memberId = RandomValueGenerator.getRandomLong(1);
     Member mockMember = TestMember.testMember();
 
+    when(memberProvider.getCurrentMemberId()).thenReturn(memberId);
     when(memberReader.findById(memberId)).thenReturn(mockMember);
 
     // when
-    Member member = memberService.getById(memberId);
+    Member member = memberService.getInfo();
 
     // then
     assertNotNull(member);
