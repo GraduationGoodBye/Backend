@@ -8,6 +8,13 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.NoArgsConstructor;
 
+/**
+ * String의 값을 생성하는 로직이 작성되어 있음
+ * 변수로 선언되어있는 nullable , size , languages 를 참조하여 String를 생성하기에
+ * String 생성마다 StringGenerator를 새롭게 호출해주어야 함.
+
+ * 현재는 랜덤한 문자열 , 랜덤한 영문 문자열 두 가지만 생성이 가능함.
+ */
 @NoArgsConstructor
 public class StringGenerator {
 
@@ -77,9 +84,10 @@ public class StringGenerator {
   }
 
 
-
-
-
+  /**
+   * 한국어 문자열 생성은 추가 예정 ,
+   * 현재 Korean 을 지정 후 랜덤 값 생성시, "korean" 이라는 고정 문자열 반환
+   */
   private String randomString(List<Language> languageList, int size){
     int index = random.nextInt(languageList.size());
     Language language = languageList.get(index);
