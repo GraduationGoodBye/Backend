@@ -10,10 +10,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * String의 값을 생성하는 로직이 작성되어 있음
- * 변수로 선언되어있는 nullable , size , languages 를 참조하여 String를 생성하기에
- * String 생성마다 StringGenerator를 새롭게 호출해주어야 함.
-
- * 현재는 랜덤한 문자열 , 랜덤한 영문 문자열 두 가지만 생성이 가능함.
+ * 별도의 설정이 없을 경우 생성되는 문자열은 , null값 허용, 문자열 랜덤, 최소 길이 0 , 최대 길이 200
  */
 @NoArgsConstructor
 public class StringGenerator {
@@ -27,30 +24,66 @@ public class StringGenerator {
   private int minSize = 0;
   private int maxSize = 2000;
 
+  /**
+   * 생성되는 문자열의 최소, 최대 길이를 지정하기 위한 생성자
+   */
+
   public StringGenerator(int minSize , int maxSize) {
     this.minSize = minSize;
     this.maxSize = Math.max(maxSize, minSize+1);
   }
 
+
+  /**
+   * 생성되는 문자열의 최소 길이를 지정하기 위한 생성자
+   */
+  
   public StringGenerator(int maxSize) {
     this.maxSize = Math.max(maxSize, 1);
   }
+
+  /**
+   * 생성되는 문자열의 null 값 여부를 지정하기 위한 메소드
+   *
+   * null 값이 허용되지 않는 필드의 경우
+   * StringGenerator.setNullable(fasle);
+   * 와 같이 랜덤한 문자열에 필수적으로 값이 생성되도록 할 수 있음
+   */
 
   public StringGenerator setNullable(boolean nullable) {
     this.nullable = nullable;
     return this;
   }
 
+  /**
+   * 생성되는 문자열의 언어를 지정하기 위한 메소드
+   *
+   * Language[] 배열 내부에, 지정할 다수의 언어를 입력 후 .setLanguages() 로 전달하면
+   * 새롭게 생성되는 문자열은 Language[] 내부에 입력되어 있는 언어 중 하나로 생성됨
+   */
   public StringGenerator setLanguages(Language[] language) {
     languages.addAll(Arrays.asList(language));
     return this;
   }
 
+  /**
+   * 생성되는 문자열의 언어를 지정하기 위한 메소드
+   *
+   * Language 중 하나를 지정하여 .setLanguages() 로 전달하면
+   * 새롭게 생성되는 문자열은 해당 언어로만 생성 됨
+   */
   public StringGenerator setLanguages(Language language) {
     languages.add(language);
     return this;
   }
 
+  /**
+   * 실제 랜덤한 String 값을 생성하는 메소드
+   *
+   * 해당 클래스에 작성되어있는 최소,최대 길이, null 여부, 문자열 설정을 읽고 그에 맞춰 랜덤한 문자열을 생성 후 반환함
+   * 별도의 설정이 없을 경우 생성되는 문자열은 , null값 허용, 문자열 랜덤, 최소 길이 0 , 최대 길이 200
+   * 변경이 필요할 경우, 해당 클래스의 생성자와 메소드를 참고하길 바람
+   */
   public String get() {
     int size = nullable ? random.nextInt(maxSize) : random.nextInt(minSize, maxSize);
     return languages.isEmpty() ? truncatedString(size) : randomString(languages, size);

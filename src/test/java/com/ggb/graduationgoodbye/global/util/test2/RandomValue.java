@@ -5,9 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
- * 랜덤 값을 생성해주는 유틸리티 클래스
  * 랜덤 값을 생성하는 로직은 StringGenerator, RandomValueGenerator에 존재하며,
  * 실제 사용시, 해당 클래스의 메서드를 호출하여 랜덤 값을 생성할 수 있음
+ *
+ * 랜덤 String 값 생성시, 필수적으로 StringGenerator 내부의 .get() 메소드를 호출해야만 함
+ * 이외 값은 별도의 처리 없이 해당 클래스의 메소드를 호출하면 생성됨
  */
 public class RandomValue {
 
@@ -15,7 +17,8 @@ public class RandomValue {
   private static final RandomValueGenerator randomValueGenerator = new RandomValueGenerator();
 
   /**
-   * 랜덤 문자열을 생성할 수 있는 StringGenerator 인스턴스 반환.
+   * 별도의 길이 설정 없이 랜덤한 문자열을 생성하고 싶을 경우 사용
+   * 해당 메소드는 StringGenerator을 생성하기 위한 메소드로,
    * StringGenerator 내부 .get() 메소드를 호출해야만 실제 값 생성 가능
    */
   public static StringGenerator string() {
@@ -23,20 +26,18 @@ public class RandomValue {
   }
 
   /**
-   * 랜덤 문자열을 생성할 수 있는 StringGenerator 인스턴스 반환.
-   * StringGenerator 내부에 선언 되어있는 minSize, maxSize를 지정하여
-   * 문자열의 길이를 설정할 수 있음
-   * StringGenerator 내부 .get() 메소드를 호출해야만 실제 값 생성 가능
+   * 최소, 최대 길이를 지정하여 문자열을 생성할 경우 사용
+   * 해당 메소드는 최소,최대 길이 설정만을 위한 메소드로, 실제 값 생성은
+   * StringGenerator 내부 .get() 메소드를 호출해야만 생성 됨
    */
   public static StringGenerator string(int minSize, int maxSize) {
     return new StringGenerator(minSize, maxSize);
   }
 
   /**
-   * 랜덤 문자열을 생성할 수 있는 StringGenerator 인스턴스 반환.
-   * StringGenerator 내부에 선언 되어있는 maxSize를 지정하여
-   * 문자열의 길이를 설정할 수 있음
-   * StringGenerator 내부 .get() 메소드를 호출해야만 실제 값 생성 가능
+   * 최대 길이를 지정하여 문자열을 생성할 경우 사용
+   * 해당 메소드는 최대 길이 설정만을 위한 메소드로, 실제 값 생성은
+   * StringGenerator 내부 .get() 메소드를 호출해야만 생성 됨
    */
 
   public static StringGenerator string(int maxSize) {
