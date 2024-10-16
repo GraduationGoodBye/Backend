@@ -2,13 +2,18 @@ package com.ggb.graduationgoodbye.domain.member.common.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class MemberLoginDto {
 
   @Schema(name = "MemberLogin_Request", description = "로그인 요청 DTO")
   @Getter
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
   public static class Request {
 
     @Schema(description = "인가코드")

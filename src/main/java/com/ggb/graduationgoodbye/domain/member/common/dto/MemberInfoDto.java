@@ -1,14 +1,18 @@
 package com.ggb.graduationgoodbye.domain.member.common.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class MemberInfoDto {
 
   @Schema(name = "MemberInfo_Response", description = "회원정보 응답 DTO")
   @Getter
   @Builder
+  @AllArgsConstructor
+  @NoArgsConstructor
   public static class Response {
 
     @Schema(description = "ID")
